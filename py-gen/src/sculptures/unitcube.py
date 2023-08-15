@@ -11,6 +11,9 @@ from numpy import eye, take, array
 from itertools import combinations
 from enum import Enum
 
+## I think we need to reconstruct this as a function that produces
+## either the NORM or BEZIER class. Working at the instance level here
+## doesn't make much sense to me here. 
 class Mode(Enum):
     NORM = 0
     BEZIER = 1
