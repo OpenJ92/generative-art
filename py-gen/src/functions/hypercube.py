@@ -1,23 +1,20 @@
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.typeclass.__composite__ import __Composite__
 from src.typeclass.__function__ import __Function__
 from src.functions.parallelogram import Parallelogram
 from src.functions.translate import Translate
 from src.functions.composition import Composition
-from src.functions.id import ID
 from src.atoms import __Data__, dimension, List, Segment, Triangle, Point
 
 from numpy import eye, take, array
 from itertools import combinations
 from enum import Enum
 
-## I think we need to reconstruct this as a function that produces
-## either the NORM or BEZIER class. Working at the instance level here
-## doesn't make much sense to me here. 
 class Mode(Enum):
     NORM = 0
     BEZIER = 1
 
+## If additional 'modes' of the algorithm are needed, we can
+## easily introduce them here
 def pnpdispatch(mode):
     match mode:
         case Mode.NORM: return pnpNorm
@@ -29,7 +26,7 @@ def pnpNorm(data, dim, hcdim):
     return planes, notplanes
 
 def pnpBez(data, dim, hcdim):
-    planes, notplanes = self.pnpNorm(data, dim, hcdim)
+    planes, notplanes = pnpNorm(data, dim, hcdim)
     return planes[:1], notplanes[:1]
 
 def HyperCube(mode = Mode.NORM):

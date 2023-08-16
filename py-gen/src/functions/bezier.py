@@ -2,7 +2,7 @@ from numpy import array, array_split, squeeze, stack, concatenate
 
 from src.typeclass.__function__ import __Function__
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.sculptures.unitcube import HyperCube
+from src.functions.hypercube import HyperCube, Mode
 from src.atoms import Segment, List
 
 class Bezier(__Function__):
@@ -37,7 +37,7 @@ class Bezier(__Function__):
         return (1-t)*slice_one + t*slice_two
 
     def ID(dim):
-        HCD = HyperCube(dim, mode=HyperCube.MODE.BEZIER)
+        HCD = HyperCube(Mode.BEZIER)(dim)
         data = __Sculpture__(Segment(array([0]), array([1])), HCD).sculpt()
 
         def dfs(data):

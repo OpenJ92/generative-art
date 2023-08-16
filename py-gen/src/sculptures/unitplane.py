@@ -24,7 +24,7 @@ def FlexPlane(sculpture, nx, ny):
     return __Sculpture__(__Sculpture__(sculpture.sculpt(), Repeat(nx*ny)).sculpt(), ZipApply(funcs))
 
 def FlexCube(atomcls, nx, ny):
-    return __Sculpture__(FlexPlane(Square(atomcls), nx,ny).sculpt(), HyperCube(3))
+    return __Sculpture__(FlexPlane(Square(atomcls), nx,ny).sculpt(), HyperCube()(3))
 
 def FlexHyperCube(atomcls, n, nx, ny):
-    return __Sculpture__(FlexCube(Square(atomcls), nx, ny).sculpt(), HyperCube(n))
+    return __Sculpture__(FlexCube(Square(atomcls), nx, ny).sculpt(), HyperCube()(n))
