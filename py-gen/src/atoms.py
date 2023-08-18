@@ -97,21 +97,21 @@ def dimension(data: __Data__):
             return l.size
         case List(elements=elements):
             if len(elements) == 0:
-                raise Exception
+                raise NotImplementedError
             return dimension(elements[0])
         case __Meta_Data__(meta, data):
-            raise NotImplementedError
+            return dimension(data)
 
 ## Ultimately, this function should only work on 2D data. That is to say that after
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
 ## to draw.
 def draw(data: __Data__) -> str:
     if dimension(data) != 2:
-        raise Exception(f'{data.__class__.__qualname__} __Data__ must be 2D to be drawn. Try making use of a camera or video transformation before passing to draw.')
+        raise NotImplementedError
     match data:
             case Point(l=l):
                 x0, y0 = l
-                return f'<circle cx="{x0}" cy="{y0}" r=".005"/>\n'
+                return f'<circle cx="{x0}" cy="{y0}" r="5"/>\n'
             case Segment(l=l, m=m):
                 x0, y0 = l
                 x1, y1 = m
@@ -124,7 +124,7 @@ def draw(data: __Data__) -> str:
             case List(elements=elements):
                 return "".join(list(map(draw, elements)))
             case __Meta_Data__(meta, data):
-                return __Meta_Data__(meta, draw(data))
+                return draw(data)
 
 def wrap(work: str) -> str:
     header = "<svg width=\"297mm\" height=\"210mm\" viewBox=\"0 0 297 210\" xmlns=\"http://www.w3.org/2000/svg\">\n"

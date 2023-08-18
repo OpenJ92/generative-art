@@ -13,8 +13,6 @@ class Mode(Enum):
     NORM = 0
     BEZIER = 1
 
-## If additional 'modes' of the algorithm are needed, we can
-## easily introduce them here
 def pnpdispatch(mode):
     match mode:
         case Mode.NORM: return pnpNorm

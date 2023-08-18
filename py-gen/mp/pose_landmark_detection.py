@@ -1,7 +1,9 @@
+from src.typeclass.__sculpture__ import __Sculpture__
 from src.atoms import __Meta_Data__, List, Point
+from src.functions.parallelogram import Parallelogram
 
 import mediapipe as mp
-from numpy import array
+from numpy import array, diag
 import cv2 as cv
 
 ## We need to seperate this class into a specific OpenCV Image and Video class and 
@@ -50,7 +52,10 @@ class Pose_Landmark_Detection():
                pose_landmarker_result = landmarker.detect_for_video(mp_image, int(1000*frame_count/fps))
 
                if not pose_landmarker_result.pose_world_landmarks: continue
-               frame_detections = [ List(list(map(self.convert_landmark, pose_landmarker_result.pose_landmarks[0])))
+               else: result = pose_landmarker_result.pose_world_landmarks
+               convert = List(list(map(self.convert_landmark, result[0])))
+               scale = __Sculpture__(convert, Parallelogram(diag([width, height]))).sculpt()
+               frame_detections = [ scale
                                   , *frame_detections
                                   ]
 
