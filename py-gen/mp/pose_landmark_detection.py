@@ -1,6 +1,7 @@
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.atoms import __Meta_Data__, List, Point
+from src.atoms import __Meta_Data__, List, Point, Segment
 from src.functions.parallelogram import Parallelogram
+from src.sculptures.unitcube import Square
 
 import mediapipe as mp
 from numpy import array, diag
@@ -32,12 +33,14 @@ class Pose_Landmark_Detection():
         ## function which 
         with PoseLandmarker.create_from_options(options) as landmarker:
 
-            cap = cv.VideoCapture('py-gen/mp/AlinaTaratorin2.mp4')
+            cap = cv.VideoCapture('py-gen/mp/AlinaTaratorin3.mp4')
             fps = cap.get(cv.CAP_PROP_FPS)
 
             width  = cap.get(cv.CAP_PROP_FRAME_WIDTH)
             height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
             frame_count = 0
+
+            f = __Sculpture__(Square(Segment).sculpt(), Parallelogram(diag([width, height]))).sculpt()
 
             frame_detections = []
             while cap.isOpened():
@@ -51,16 +54,18 @@ class Pose_Landmark_Detection():
                mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
                pose_landmarker_result = landmarker.detect_for_video(mp_image, int(1000*frame_count/fps))
 
-               if not pose_landmarker_result.pose_world_landmarks: continue
-               else: result = pose_landmarker_result.pose_world_landmarks
+               if not pose_landmarker_result.pose_landmarks: continue
+               else: result = pose_landmarker_result.pose_landmarks
+
                convert = List(list(map(self.convert_landmark, result[0])))
                scale = __Sculpture__(convert, Parallelogram(diag([width, height]))).sculpt()
-               frame_detections = [ scale
-                                  , *frame_detections
+
+               frame_detections = [ *frame_detections
+                                  , scale
                                   ]
 
             cap.release()
-        return List(frame_detections)
+        return List([f, *frame_detections])
 
     def convert_landmark(self, landmark):
         Landmark = mp.tasks.components.containers.Landmark
