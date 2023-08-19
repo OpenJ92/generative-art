@@ -58,10 +58,9 @@ class Pose_Landmark_Detection():
                else: result = pose_landmarker_result.pose_landmarks
 
                convert = List(list(map(self.convert_landmark, result[0])))
-               scale = __Sculpture__(convert, Parallelogram(diag([width, height]))).sculpt()
 
                frame_detections = [ *frame_detections
-                                  , scale
+                                  , convert
                                   ]
 
             cap.release()
