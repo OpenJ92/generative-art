@@ -65,7 +65,7 @@ class Pose_Landmark_Detection():
                                   ]
 
             cap.release()
-        return List([f, *frame_detections])
+        return f, List(frame_detections)
 
     def convert_landmark(self, landmark):
         Landmark = mp.tasks.components.containers.Landmark
@@ -74,9 +74,9 @@ class Pose_Landmark_Detection():
         match landmark:
             case Landmark(x=x, y=y, z=z, visibility=visibility, presence=presence):
                 meta = {'visibility':visibility, 'presence':presence}
-                return __Meta_Data__(meta, Point(array([x, y])))
+                return __Meta_Data__(meta, Point(array([x, y, z])))
             case NormalizedLandmark(x=x, y=y, z=z, visibility=visibility, presence=presence):
                 meta = {'visibility':visibility, 'presence':presence}
-                return __Meta_Data__(meta, Point(array([x, y])))
+                return __Meta_Data__(meta, Point(array([x, y, z])))
             case _:
                 raise NotImplementedError
