@@ -8,8 +8,11 @@ def TemporalFrameBezierNoise():
     frame, frames = Pose_Landmark_Detection("py-gen/mp/pose_landmarker_full.task").setupmodel()
     scale = lambda convert: __Sculpture__(convert, Parallelogram(diag([width, height]))).sculpt()
 
+    detection_element_order_policy = lambda x: x
+
     A = []
     for detection in frames.elements:
+        detection.elements = detection_element_order_policy(detection.elements)
         A = [*A, stack(map(lambda x: x.data.l, detection.elements))]
     A = stack(A)
 
@@ -25,5 +28,9 @@ def TemporalFrameBezierNoise():
 
     ## Consider the fact that we're constructing a function from data here. Perhaps we should 
     ## move this into the functions directory
+
+    ## Notice that we're taking the detection data and stacking it in order. We may want to 
+    ## order them with different policies. Here the identity policy is provied, This may also
+    ## depend on t. It may be a very good idea to place those policies onto the MP/Pose classes
 
     breakpoint()
