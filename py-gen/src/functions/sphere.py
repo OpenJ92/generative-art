@@ -4,9 +4,6 @@ from math import sin, cos
 from numpy import hstack, array
 
 class Sphere(__Function__):
-    def __init__(self):
-        super().__init__()
-
     def __call__(self, ts):
         return self.recursive_call(array([1]), ts)
 
