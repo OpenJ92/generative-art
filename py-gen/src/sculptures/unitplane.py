@@ -1,11 +1,10 @@
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.typeclass.__composite__ import __Composite__
 from src.functions.parallelogram import Parallelogram
 from src.functions.translate import Translate
 from src.functions.composition import Composition
 from src.helpers.zipapply import ZipApply
 from src.sculptures.unitcube import Square, HyperCube
-from src.functions.copy import Repeat
+from src.functions.copy import Copy
 
 from numpy import array, diag
 from itertools import product
@@ -21,7 +20,7 @@ def FlexPlane(sculpture, nx, ny):
                               ])
                 ]
 
-    return __Sculpture__(__Sculpture__(sculpture.sculpt(), Repeat(nx*ny)).sculpt(), ZipApply(funcs))
+    return __Sculpture__(__Sculpture__(sculpture.sculpt(), Copy(nx*ny)).sculpt(), ZipApply(funcs))
 
 def FlexCube(atomcls, nx, ny):
     return __Sculpture__(FlexPlane(Square(atomcls), nx,ny).sculpt(), HyperCube()(3))
