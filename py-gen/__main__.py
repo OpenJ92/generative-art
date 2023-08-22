@@ -11,22 +11,13 @@
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
 
-import numpy as np
 from numpy.random import rand, randint
+from numpy import array_split, concatenate
 
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.functions.parallelogram import Parallelogram
-from src.functions.bezier import Bezier
-from src.functions.sphere import Sphere
-from src.functions.dialate import Dialate
-from src.functions.translate import Translate
-from src.functions.composition import Composition
-from src.functions.add import Add
-
-from src.sculptures.unitplane import FlexPlane, FlexCube, FlexHyperCube
-from src.sculptures.unitline import UnitLine
-from src.sculptures.unitcube import Cube, Square, HCube
-from src.sculptures.temporalframebeziernoise import TemporalFrameBezierNoise
+from src.functions import Parallelogram, Bezier, Sphere, Dialate, Translate, Composition, ID, Ball
+from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
+        UnitLine, Cube, Square, HCube, TemporalFrameBezierNoise
 
 from src.atoms import Point, Segment, Triangle
 
