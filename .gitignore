@@ -1,0 +1,12 @@
+hs-gen
+rust-gen
+examples
+tags
+
+__pycache__/
+*.pyc
+*.swp
+*.swo
+*.task
+*.mp4
+*.DS_Store
