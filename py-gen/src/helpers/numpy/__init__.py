@@ -35,6 +35,23 @@ def populate_average_tangents(A, collapse_to):
                     # capture the poles along collapse_to axis and scale c - a 
                     # w.r.t. projection length. i.e. (c - a) * (c - b) dot (c - a)
                     # This would make a rectangular type form over the five points.
+
+                    # in order to do the above computation we're going to have to 
+                    # store/collapse elements in the collapse_to elements:
+                    #
+                    #      A = apply_along_axis(lambda x: lambda _: x, collapse_to, A) 
+                    #      B = apply_along_axis(lambda x: lambda _: x, collapse_to, B) 
+                    # 
+                    # Then applying something of an applicative functor to the two
+                    # of them like so
+                    #
+                    #       f g <$> A <*> B
+                    #
+                    #   where f g a b =
+                    #       let a = a None
+                    #           b = b None
+                    #       in g a b
+
                     e = c - a / square(c - a).sum()
                     print(b - e, b, b + e)
                     E = [*E, b - e, b, b + e]
@@ -45,6 +62,7 @@ def populate_average_tangents(A, collapse_to):
                     E = [*E, b - e, b, b + e]
                     B = [b, c, *B]
 
+        breakpoint()
         a, *B, c = B
         A = concatenate([a, *E, c], axis=axis)
     return A
