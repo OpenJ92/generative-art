@@ -17,10 +17,9 @@ def Concentric(sculpture, count):
 
     funcs = []
     for comp in range(count + 1):
-        funcs = [ Composition( [ Scale(comp/count)
-                               , Translate(array([1 - comp/count for _ in range(dim)]))
-                               ]
-                             )
+        funcs = [ Composition([Scale(comp/count)
+                              ,Translate(array([1 - comp/count for _ in range(dim)]))
+                              ])
                 , *funcs
                 ]
     return __Sculpture__(__Sculpture__(sculpture, Repeat(count)).sculpt(), ZipApply(funcs))
