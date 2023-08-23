@@ -1,5 +1,16 @@
 from numpy import array_split, concatenate, square
 
+## Functor | Applicative Numpy A forms need to be constructed
+## iteration -- product(*map(lambda x: list(range(x)),A.shape))
+##           -- A[(slice(10),2,slice(10),1)] == A[:,2,:,1]
+
+def condense(A, dims):
+    shape = A.shape
+    ranges = map(range, shape)
+    slices = map(slice, shape)
+
+    ## this is a really interesting algo. Take some time to think.
+
 def linear_interpolate(A, collapse_axes, samples):
     for axis, sample in zip(collapse_axes, samples):
         B = array_split(A, A.shape[axis], axis)
@@ -51,6 +62,10 @@ def populate_average_tangents(A, collapse_to):
                     #       let a = a None
                     #           b = b None
                     #       in g a b
+                    # --------------------------------
+                    #
+                    # Note: in python, the provided functions in the storage step can be accessed
+                    #           via a(_)
 
                     e = c - a / square(c - a).sum()
                     print(b - e, b, b + e)

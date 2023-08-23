@@ -4,6 +4,11 @@ from src.typeclass.__function__ import __Function__
 from src.typeclass.__sculpture__ import __Sculpture__
 from src.atoms import __Data__, List
 
+## I think this can be moved into the src.functions.__init__ file
+## as a standard function that takes data and functions and produces
+## data. Here we really bend the knee to make this work in the function
+## format, which is not needed
+
 class ZipApply(__Function__):
     def __init__(self, funcs):
         self.funcs = funcs
