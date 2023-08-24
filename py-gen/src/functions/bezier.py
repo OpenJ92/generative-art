@@ -52,3 +52,8 @@ class Bezier(__Function__):
 
         return Bezier(id_control_points, id_collapse_axes)
 
+    def WithTangents(control_points, tangent_construction_policy, collapse_axes):
+        ## I think we need to make a new folder with numpy helper functions. Particularly
+        ## for injecting tangents and interpolation operations. These will be array_split 
+        ## compose concatenate operations in general. (As I think...).
+        raise NotImplementedError

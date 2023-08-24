@@ -3,6 +3,7 @@ from numpy import array_split, concatenate, square
 ## Functor | Applicative Numpy A forms need to be constructed
 ## iteration -- product(*map(lambda x: list(range(x)),A.shape))
 ##           -- A[(slice(10),2,slice(10),1)] == A[:,2,:,1]
+##           -- A[(*(4,5,6), slice(10), *(3,), slice(4))] == A[4,5,6,:,3,:,1]
 
 def condense(A, dims):
     shape = A.shape
@@ -20,7 +21,7 @@ def linear_interpolate(A, collapse_axes, samples):
         while True:
             match B:
                 case [] | [_]:
-                    break
+                    raise NotImplementedError
                 case [a, b]:
                     C = [a, *map(f(a, b), range(1,sample)), b, *C]
                     break
@@ -31,7 +32,7 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
-def populate_average_tangents(A, collapse_to):
+def populate_MVT(A, collapse_to):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
 
@@ -39,7 +40,7 @@ def populate_average_tangents(A, collapse_to):
         while True:
             match B:
                 case [] | [_] | [_,_]:
-                    break
+                    raise NotImplementedError
                 case [a, b, c]:
                     # This heuristic is reasonable in the instance A is (n, m)
                     # but falls apart for beyond (n, m, ...). Perhaps we should
