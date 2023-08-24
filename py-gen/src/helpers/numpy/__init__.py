@@ -7,9 +7,11 @@ from numpy import array_split, concatenate, square
 
 def condense(A, dims):
     shape = A.shape
-    ranges = map(range, shape)
-    slices = map(slice, shape)
+    ranges = list(map(range, shape))
+    slices = list(map(slice, shape))
+    key = [1 if n in dims else 0 for n in range(len(shape))]
 
+    breakpoint()
     ## this is a really interesting algo. Take some time to think.
 
 def linear_interpolate(A, collapse_axes, samples):
@@ -32,10 +34,12 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
-def populate_MVT(A, collapse_to):
+def populate_MVT(A, collapse_to, extent):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
+        C = B.copy()
 
+        breakpoint()
         E = []
         while True:
             match B:
@@ -68,17 +72,18 @@ def populate_MVT(A, collapse_to):
                     # Note: in python, the provided functions in the storage step can be accessed
                     #           via a(_)
 
-                    e = c - a / square(c - a).sum()
-                    print(b - e, b, b + e)
-                    E = [*E, b - e, b, b + e]
+                    e = c - a
+                    E = [*E, *(extent * (b + e,)), *(extent * (b,)), *(extent * (b - e,))]
                     break
                 case [a, b, c, *B]:
-                    e = c - a / square(c - a).sum()
-                    print(b - e, b, b + e)
-                    E = [*E, b - e, b, b + e]
+                    e = c - a
+                    E = [*E, *(extent * (b + e,)), *(extent * (b,)), *(extent * (b - e,))]
                     B = [b, c, *B]
 
+        # We're going to finish this, but the result is not what I expected.
+        # What I'm looking to do next is construct a series of cubic splines
+        # and stitch them together in a new piecewise function type. 
         breakpoint()
-        a, *B, c = B
+        a, *C, c = C
         A = concatenate([a, *E, c], axis=axis)
     return A
