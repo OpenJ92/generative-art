@@ -73,11 +73,11 @@ def populate_MVT(A, collapse_to, extent):
                     #           via a(_)
 
                     e = c - a
-                    E = [*E, *(extent * (b + e,)), *(extent * (b,)), *(extent * (b - e,))]
+                    E = [*E, *(extent * (b + flare*e,)), *(extent * (b,)), *(extent * (b - flare*e,))]
                     break
                 case [a, b, c, *B]:
                     e = c - a
-                    E = [*E, *(extent * (b + e,)), *(extent * (b,)), *(extent * (b - e,))]
+                    E = [*E, *(extent * (b + flare*e,)), *(extent * (b,)), *(extent * (b - flare*e,))]
                     B = [b, c, *B]
 
         # We're going to finish this, but the result is not what I expected.
