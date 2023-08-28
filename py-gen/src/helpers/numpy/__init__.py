@@ -86,6 +86,7 @@ def populate_MVT(A, collapse_to, extent, flare):
         A = concatenate([a, *E, c], axis=axis)
     return A
 
-def make_closed(A, axis):
-    a, *A = array_split(A, A.shape[axis], axis)
-    return concatenate([a, *A, a], axis=axis)
+def make_closed_MVT(A, axis, flare):
+    a, ap, *A, bp = array_split(A, A.shape[axis], axis)
+    c = bp - ap
+    return concatenate([a, a - flare*c, ap, *A, bp, a + flare*c, a], axis=axis)
