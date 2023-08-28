@@ -34,7 +34,7 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
-def populate_MVT(A, collapse_to, extent):
+def populate_MVT(A, collapse_to, extent, flare):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
         C = B.copy()
