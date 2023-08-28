@@ -90,3 +90,8 @@ def make_closed_MVT(A, axis, flare):
     a, ap, *A, bp = array_split(A, A.shape[axis], axis)
     c = bp - ap
     return concatenate([a, a - flare*c, ap, *A, bp, a + flare*c, a], axis=axis)
+
+def make_closed_LNE(A, axis, t):
+    a, *A, b = array_split(A, A.shape[axis], axis)
+    c = b - a
+    return concatenate([a + t*c, a, *A, b, b - (1 - t)*c], axis=axis)
