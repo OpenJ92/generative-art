@@ -39,7 +39,6 @@ def populate_MVT(A, collapse_to, extent, flare):
         B = array_split(A, A.shape[axis], axis)
         C = B.copy()
 
-        breakpoint()
         E = []
         while True:
             match B:
@@ -73,17 +72,20 @@ def populate_MVT(A, collapse_to, extent, flare):
                     #           via a(_)
 
                     e = c - a
-                    E = [*E, *(extent * (b + flare*e,)), *(extent * (b,)), *(extent * (b - flare*e,))]
+                    E = [*E, *(extent * (b - flare*e,)), *(extent * (b,)), *(extent * (b + flare*e,))]
                     break
                 case [a, b, c, *B]:
                     e = c - a
-                    E = [*E, *(extent * (b + flare*e,)), *(extent * (b,)), *(extent * (b - flare*e,))]
+                    E = [*E, *(extent * (b - flare*e,)), *(extent * (b,)), *(extent * (b + flare*e,))]
                     B = [b, c, *B]
 
         # We're going to finish this, but the result is not what I expected.
         # What I'm looking to do next is construct a series of cubic splines
         # and stitch them together in a new piecewise function type. 
-        breakpoint()
         a, *C, c = C
         A = concatenate([a, *E, c], axis=axis)
     return A
+
+def make_closed(A, axis):
+    a, *A = array_split(A, A.shape[axis], axis)
+    return concatenate([a, *A, a], axis=axis)
