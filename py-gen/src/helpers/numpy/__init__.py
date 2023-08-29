@@ -83,9 +83,13 @@ def populate_MVT(A, collapse_to, extent, flare):
         # What I'm looking to do next is construct a series of cubic splines
         # and stitch them together in a new piecewise function type. 
         a, *C, c = C
-        A = concatenate([a, *E, c], axis=axis)
+        A = concatenate([*(extent * (a,)), *E, *(extent * (c,))], axis=axis)
+        ## A = concatenate([a, *E, c], axis=axis)
     return A
 
+## Perhaps we need to include extent and flare to this function with initial values 1. Then we can
+## use it in a poulate_closed_MVT function which has an awareness of the extent/flare used on the
+## original MDA. Here we cant figure b/c of that unknown. We're assuming those values are one.
 def make_closed_MVT(A, axis, flare):
     a, ap, *A, bp = array_split(A, A.shape[axis], axis)
     c = bp - ap
@@ -94,4 +98,4 @@ def make_closed_MVT(A, axis, flare):
 def make_closed_LNE(A, axis, t):
     a, *A, b = array_split(A, A.shape[axis], axis)
     c = b - a
-    return concatenate([a + t*c, a, *A, b, b - (1 - t)*c], axis=axis)
+    return concatenate([a + t*c, a, *A, b, a + t*c], axis=axis)

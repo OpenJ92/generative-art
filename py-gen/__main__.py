@@ -23,14 +23,11 @@ from src.helpers.numpy import *
 from mp.pose_landmark_detection import Pose_Landmark_Detection
 from src.typeclass.__sculpture__ import __Sculpture__
 
-breakpoint()
-A = make_closed(100*rand(3, 2), 0)
-B = populate_MVT(A, 1, 5, .01)
-f = lambda A: __Sculpture__(UnitLine(150).sculpt(), Bezier(A, [0])).sculpt()
-M = populate_MVT(A, 1, 2, .01)
-L = List([f(A), *[f(populate_MVT(A, 1, i, 1)) for i in range(2, 7)]])
-## Q = List([Point(*x) for x in array_split(A, A.shape[0], 0)])
-## R = List([Point(*x) for x in array_split(B, B.shape[0], 0)])
-## D = List([f(A), Q, f(B), R, f(M)])
-
-write_to_file("smoothtest42.svg", wrap(draw(L)))
+for k in range(10):
+    A = 100*rand(10, 2)
+    print(k, A)
+    f = lambda A: __Sculpture__(UnitLine(500).sculpt(), Bezier(A, [0])).sculpt()
+    N = [make_closed_LNE(populate_MVT(A, 1, 5, .5 + i*.1), 0, .5)  for i in range(2, 10)]
+    ## N = [populate_MVT(make_closed_LNE(A, 0, .5), 1, 5, .5 + i*.1)  for i in range(2, 10)]
+    L = List(list(map(f, N)))
+    write_to_file(f"smoothtest_{k+100}.svg", wrap(draw(L)))
