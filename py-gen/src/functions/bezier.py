@@ -57,3 +57,19 @@ class Bezier(__Function__):
         ## for injecting tangents and interpolation operations. These will be array_split 
         ## compose concatenate operations in general. (As I think...).
         raise NotImplementedError
+
+class FUNCBezier(__Function__):
+    def __init__(self, control_points: array, collapse_axes: array):
+        self.control_points = control_points
+        self.collapse_axes = collapse_axes
+        self.function = self.construct_function()
+
+    def construct_function(self):
+        f = vectorize(lambda x: lambda _: x)
+        functional_points = f(self.control_points)
+
+    ## We have to consider how this works exactly.
+    def functional_convolve(self, t, func1, func2):
+        return lambda t: (1 - t)*func1(t) + t*func2(t)
+
+

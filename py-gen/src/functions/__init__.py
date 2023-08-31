@@ -1,5 +1,5 @@
 from src.functions.parallelogram import Parallelogram
-from src.functions.bezier import Bezier
+from src.functions.bezier import Bezier, FUNCBezier
 from src.functions.sphere import Sphere
 from src.functions.dialate import Dialate
 from src.functions.translate import Translate
