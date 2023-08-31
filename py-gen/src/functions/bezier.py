@@ -11,6 +11,7 @@ class Bezier(__Function__):
         self.collapse_axes = collapse_axes
 
     def __call__(self, ts: array) -> array:
+        ## The de Casteljau Algorithm
         ## Extract domain value and axis indicator.
         t, *ts = ts
         m, *ms = self.collapse_axes
@@ -60,16 +61,19 @@ class Bezier(__Function__):
 
 class FUNCBezier(__Function__):
     def __init__(self, control_points: array, collapse_axes: array):
-        self.control_points = control_points
+        f = vectorize(lambda x: lambda _: x)
+        functional_points = f(control_points)
+        self.control_points = functional_points
         self.collapse_axes = collapse_axes
         self.function = self.construct_function()
 
     def construct_function(self):
-        f = vectorize(lambda x: lambda _: x)
-        functional_points = f(self.control_points)
+
+        t, *ts = ts
+        m, *ms = self.collapse_axes
 
     ## We have to consider how this works exactly.
     def functional_convolve(self, t, func1, func2):
-        return lambda t: (1 - t)*func1(t) + t*func2(t)
+        return lambda t: lambda q: (1 - t)*func1(q) + lambda q: t*func2(q)
 
 
