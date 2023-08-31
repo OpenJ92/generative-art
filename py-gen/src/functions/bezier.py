@@ -61,6 +61,9 @@ class Bezier(__Function__):
 
 class FUNCBezier(__Function__):
     def __init__(self, control_points: array, collapse_axes: array):
+        ## This may be a place to use helper/numpy condense funcition where we condense
+        ## to 'not collapse_axes instead of applying the constant function to every element
+        ## of the ndarray. Work on that before moving forward.
         f = vectorize(lambda x: lambda _: x)
         functional_points = f(control_points)
 
