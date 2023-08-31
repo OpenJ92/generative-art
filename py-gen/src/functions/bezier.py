@@ -84,8 +84,12 @@ class FUNCBezier(__Function__):
         ## and we return self.function(ts_augment)
         ## We'll need a apply function function which takes the elements of ts_augment and
         ## applys them one at a time
+        ts_augment = (,)
+        for t, s in zip(ts, self.control_points.shape):
+            ts_augment = [*ts_augment, *[s*(t,)]]
+        ts_augment = [*ts_augment, None]
 
-        return self.function(ts)
+        return self.applyfunction(self.function, ts_augment)
 
     def construct_function(self):
         pass
@@ -94,5 +98,8 @@ class FUNCBezier(__Function__):
     ## the proper Bezier __Function__?
     def functional_convolve(self, t, func1, func2):
         return lambda t: lambda q: (1 - t)*func1(q) + t*func2(q)
+
+    def applyfunction(self, f, ts):
+        pass
 
 
