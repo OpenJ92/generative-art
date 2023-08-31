@@ -63,14 +63,32 @@ class FUNCBezier(__Function__):
     def __init__(self, control_points: array, collapse_axes: array):
         f = vectorize(lambda x: lambda _: x)
         functional_points = f(control_points)
+
         self.control_points = functional_points
         self.collapse_axes = collapse_axes
         self.function = self.construct_function()
 
-    def construct_function(self):
+    def __call__(self, ts):
+        ## perhaps we need to reconstruct ts s.t. the compenents match the number of times
+        ## we need to apply that component to self.function. There's some sense that the 
+        ## function we build is waiting for the t to fill. At last, we'll supply a None 
+        ## at the end to unpack the numbers hidden in f. for example
 
-        t, *ts = ts
-        m, *ms = self.collapse_axes
+        ## control_points.shape = (1,4,2,3)
+        ## ts = (1,2,3,4)
+
+        ## becomes:
+
+        ##     ts_augment = (1,2,2,2,2,3,3,4,4,4,None)
+        ##
+        ## and we return self.function(ts_augment)
+        ## We'll need a apply function function which takes the elements of ts_augment and
+        ## applys them one at a time
+
+        return self.function(ts)
+
+    def construct_function(self):
+        pass
 
     ## We have to consider how this works exactly. Will this run faster than what we have in 
     ## the proper Bezier __Function__?
