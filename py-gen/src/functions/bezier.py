@@ -72,8 +72,9 @@ class FUNCBezier(__Function__):
         t, *ts = ts
         m, *ms = self.collapse_axes
 
-    ## We have to consider how this works exactly.
+    ## We have to consider how this works exactly. Will this run faster than what we have in 
+    ## the proper Bezier __Function__?
     def functional_convolve(self, t, func1, func2):
-        return lambda t: lambda q: (1 - t)*func1(q) + lambda q: t*func2(q)
+        return lambda t: lambda q: (1 - t)*func1(q) + t*func2(q)
 
 
