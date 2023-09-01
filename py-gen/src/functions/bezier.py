@@ -88,3 +88,14 @@ def Bezier(mode = Mode.CLOSED):
 
     bezier.collapse = collapsedispatch(mode)
     return bezier
+
+## Next on the docket... InconsistentApply(Beziers, collapse_to). 
+##
+## B1.shape = (10,3,4,4,4)
+## B2.shape = (30,3,8,2,5)
+## collapse_to -> 1
+## 
+## Supply both B1 and B2 with collapse axes not collapse_to and apply ts.
+## InconsistentApply resolves a bezier B3.shape (3,2) which can be applied
+## lastly to retrieve the vector R3. This is a means to combine beziers that
+## are of different shapes
