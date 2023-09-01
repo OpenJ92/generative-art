@@ -5,6 +5,9 @@ from src.typeclass.__sculpture__ import __Sculpture__
 from src.functions.hypercube import HyperCube, Mode
 from src.atoms import Segment, List
 
+## Like Hypersphere, we need to reconstruct Bezier to dispatch on convolve
+## strategy. Be it recursive, closed or AST constructions
+
 class Bezier(__Function__):
     def __init__(self, control_points: array, collapse_axes: array):
         self.control_points = control_points
@@ -87,12 +90,13 @@ class FUNCBezier(__Function__):
         ## and we return self.function(ts_augment)
         ## We'll need a apply function function which takes the elements of ts_augment and
         ## applys them one at a time
-        ts_augment = (,)
-        for t, s in zip(ts, self.control_points.shape):
-            ts_augment = [*ts_augment, *[s*(t,)]]
-        ts_augment = [*ts_augment, None]
+        ## ts_augment = (,)
+        ## for t, s in zip(ts, self.control_points.shape):
+        ##     ts_augment = [*ts_augment, *[s*(t,)]]
+        ## ts_augment = [*ts_augment, None]
 
-        return self.applyfunction(self.function, ts_augment)
+        ## return self.applyfunction(self.function, ts_augment)
+        pass
 
     def construct_function(self):
         pass
