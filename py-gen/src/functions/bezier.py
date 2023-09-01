@@ -67,9 +67,6 @@ def Bezier(mode = Mode.CLOSED):
 
             return retv
 
-        def convolve(self, t, slice_one, slice_two):
-            return (1-t)*slice_one + t*slice_two
-
         def ID(dim):
             HCD = HyperCube(HCMode.BEZIER)(dim)
             data = __Sculpture__(Segment(array([0]), array([1])), HCD).sculpt()
