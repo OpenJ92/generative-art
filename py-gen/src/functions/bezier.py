@@ -1,4 +1,5 @@
 from numpy import array, array_split, squeeze, stack, concatenate
+from functools import reduce
 from math import comb
 from enum import Enum
 
@@ -85,6 +86,33 @@ def Bezier(mode = Mode.CLOSED):
 
     bezier.collapse = collapsedispatch(mode)
     return bezier
+
+class IncongruousApply(__Funcion__):
+    def __init__(self, beziers, collapse_to):
+        self.beziers = beziers
+        self.collapse_to = collapse_to
+
+        self.check_conditions()
+
+    def __call__(self, ts):
+        ## Split ts into collapse_ts and preserve_ts. 
+
+        ## For each Bezier, update corresponding collapse_axes so as to remove 
+        ## collapse_to axis and apply collapse_ts to it. (Perhaps we should initialize
+        ## a new Bezier?)
+
+        ## The whole of the outputs should now be in the same shape. Concatenate
+        ## along the zeroth axis and construct/return Bezier()(CONCAT, [not 0])(preserve_ts)
+        pass
+
+    def check_conditions(self):
+        check_sizes = reduce(lambda x, y: x == y
+                            , map(lambda b: b.control_points.shape[self.collapse_to] , self.beziers)
+                            , self.collapse_to
+                            )
+
+        return check_sizes and True
+
 
 ## Next on the docket... InconsistentApply(Beziers, collapse_to). 
 ##
