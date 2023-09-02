@@ -10,12 +10,12 @@ from itertools import combinations
 from enum import Enum
 
 class Mode(Enum):
-    NORM = 0
+    FULL = 0
     BEZIER = 1
 
 def pnpdispatch(mode):
     match mode:
-        case Mode.NORM: return pnpNorm
+        case Mode.FULL: return pnpNorm
         case Mode.BEZIER: return pnpBez
 
 def pnpNorm(data, dim, hcdim):
@@ -27,7 +27,7 @@ def pnpBez(data, dim, hcdim):
     planes, notplanes = pnpNorm(data, dim, hcdim)
     return planes[:1], notplanes[:1]
 
-def HyperCube(mode = Mode.NORM):
+def HyperCube(mode = Mode.FULL):
     class hypercube(__Function__):
         def __init__(self, N):
             self.N = N
