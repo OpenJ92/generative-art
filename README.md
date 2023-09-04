@@ -4,11 +4,11 @@ generative-art is a python svg generation suite. It models the act of making a p
 
 ### TODO
 - ~~ construct \_\_Function\_\_ ~~
-    - ~~ implement Hypercube ~~
-    - ~~ implement Hypersphere ~~
-    - ~~ implement Bezier ~~
-- ~~ construct \_\_Sculpture\_\_ ~~
-- ~~ construct \_\_Data\_\_ ~~
+    - ~~implement Hypercube~~
+    - ~~implement Hypersphere~~
+    - ~~implement Bezier~~
+- ~~construct \_\_Sculpture\_\_~~
+- ~~construct \_\_Data\_\_~~
 - construct \_\_Camera\_\_ 
 - construct \_\_Enviornment\_\_
 - construct \_\_Photograph\_\_ 
