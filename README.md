@@ -27,4 +27,4 @@ generative-art is a python svg generation suite. It models the act of making a p
     > Sculptures are the basic units of construction for any generative work done in the program. Examples that utilize the system well include those found in the [unitcube.py](py-gen/src/sculptures/unitcube.py) and [unitplane.py](py-gen/src/sculptures/unitplane.py). Sculptures have no constraints on form so long as the output is of the class [\_\_Sculpture\_\_](py-gen/src/typeclass/__sculpture__.py).
 - [typeclass](py-gen/src/typeclass)
     
-    > Typeclass forms are ABC classes which the above forms inherit from to enforce method definitions for submission to more generic classes like [\_\_Sculpture\_\_](py-gen/src/typeclass/__sculpture__.py) class and upcoming \_\_Camera\_\_, \_\_Enviornment\_\_, \_\_Photograph\_\_ and \_\_Video\_\_ classes.
+    > Typeclass forms are ABC classes which the above forms inherit from. They enforce method definitions for submission to more generic classes like [\_\_Sculpture\_\_](py-gen/src/typeclass/__sculpture__.py) class and upcoming \_\_Camera\_\_, \_\_Enviornment\_\_, \_\_Photograph\_\_ and \_\_Video\_\_ classes.
