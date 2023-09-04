@@ -13,6 +13,7 @@
 
 from numpy.random import rand, randint
 from numpy import array_split, concatenate, square, array
+from math import pi
 
 from src.functions import Parallelogram, Bezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, Perlin_Vector
@@ -31,10 +32,11 @@ def explore():
         f = lambda A: __Sculpture__(UnitLine(500).sculpt()
                                    , Composition(
                                        [ Bezier()(A, [0])
-                                       , Parallelogram(array([[1,0,0,0],[0,3.14,0,0],[0,0,3.14,0],[0,0,0,3.14]]))
+                                       , Parallelogram(array([[1,0,0,0],[0,2*pi,0,0],[0,0,pi,0],[0,0,0,pi]]))
+                                       , Translate(array([1,0,0,0]))
                                        , Ball()
-                                       , Parallelogram(array([[1,0,0,0],[0,0,1,0]]))
+                                       , Parallelogram(array([Sphere()(rand(3,1)),Sphere()(rand(3,1))]))
                                        ])).sculpt()
         N = [make_closed_LNE(populate_MVT(A, 1, 2, i*.025), 0, .5)  for i in range(2, 30)]
         L = List(list(map(f, N)))
-        write_to_file(f"smoothtest_{k+410}.svg", wrap(draw(L)))
+        write_to_file(f"smoothtest_{k+530}.svg", wrap(draw(L)))

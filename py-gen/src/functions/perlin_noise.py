@@ -1,5 +1,6 @@
+from __future__ import annotations
 from perlin_noise import PerlinNoise
-from numpy import array, zeros
+from numpy import array
 
 from src.typeclass.__function__ import __Function__
 
@@ -26,17 +27,19 @@ class Perlin_Stack(__Function__):
         self.octaves = octaves
         self.seeds = seeds
 
-    def __call__(self, ts):
+    def __call__(self, ts: array):
         perlins = map(lambda octseed: Perlin_Noise(*octseed), zip(self.octaves, self.seeds))
         retval = 0
-        for prop, f in zip(self.proportions, perlins):
-            retval += retval + prop*f(ts)
+        for prop, perlin in zip(self.proportions, perlins):
+            retval += retval + prop*perlin(ts)
         return retval
+
+Perlin = Perlin_Noise | Perlin_Stack
 
 ## Rn -> Rm transform
 class Perlin_Vector(__Function__):
     def __init__(self, perlins):
         self.perlins = perlins
 
-    def __call__(self, ts):
+    def __call__(self, ts: array):
         return array(list(map(lambda perlin: perlin(ts), self.perlins)))
