@@ -1,7 +1,9 @@
 from __future__ import annotations
 from perlin_noise import PerlinNoise
-from numpy import array
+from numpy import array, square
+from numpy.random import randint, rand
 
+from src.functions.sphere import Sphere
 from src.typeclass.__function__ import __Function__
 from src.typeclass.__random__ import __Random__
 
@@ -22,7 +24,7 @@ class Perlin_Noise(__Random__, __Function__):
 
     @classmethod
     def random(cls):
-        raise NotImplementedError
+        return cls(randint(20), randint(999999999))
 
 
 ## Rn -> R1
@@ -41,7 +43,11 @@ class Perlin_Stack(__Random__, __Function__):
 
     @classmethod
     def random(cls):
-        raise NotImplementedError
+        size = randint(low = 1, high = 10)
+        proportions = square(Sphere()(rand(size,)))
+        octaves = randint(low=1, high=20, size=(size+1,))
+        seeds = randint(999999999, size=(size+1,))
+        return cls(proportions, octaves, seeds)
 
 
 Perlin = Perlin_Noise | Perlin_Stack
@@ -56,5 +62,5 @@ class Perlin_Vector(__Random__, __Function__):
 
     @classmethod
     def random(cls):
-        raise NotImplementedError
+        return lambda size: cls([Perlin_Stack.random() for _ in range(size)])
 
