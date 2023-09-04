@@ -3,7 +3,7 @@
 generative-art is a python svg generation suite. It models the act of making a parameterized mathematical forms in any real space using numpy ndarrays at it's base. Works generated here have been displayed in the New York Metropolitan Area.
 
 ### TODO
-- ~~ construct \_\_Function\_\_ ~~
+- ~~construct \_\_Function\_\_~~
     - ~~implement Hypercube~~
     - ~~implement Hypersphere~~
     - ~~implement Bezier~~
