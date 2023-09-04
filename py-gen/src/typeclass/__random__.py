@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 class __Random__(ABC):
+    @classmethod
     @abstractmethod
-    def random(self):
-        rasie NotImplementedError
+    def random():
+        raise NotImplementedError
