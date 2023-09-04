@@ -15,14 +15,14 @@ from src.atoms import Segment, List
 
 class Mode(Enum):
     CLOSED = 0
-    RECURSIVE = 1
+    DECASTELJAU = 1
 
 def collapsedispatch(mode):
     match mode:
-        case Mode.CLOSED: return collapseclosed
-        case Mode.RECURSIVE: return collapserecursive
+        case Mode.CLOSED: return collapse_closed
+        case Mode.DECASTELJAU: return collapse_decasteljau
 
-def collapseclosed(s, scp, t, m):
+def collapse_closed(s, scp, t, m):
     ## condense sub-arrays with closed-form
     f = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
     collapse_function = f(s.control_points.shape[m]-1)(t)
@@ -31,7 +31,7 @@ def collapseclosed(s, scp, t, m):
     retv = squeeze(sum(parts),axis=m)
     return retv
 
-def collapserecursive(s, scp, t, m):
+def collapse_decasteljau(s, scp, t, m):
     ## condense sub-arrays with convolution 
     convolve = lambda t: lambda c: lambda p: (1-t)*p + t*c
     while len(scp) > 1: scp = [convolve(t)(p)(c) for p, c in zip(scp, scp[1:])]
@@ -87,7 +87,7 @@ def Bezier(mode = Mode.CLOSED):
     bezier.collapse = collapsedispatch(mode)
     return bezier
 
-class IncongruousApply(__Funcion__):
+class IncongruousApply(__Function__):
     def __init__(self, beziers, collapse_to):
         self.beziers = beziers
         self.collapse_to = collapse_to
@@ -103,6 +103,10 @@ class IncongruousApply(__Funcion__):
 
         ## The whole of the outputs should now be in the same shape. Concatenate
         ## along the zeroth axis and construct/return Bezier()(CONCAT, [not 0])(preserve_ts)
+
+        # potential useful functions here:
+        #   np.take for construction of collapse_ts, preserve_ts
+        #   lambda lst: lambda x: [lst.pop(k-i) for i, k in enumerate(x)]
         pass
 
     def check_conditions(self):
