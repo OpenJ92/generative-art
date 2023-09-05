@@ -5,6 +5,7 @@ from enum import Enum
 
 from src.typeclass.__function__ import __Function__
 from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.__random__ import __Random__
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
@@ -32,6 +33,7 @@ def collapse_closed(s, scp, t, m):
     return retv
 
 def collapse_decasteljau(s, scp, t, m):
+    ## The de Casteljau Algorithm
     ## condense sub-arrays with convolution 
     convolve = lambda t: lambda c: lambda p: (1-t)*p + t*c
     while len(scp) > 1: scp = [convolve(t)(p)(c) for p, c in zip(scp, scp[1:])]
@@ -42,13 +44,12 @@ def collapse_decasteljau(s, scp, t, m):
     return retv
 
 def Bezier(mode = Mode.CLOSED):
-    class bezier(__Function__):
+    class bezier(__Random__, __Function__):
         def __init__(self, control_points: array, collapse_axes: array):
             self.control_points = control_points
             self.collapse_axes = collapse_axes
 
         def __call__(self, ts: array) -> array:
-            ## The de Casteljau Algorithm
             ## Extract domain value and axis indicator.
             t, *ts = ts
             m, *ms = self.collapse_axes
@@ -59,7 +60,6 @@ def Bezier(mode = Mode.CLOSED):
             ## collapse given dispatch
             retv = bezier.collapse(self, scp, t, m)
 
-
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
             if ms and ts:
@@ -68,7 +68,12 @@ def Bezier(mode = Mode.CLOSED):
 
             return retv
 
-        def ID(dim):
+        @classmethod
+        def random(cls):
+            raise NotImplementedError
+
+        @classmethod
+        def ID(cls, dim):
             HCD = HyperCube(HCMode.BEZIER)(dim)
             data = __Sculpture__(Segment(array([0]), array([1])), HCD).sculpt()
 
@@ -82,10 +87,14 @@ def Bezier(mode = Mode.CLOSED):
             id_control_points = dfs(data)
             id_collapse_axes = range(dim)[::-1]
 
-            return bezier(id_control_points, id_collapse_axes)
+            return cls(id_control_points, id_collapse_axes)
 
     bezier.collapse = collapsedispatch(mode)
     return bezier
+
+class RationalBezier(__Random__, __Function__):
+    def __init__(control_points, collapse_axes, weights):
+        pass
 
 class IncongruousApply(__Function__):
     def __init__(self, beziers, collapse_to):
