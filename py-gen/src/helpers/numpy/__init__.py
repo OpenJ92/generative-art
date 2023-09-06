@@ -34,6 +34,9 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
+## Extent is imaterial here having found RationalBezier. Look to reconstruct here.
+## What's more, there is a way to make any n-order into an n+m order according to 
+## wiki. Look to reimplement here and make RationalBezier in bezier file
 def populate_MVT(A, collapse_to, extent, flare):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
@@ -45,46 +48,30 @@ def populate_MVT(A, collapse_to, extent, flare):
                 case [] | [_] | [_,_]:
                     raise NotImplementedError
                 case [a, b, c]:
-                    # This heuristic is reasonable in the instance A is (n, m)
-                    # but falls apart for beyond (n, m, ...). Perhaps we should
-                    # capture the poles along collapse_to axis and scale c - a 
-                    # w.r.t. projection length. i.e. (c - a) * (c - b) dot (c - a)
-                    # This would make a rectangular type form over the five points.
-
-                    # in order to do the above computation we're going to have to 
-                    # store/collapse elements in the collapse_to elements:
-                    #
-                    #      A = apply_along_axis(lambda x: lambda _: x, collapse_to, A) 
-                    #      B = apply_along_axis(lambda x: lambda _: x, collapse_to, B) 
-                    # 
-                    # Then applying something of an applicative functor to the two
-                    # of them like so
-                    #
-                    #       f g <$> A <*> B
-                    #
-                    #   where f g a b =
-                    #       let a = a None
-                    #           b = b None
-                    #       in g a b
-                    # --------------------------------
-                    #
-                    # Note: in python, the provided functions in the storage step can be accessed
-                    #           via a(_)
-
                     e = c - a
-                    E = [*E, *(extent * (b - flare*e,)), *(extent * (b,)), *(extent * (b + flare*e,))]
+                    E = [ *E
+                        , extent * (b - flare*e)
+                        , extent *  b
+                        , extent * (b + flare*e)
+                        ]
+
                     break
                 case [a, b, c, *B]:
                     e = c - a
-                    E = [*E, *(extent * (b - flare*e,)), *(extent * (b,)), *(extent * (b + flare*e,))]
+                    E = [ *E
+                        , extent * (b - flare*e)
+                        , extent * b
+                        , extent * (b + flare*e)
+                        ]
                     B = [b, c, *B]
 
         # We're going to finish this, but the result is not what I expected.
         # What I'm looking to do next is construct a series of cubic splines
         # and stitch them together in a new piecewise function type. 
         a, *C, c = C
-        A = concatenate([*(extent * (a,)), *E, *(extent * (c,))], axis=axis)
+        A = concatenate([extent * a, *E, extent * c], axis=axis)
         ## A = concatenate([a, *E, c], axis=axis)
+        print(A)
     return A
 
 ## Perhaps we need to include extent and flare to this function with initial values 1. Then we can

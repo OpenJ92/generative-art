@@ -94,46 +94,13 @@ def Bezier(mode = Mode.CLOSED):
 
 class RationalBezier(__Random__, __Function__):
     def __init__(control_points, collapse_axes, weights):
-        pass
-
-class IncongruousApply(__Function__):
-    def __init__(self, beziers, collapse_to):
-        self.beziers = beziers
-        self.collapse_to = collapse_to
-
-        self.check_conditions()
+        self.control_points = control_points
+        self.collapse_axes = collapse_axes
+        self.weights = weights
 
     def __call__(self, ts):
-        ## Split ts into collapse_ts and preserve_ts. 
-
-        ## For each Bezier, update corresponding collapse_axes so as to remove 
-        ## collapse_to axis and apply collapse_ts to it. (Perhaps we should initialize
-        ## a new Bezier?)
-
-        ## The whole of the outputs should now be in the same shape. Concatenate
-        ## along the zeroth axis and construct/return Bezier()(CONCAT, [not 0])(preserve_ts)
-
-        # potential useful functions here:
-        #   np.take for construction of collapse_ts, preserve_ts
-        #   lambda lst: lambda x: [lst.pop(k-i) for i, k in enumerate(x)]
         pass
 
-    def check_conditions(self):
-        check_sizes = reduce(lambda x, y: x == y
-                            , map(lambda b: b.control_points.shape[self.collapse_to] , self.beziers)
-                            , self.collapse_to
-                            )
-
-        return check_sizes and True
-
-
-## Next on the docket... InconsistentApply(Beziers, collapse_to). 
-##
-## B1.shape = (10,3,4,4,4)
-## B2.shape = (30,3,8,2,5)
-## collapse_to -> 1
-## 
-## Supply both B1 and B2 with collapse axes not collapse_to and apply ts.
-## InconsistentApply resolves a bezier B3.shape (3,2) which can be applied
-## lastly to retrieve the vector R3. This is a means to combine beziers that
-## are of different shapes
+    @classmethod
+    def random(self):
+        pass
