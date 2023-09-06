@@ -4,6 +4,7 @@ from src.functions.composition import Composition
 from src.helpers.zipapply import ZipApply
 from src.functions.copy import Copy
 from src.atoms import Segment, List
+from src.typeclass.__sculpture__ import __Sculpture__
 
 from numpy import array, diag
 
