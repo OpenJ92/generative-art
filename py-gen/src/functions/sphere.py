@@ -13,3 +13,10 @@ class Sphere(__Function__):
         if ts: return self.recursive_call(arr, ts)
         else : return arr
 
+from unittest import TestCase
+class TEST_Sphere(TestCase):
+    def test_length_invariant(self):
+        pass
+
+    def test_embedded_dimension_change(self):
+        pass
