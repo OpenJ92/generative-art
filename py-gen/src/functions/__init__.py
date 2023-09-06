@@ -9,6 +9,8 @@ from src.functions.hypercube import HyperCube
 from src.functions.id import ID
 from src.functions.ball import Ball
 from src.functions.perlin_noise import Perlin_Noise, Perlin_Stack, Perlin_Vector
+from src.functions.add import Add
+from src.functions.accumulateonto import AccumulateOnto
 
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
