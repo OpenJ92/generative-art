@@ -19,7 +19,8 @@ from src.functions import Parallelogram, Bezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, \
         Perlin_Vector, Add, AccumulateOnto, Copy
 from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
-        UnitLine, Cube, Square, HCube, TemporalFrameBezierNoise, Concentric, FlexSquare
+        UnitLine, Cube, Square, HCube, TemporalFrameBezierNoise, Concentric, FlexSquare, \
+        SegmentedUnitStrip
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
 
@@ -31,11 +32,12 @@ from src.typeclass.__sculpture__ import __Sculpture__
 # into component pieces.
 
 def U06():
-    for k in range(20):
+    for k in range(10):
         A = rand(10, 3)
         print(k, A)
 
-        line = UnitLine(1500)
+        line = SegmentedUnitStrip(1500)
+        breakpoint()
         squares = lambda k: __Sculpture__( Concentric(FlexSquare(50), 100).sculpt()
                                          , Composition([ Parallelogram([[2*pi,0],[0,1*pi]])
                                                        , Translate([pi*(k/20), pi*(k/60)])
@@ -65,7 +67,7 @@ def U06():
         N = [make_closed_LNE(populate_MVT(A, 1, 1.75, i*.0125), 0, .5)  for i in range(2, 60)]
         L = List(list(map(lambda A: f(A, line, noise, deform), N)))
 
-        write_to_file(f"smoothtest_{k+880}.svg", wrap(draw(List([squares(pi*(k/20)), L]))))
+        write_to_file(f"smoothtest_{k+920}.svg", wrap(draw(List([squares(pi*(k/20)), L]))))
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares

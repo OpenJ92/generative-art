@@ -1,5 +1,5 @@
 from src.sculptures.unitplane import FlexPlane, FlexCube, FlexHyperCube
-from src.sculptures.unitline import UnitLine
+from src.sculptures.unitline import UnitLine, SegmentedUnitStrip
 from src.sculptures.unitcube import Cube, Square, HCube, FlexSquare
 from src.sculptures.temporalframebeziernoise import TemporalFrameBezierNoise
 from src.sculptures.concentric import Concentric
