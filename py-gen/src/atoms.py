@@ -1,6 +1,5 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List
 from numpy import array, zeros, diag
 
 from src.typeclass.__composite__ import __Composite__
@@ -53,16 +52,8 @@ class Triangle:
 Atomic = Point | Segment | Triangle
 
 class SegmentStrip():
-    def __init__(self):
-        # Were looking to make the strip class if __Data__ in order to minimize
-        # time to computation. Typical functions will be called as a map over the
-        # set of points. The relationships between points will be stored in dictionaries
-        # to be consturcted into segments at the appropriate times. In effect, they're not
-        # drawable. Drawable needs to convert Strips into the appropriate List form to be
-        # drawn. Perhaps not. I think I remember that there may be polygon/line forms
-        # that allow us to go directly to svg.
-        points = list()
-        relations = defaultdict(list)
+    def __init__(self, points):
+        self.points = points
 
 class List():
     ## We need to figure how to derive dimension
@@ -95,10 +86,12 @@ def dimension(data: __Data__):
             return l.size
         case Triangle(l=l, m=m, n=n):
             return l.size
-        case List(elements=elements):
-            if len(elements) == 0:
-                raise NotImplementedError
-            return dimension(elements[0])
+        case List(elements=[element,*_]):
+            return dimension(element)
+        case List(elements=[]):
+            raise NotImplementedError
+        case SegmentStrip(points=[point,*_]):
+            return dimension(point)
         case __Meta_Data__(meta, data):
             return dimension(data)
 
@@ -123,6 +116,14 @@ def draw(data: __Data__) -> str:
                 return f'<polygon points="{x0},{y0} {x1},{y1} {x2},{y2} {x0},{y0}" />\n'
             case List(elements=elements):
                 return "".join(list(map(draw, elements)))
+            case SegmentStrip(points=points):
+                def f(points):
+                     match points:
+                        case (Point(l=l1), Point(l=l2)):
+                            return Segment(l1, l2)
+                        case _:
+                            raise NotImplementedError
+                return "".join(list(map(draw, map(f, zip(points,points[1:])))))
             case __Meta_Data__(meta, data):
                 return draw(data)
 
