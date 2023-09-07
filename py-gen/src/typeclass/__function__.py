@@ -19,5 +19,7 @@ class __Function__(ABC):
                 return Triangle(self.__call__(l), self.__call__(m), self.__call__(n))
             case List(elements=elements):
                 return List(list(map(lambda x: self.__call_data__(x), elements)))
+            case SegmentStrip(points=points):
+                return SegmentStrip(list(map(lambda x: self.__call_data__(x), points)))
             case __Meta_Data__(meta, data):
                 return __Meta_Data__(meta, self.__call_data__(data))

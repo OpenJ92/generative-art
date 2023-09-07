@@ -52,6 +52,10 @@ class Triangle:
 Atomic = Point | Segment | Triangle
 
 class SegmentStrip():
+    @classmethod
+    def from_list(cls, lst):
+        return cls(list(map(lambda arr: Point(arr))))
+
     def __init__(self, points):
         self.points = points
 
