@@ -1,7 +1,7 @@
 from src.typeclass.__sculpture__ import __Sculpture__
 from src.functions.id import ID
 from src.functions.hypercube import HyperCube
-from src.sculptures.unitline import UnitLine, SegmentedUnitStrip
+from src.sculptures.unitline import UnitLine, UnitStrip
 from src.atoms import List, Segment, Triangle, Point
 
 from numpy import array
@@ -35,5 +35,5 @@ def HCube(atomcls, n):
     return __Sculpture__(Square(atomcls).sculpt(), HyperCube()(n))
 
 def FlexSquare(n):
-    return __Sculpture__(SegmentedUnitStrip(n).sculpt(), HyperCube()(2))
+    return __Sculpture__(UnitStrip(n).sculpt(), HyperCube()(2))
 

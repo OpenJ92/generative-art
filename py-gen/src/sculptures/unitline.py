@@ -20,6 +20,7 @@ def UnitLine(nx):
 
     return __Sculpture__(__Sculpture__(Segment(array([0]), array([1])), Copy(nx)).sculpt(), ZipApply(funcs))
 
-def SegmentedUnitStrip(n):
-    return __Sculpture__(SegmentStrip.from_linspace(linspace(0, 1, num=n, endpoint=True)), ID())
+# There are no repeated points in this form as it's piped though __Function__ machines
+def UnitStrip(n):
+    return __Sculpture__(SegmentStrip.from_itterable(linspace(0, 1, num=n, endpoint=True).reshape(n,1)), ID())
 
