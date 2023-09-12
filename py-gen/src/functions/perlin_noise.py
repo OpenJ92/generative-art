@@ -24,7 +24,7 @@ class Perlin_Noise(__Random__, __Function__):
 
     @classmethod
     def random(cls):
-        return cls(randint(20), randint(999999999))
+        return cls(randint(low=1, high=20), randint(999999999))
 
 
 ## Rn -> R1
@@ -43,9 +43,9 @@ class Perlin_Stack(__Random__, __Function__):
 
     @classmethod
     def random(cls):
-        size = randint(low = 1, high = 10)
+        size = randint(low = 1, high = 5)
         proportions = square(Sphere()(rand(size,)))
-        octaves = randint(low=1, high=20, size=(size+1,))
+        octaves = randint(low = 2, high = 4, size = (size+1,))
         seeds = randint(999999999, size=(size+1,))
         return cls(proportions, octaves, seeds)
 
