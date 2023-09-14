@@ -19,7 +19,7 @@ class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
 
-def collapsedispatch(mode):
+def collapse_dispatch(mode):
     match mode:
         case Mode.CLOSED: return collapse_closed
         case Mode.DECASTELJAU: return collapse_decasteljau
@@ -66,11 +66,11 @@ def Bezier(mode = Mode.CLOSED):
             collapse_axis, *collapse_axes = self.collapse_axes
 
             ## Along the given axis, gather sub-arrays from control points
-            control_point_slices = array_split(self.control_points, \
+            control_vectors = array_split(self.control_points, \
                     self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = bezier.collapse(self, control_point_slices, t, collapse_axis)
+            retv = bezier.collapse_dispatch(mode)(self, control_vectors, t, collapse_axis)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
@@ -101,7 +101,6 @@ def Bezier(mode = Mode.CLOSED):
 
             return cls(id_control_points, id_collapse_axes)
 
-    bezier.collapse = collapsedispatch(mode)
     return bezier
 
 ## Perhaps this should be constructed through composition. We have a function which recieves a Bezier
