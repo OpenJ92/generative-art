@@ -24,24 +24,34 @@ def collapsedispatch(mode):
         case Mode.CLOSED: return collapse_closed
         case Mode.DECASTELJAU: return collapse_decasteljau
 
-def collapse_closed(s, scp, t, m):
+## Rational Closed form? 
+def collapse_closed(this, control_point_slices, t, collapse_axis):
     ## condense sub-arrays with closed-form
     f = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
-    collapse_function = f(s.control_points.shape[m]-1)(t)
-    parts = [collapse_function(i)*part for i, part in enumerate(scp)]
-
-    retv = squeeze(sum(parts),axis=m)
-    return retv
-
-def collapse_decasteljau(s, scp, t, m):
-    ## The de Casteljau Algorithm
-    ## condense sub-arrays with convolution 
-    convolve = lambda t: lambda c: lambda p: (1-t)*p + t*c
-    while len(scp) > 1: scp = [convolve(t)(p)(c) for p, c in zip(scp, scp[1:])]
+    collapse_function = f(this.control_points.shape[collapse_axis]-1)(t)
+    parts = [ collapse_function(i)*part
+              for i, part
+              in enumerate(control_point_slices)
+            ]
 
     ## collect result of above computation and remove the condensed axis
-    retv, *_ = scp
-    retv = squeeze(retv, axis=m)
+    retv = squeeze(sum(parts),axis=collapse_axis)
+    return retv
+
+def collapse_decasteljau(this, control_point_slices, t, collapse_axis):
+    ## The de Casteljau Algorithm
+    ## condense sub-arrays with convolution 
+    convolve = lambda t: lambda left: lambda right: (1-t)*right + t*left
+    tail = lambda lst: lst[1:]
+    while len(control_point_slices) > 1:
+        control_point_slices = [ convolve(t)(left)(right)
+                                 for left, right
+                                 in zip(control_point_slices, tail(control_point_slices))
+                               ]
+
+    ## collect result of above computation and remove the condensed axis
+    retv, *_ = control_point_slices
+    retv = squeeze(retv, axis=collapse_axis)
     return retv
 
 def Bezier(mode = Mode.CLOSED):
@@ -53,19 +63,20 @@ def Bezier(mode = Mode.CLOSED):
         def __call__(self, ts: array) -> array:
             ## Extract domain value and axis indicator.
             t, *ts = ts
-            m, *ms = self.collapse_axes
+            collapse_axis, *collapse_axes = self.collapse_axes
 
             ## Along the given axis, gather sub-arrays from control points
-            scp = array_split(self.control_points, self.control_points.shape[m], m)
+            control_point_slices = array_split(self.control_points, \
+                    self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = bezier.collapse(self, scp, t, m)
+            retv = bezier.collapse(self, control_point_slices, t, collapse_axis)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
-            if ms and ts:
-                ms = map(lambda x: x if x < m else x - 1, ms)
-                retv = bezier(retv, ms).__call__(ts)
+            if collapse_axes and ts:
+                collapse_axes = map(lambda x: x if x < m else x - 1, ms)
+                retv = bezier(retv, collapse_axes).__call__(ts)
 
             return retv
 
