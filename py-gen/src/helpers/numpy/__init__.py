@@ -88,6 +88,7 @@ def make_closed_LNE(A, axis, t):
     return concatenate([a + t*c, a, *A, b, a + t*c], axis=axis)
 
 # Should we be weighting the first and last components of the bezier ndarray?
+## This is incorrect. This process has to happen at evaluation time. See Wiki: Rational Bezier
 def rational(A, weights, axis):
     if A.shape[axis] != len(weights):
         raise ValueError(f"Shape of A in axis: {axis} not equal to length of weights: {len(weights)}")
