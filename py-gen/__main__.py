@@ -15,11 +15,11 @@ from numpy import array_split, concatenate, square, array
 from numpy.random import rand, randint
 from math import pi
 
-from src.functions import Parallelogram, Bezier, Sphere, Dialate, \
+from src.functions import Parallelogram, Bezier, RationalBezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, \
         Perlin_Vector, Add, AccumulateOnto, Copy
 from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
-        UnitLine, Cube, Square, HCube, TemporalFrameBezierNoise, Concentric, FlexSquare, \
+        UnitLine, Cube, Square, HCube, Concentric, FlexSquare, \
         UnitStrip
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *

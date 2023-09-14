@@ -9,6 +9,7 @@ from src.typeclass.__random__ import __Random__
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
+from src.helpers.numpy import rational
 
 ## Like Hypersphere, we need to reconstruct Bezier to dispatch on convolve
 ## strategy. Be it recursive, closed or AST constructions
@@ -92,15 +93,22 @@ def Bezier(mode = Mode.CLOSED):
     bezier.collapse = collapsedispatch(mode)
     return bezier
 
-class RationalBezier(__Random__, __Function__):
-    def __init__(control_points, collapse_axes, weights):
-        self.control_points = control_points
+class RationalBezier(Bezier()):
+    def __init__(self, control_points, collapse_axes, weights, axes):
+        self.control_points = self.form_control_points(control_points, weights, axes)
         self.collapse_axes = collapse_axes
-        self.weights = weights
-
-    def __call__(self, ts):
-        pass
 
     @classmethod
     def random(self):
         pass
+
+    def __call__(self, ts):
+        return Bezier()(self.control_points, self.collapse_axes).__call__(ts)
+
+    def form_control_points(self, control_points, weights, axes):
+        while weights:
+            weight, *weights = weights
+            axis, *axes      = axes
+            control_points = rational(control_points, weight, axis)
+        return control_points
+

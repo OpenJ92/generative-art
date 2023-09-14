@@ -86,3 +86,12 @@ def make_closed_LNE(A, axis, t):
     a, *A, b = array_split(A, A.shape[axis], axis)
     c = b - a
     return concatenate([a + t*c, a, *A, b, a + t*c], axis=axis)
+
+# Should we be weighting the first and last components of the bezier ndarray?
+def rational(A, weights, axis):
+    if A.shape[axis] != len(weights):
+        raise ValueError(f"Shape of A in axis: {axis} not equal to length of weights: {len(weights)}")
+    splitA = array_split(A, A.shape[axis], axis)
+    weightedA = [weight*split for weight, split in zip(weights, splitA)]
+    return concatenate(weightedA, axis=axis)
+
