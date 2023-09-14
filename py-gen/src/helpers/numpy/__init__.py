@@ -95,3 +95,6 @@ def rational(A, weights, axis):
     weightedA = [weight*split for weight, split in zip(weights, splitA)]
     return concatenate(weightedA, axis=axis)
 
+def degree_elevation(A, degree, axis):
+    pass
+

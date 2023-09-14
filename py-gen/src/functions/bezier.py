@@ -93,6 +93,10 @@ def Bezier(mode = Mode.CLOSED):
     bezier.collapse = collapsedispatch(mode)
     return bezier
 
+## Perhaps this should be constructed through composition. We have a function which recieves a Bezier
+## and returns a new Bezier that has been edited with the application of rational. This way we could make
+## compositions with Rational and the upcoming ElevateBezier classes. Both of which edit the control_point
+## forms
 class RationalBezier(Bezier()):
     def __init__(self, control_points, collapse_axes, weights, axes):
         self.control_points = self.form_control_points(control_points, weights, axes)
