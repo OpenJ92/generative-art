@@ -10,27 +10,12 @@ class Point:
         self.embeded_dimension = l.size
         self.intrinsic_dimension = 0
 
-    def __add__(self, x):
-        if not isinstance(x, Point): raise NotImplementedError(f"Sum of {self} and {x} not defined")
-        match x:
-            case Point(l=l):
-                return Point(self.l + l)
-
-
 class Segment:
     def __init__(self, l, m):
         self.l: array = l
         self.m: array = m
         self.embeded_dimension = l.size
         self.intrinsic_dimension = 1
-
-    def __add__(self, x):
-        if not isinstance(x, Segment): raise NotImplementedError(f"Sum of {self} and {x} not defined")
-        match x:
-            case Segment(l=l, m=m):
-                return Segment(self.l + l, self.m + m)
-
-
 
 # make assertions that all arrays are of equal size or make it 
 # so we store the triangle as a matrix...
@@ -42,23 +27,12 @@ class Triangle:
         self.embeded_dimension = l.size
         self.intrinsic_dimension = 2
 
-    def __add__(self, x):
-        if not isinstance(x, Triangle): raise NotImplementedError(f"Sum of {self} and {x} not defined")
-        match x:
-            case Triangle(l=l, m=m, n=n):
-                return Triangle(self.l + l, self.m + m, self.n + n)
-
-
 Atomic = Point | Segment | Triangle
 
 class SegmentStrip():
     @classmethod
     def from_itterable(cls, ittr):
         return cls(list(map(lambda arr: Point(arr), ittr)))
-
-    @classmethod
-    def from_linspace(cls, ittr):
-        return cls(list(map(lambda arr: Point(array([arr])), ittr)))
 
     def __init__(self, points):
         self.points = points
@@ -96,10 +70,12 @@ def dimension(data: __Data__):
             return l.size
         case List(elements=[element,*_]):
             return dimension(element)
-        case List(elements=[]):
+        case List(elements=_):
             raise NotImplementedError
-        case SegmentStrip(points=[point,*_]):
-            return dimension(point)
+        case SegmentStrip(points=[Point(l=l),*_]):
+            return dimension(Point(l))
+        case SegmentStrip(points=_):
+            raise NotImplementedError
         case __Meta_Data__(meta, data):
             return dimension(data)
 
