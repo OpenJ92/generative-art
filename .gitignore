@@ -10,3 +10,4 @@ __pycache__/
 *.task
 *.mp4
 *.DS_Store
+*.svg
