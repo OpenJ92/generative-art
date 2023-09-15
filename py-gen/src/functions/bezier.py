@@ -63,7 +63,7 @@ def Bezier(mode = Mode.CLOSED):
             self.collapse_axes  = collapse_axes
             self.weights =      weights \
                            if   weights \
-                           else [ ones(shape = self.control_points.shape[axis] - 1)
+                           else [ ones(shape = self.control_points.shape[axis])
                                   for axis
                                   in  self.collapse_axes
                                 ]
@@ -80,7 +80,7 @@ def Bezier(mode = Mode.CLOSED):
                     self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis, None)
+            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis, weight)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
