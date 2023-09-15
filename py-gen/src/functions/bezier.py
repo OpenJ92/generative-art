@@ -1,5 +1,5 @@
 from numpy import array, array_split, squeeze, stack, concatenate
-from functools import reduce
+from functools import reduce, partial
 from math import comb
 from enum import Enum
 
@@ -25,20 +25,20 @@ def collapse_dispatch(mode):
         case Mode.DECASTELJAU: return collapse_decasteljau
 
 ## Rational Closed form? 
-def collapse_closed(this, control_vector, t, collapse_axis):
+def collapse_closed(this, control_vector, t, collapse_axis, weights):
     ## condense sub-arrays with closed-form
     f = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
     collapse_function = f(this.control_points.shape[collapse_axis]-1)(t)
-    parts = [ collapse_function(i)*part
-              for i, part
-              in enumerate(control_vector)
+    parts = [ collapse_function(i)*part*weight
+              for i, part, weight
+              in zip(*enumerate(control_vector), weights)
             ]
 
     ## collect result of above computation and remove the condensed axis
     retv = squeeze(sum(parts),axis=collapse_axis)
     return retv
 
-def collapse_decasteljau(this, control_vector, t, collapse_axis):
+def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
     ## The de Casteljau Algorithm
     ## condense sub-arrays with convolution 
     tail = lambda lst: lst[1:]
