@@ -1,4 +1,4 @@
-from numpy import array, array_split, squeeze, stack, concatenate
+from numpy import array, array_split, squeeze, stack, concatenate, ones
 from functools import reduce, partial
 from math import comb
 from enum import Enum
@@ -18,6 +18,7 @@ from src.helpers.numpy import rational
 class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
+    RATIONAL = 2
 
 def collapse_dispatch(mode):
     match mode:
@@ -38,6 +39,7 @@ def collapse_closed(this, control_vector, t, collapse_axis, weights):
     retv = squeeze(sum(parts),axis=collapse_axis)
     return retv
 
+
 def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
     ## The de Casteljau Algorithm
     ## condense sub-arrays with convolution 
@@ -56,27 +58,35 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 
 def Bezier(mode = Mode.CLOSED):
     class bezier(__Random__, __Function__):
-        def __init__(self, control_points: array, collapse_axes: array):
+        def __init__(self, control_points, collapse_axes, weights=None):
             self.control_points = control_points
-            self.collapse_axes = collapse_axes
+            self.collapse_axes  = collapse_axes
+            self.weights =      weights \
+                           if   weights \
+                           else [ ones(shape = self.control_points.shape[axis] - 1)
+                                  for axis
+                                  in  self.collapse_axes
+                                ]
+            breakpoint()
 
         def __call__(self, ts: array) -> array:
             ## Extract domain value and axis indicator.
             t, *ts = ts
             collapse_axis, *collapse_axes = self.collapse_axes
+            weight, *weights = self.weights
 
             ## Along the given axis, gather sub-arrays from control points
             control_vectors = array_split(self.control_points, \
                     self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis)
+            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis, None)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
             if collapse_axes and ts:
                 collapse_axes = map(lambda x: x if x < m else x - 1, ms)
-                retv = bezier(retv, collapse_axes).__call__(ts)
+                retv = bezier(retv, collapse_axes, weights).__call__(ts)
 
             return retv
 
