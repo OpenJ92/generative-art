@@ -25,32 +25,32 @@ def collapse_dispatch(mode):
         case Mode.DECASTELJAU: return collapse_decasteljau
 
 ## Rational Closed form? 
-def collapse_closed(this, control_point_slices, t, collapse_axis):
+def collapse_closed(this, control_vector, t, collapse_axis):
     ## condense sub-arrays with closed-form
     f = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
     collapse_function = f(this.control_points.shape[collapse_axis]-1)(t)
     parts = [ collapse_function(i)*part
               for i, part
-              in enumerate(control_point_slices)
+              in enumerate(control_vector)
             ]
 
     ## collect result of above computation and remove the condensed axis
     retv = squeeze(sum(parts),axis=collapse_axis)
     return retv
 
-def collapse_decasteljau(this, control_point_slices, t, collapse_axis):
+def collapse_decasteljau(this, control_vector, t, collapse_axis):
     ## The de Casteljau Algorithm
     ## condense sub-arrays with convolution 
-    convolve = lambda t: lambda left: lambda right: (1-t)*right + t*left
     tail = lambda lst: lst[1:]
-    while len(control_point_slices) > 1:
-        control_point_slices = [ convolve(t)(left)(right)
-                                 for left, right
-                                 in zip(control_point_slices, tail(control_point_slices))
-                               ]
+    convolve = lambda t: lambda left: lambda right: (1-t)*right + t*left
+    while len(control_vector) > 1:
+        control_vector = [ convolve(t)(left)(right)
+                           for left, right
+                           in zip(control_vector, tail(control_vector))
+                         ]
 
     ## collect result of above computation and remove the condensed axis
-    retv, *_ = control_point_slices
+    retv, *_ = control_vector
     retv = squeeze(retv, axis=collapse_axis)
     return retv
 
@@ -70,7 +70,7 @@ def Bezier(mode = Mode.CLOSED):
                     self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = bezier.collapse_dispatch(mode)(self, control_vectors, t, collapse_axis)
+            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
