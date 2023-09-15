@@ -75,7 +75,7 @@ def Bezier(mode = Mode.CLOSED):
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
             if collapse_axes and ts:
-                collapse_axes = map(lambda x: x if x < m else x - 1, ms)
+                collapse_axes = map(lambda x: x if x < collapse_axis else x - 1, collapse_axes)
                 retv = bezier(retv, collapse_axes).__call__(ts)
 
             return retv
