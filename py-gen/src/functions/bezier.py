@@ -27,8 +27,8 @@ def collapse_dispatch(mode):
 ## Rational Closed form? 
 def collapse_closed(this, control_vector, t, collapse_axis):
     ## condense sub-arrays with closed-form
-    f = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
-    collapse_function = f(this.control_points.shape[collapse_axis]-1)(t)
+    bernstein = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
+    collapse_function = bernstein(this.control_points.shape[collapse_axis]-1)(t)
     parts = [ collapse_function(i)*part
               for i, part
               in enumerate(control_vector)
