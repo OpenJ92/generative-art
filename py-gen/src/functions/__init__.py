@@ -11,7 +11,9 @@ from src.functions.ball import Ball
 from src.functions.perlin_noise import Perlin_Noise, Perlin_Stack, Perlin_Vector
 from src.functions.add import Add
 from src.functions.accumulateonto import AccumulateOnto
+from src.functions.barycentric import Barycentric
 
+from src.typeclass.__function__ import __Function__
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
 ## class Concat(__Function__):
