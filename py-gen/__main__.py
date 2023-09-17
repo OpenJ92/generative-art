@@ -17,7 +17,7 @@ from math import pi
 
 from src.functions import Parallelogram, Bezier, RationalBezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, \
-        Perlin_Vector, Add, AccumulateOnto, Copy
+        Perlin_Vector, Add, AccumulateOnto, Copy, Barycentric
 from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
         UnitLine, Cube, Square, HCube, Concentric, FlexSquare, \
         UnitStrip
