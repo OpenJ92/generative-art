@@ -11,7 +11,7 @@
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
 
 from numpy.random import rand, randint
-from numpy import array_split, concatenate, square, array
+from numpy import array_split, concatenate, square, array, ones, multiply, tensordot
 from numpy.random import rand, randint
 from math import pi
 
