@@ -89,6 +89,9 @@ def make_closed_LNE(A, axis, t):
 
 # Should we be weighting the first and last components of the bezier ndarray?
 ## This is incorrect. This process has to happen at evaluation time. See Wiki: Rational Bezier
+
+## There's an odd thing about this evaluation thing. There's got to be a way to capture the
+## RationalBezier form in the tensor control_points. 
 def rational(A, weights, axis):
     if A.shape[axis] != len(weights):
         raise ValueError(f"Shape of A in axis: {axis} not equal to length of weights: {len(weights)}")
