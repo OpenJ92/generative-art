@@ -9,7 +9,6 @@
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
-
 from numpy.random import rand, randint
 from numpy import array_split, concatenate, square, array
 from numpy.random import rand, randint
