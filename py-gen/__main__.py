@@ -9,13 +9,12 @@
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
-
 from numpy.random import rand, randint
-from numpy import array_split, concatenate, square, array
+from numpy import array_split, concatenate, square, array, ones, multiply, tensordot
 from numpy.random import rand, randint
 from math import pi
 
-from src.functions import Parallelogram, Bezier, RationalBezier, Sphere, Dialate, \
+from src.functions import Parallelogram, Bezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, \
         Perlin_Vector, Add, AccumulateOnto, Copy, Barycentric
 from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
@@ -69,7 +68,7 @@ def U04():
         L = List(list(map(lambda A: f(A, line, noise, deform), N)))
         K = __Sculpture__(List(list(map(lambda A: f(A, line, noise, deform), M))), Dialate(2)).sculpt()
 
-        write_to_file(f"smoothtest_{k+931}.svg", wrap(draw(List([squares(pi*(k/20)), L, K]))))
+        write_to_file(f"{k+900}.svg", wrap(draw(List([squares(pi*(k/20)), L, K]))))
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares

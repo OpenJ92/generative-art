@@ -1,5 +1,5 @@
-from numpy import array, array_split, squeeze, stack, concatenate
-from functools import reduce
+from numpy import array, array_split, squeeze, stack, concatenate, ones
+from functools import reduce, partial
 from math import comb
 from enum import Enum
 
@@ -24,61 +24,73 @@ def collapse_dispatch(mode):
         case Mode.CLOSED: return collapse_closed
         case Mode.DECASTELJAU: return collapse_decasteljau
 
-## Rational Closed form? 
-def collapse_closed(this, control_vector, t, collapse_axis):
-    ## condense sub-arrays with closed-form
-    bernstein = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
-    collapse_function = bernstein(this.control_points.shape[collapse_axis]-1)(t)
-    parts = [ collapse_function(i)*part
-              for i, part
-              in enumerate(control_vector)
-            ]
+def bernstein(n, t, i):
+    combinations = comb(n, i)
+    bernstein_basis = ((1-t)**(n-i)) * (t**i)
+    ## print(n, t, i, bernstein_basis, combinations, (1-t)**(n-i), t**i)
+    return combinations*bernstein_basis
 
-    ## collect result of above computation and remove the condensed axis
+def collapse_closed(this, control_vector, t, collapse_axis, weights):
+    ## Bernstein Closed Form
+    n = this.control_points.shape[collapse_axis] - 1
+    total_weight =[ bernstein(n, t, i)*weight for i, weight in enumerate(weights) ]
+
+    if sum(total_weight) == 0: breakpoint()
+
+    parts = []
+    for i, (part, weight) in enumerate(zip(control_vector, weights)):
+        parts = [*parts, (bernstein(n,t,i)*part*weight)/sum(total_weight)]
+
     retv = squeeze(sum(parts),axis=collapse_axis)
     return retv
 
-def collapse_decasteljau(this, control_vector, t, collapse_axis):
+
+def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
     ## The de Casteljau Algorithm
-    ## condense sub-arrays with convolution 
     tail = lambda lst: lst[1:]
-    convolve = lambda t: lambda left: lambda right: (1-t)*right + t*left
+    interpolate = lambda t: lambda left: lambda right: (1-t)*right + t*left
     while len(control_vector) > 1:
-        control_vector = [ convolve(t)(left)(right)
+        control_vector = [ interpolate(t)(left)(right)
                            for left, right
                            in zip(control_vector, tail(control_vector))
                          ]
 
-    ## collect result of above computation and remove the condensed axis
     retv, *_ = control_vector
     retv = squeeze(retv, axis=collapse_axis)
     return retv
 
 def Bezier(mode = Mode.CLOSED):
     class bezier(__Random__, __Function__):
-        def __init__(self, control_points: array, collapse_axes: array):
+        def __init__(self, control_points, collapse_axes, weights=None):
             self.control_points = control_points
-            self.collapse_axes = collapse_axes
+            self.collapse_axes  = collapse_axes
+            self.weights =      weights \
+                           if   weights \
+                           else [ ones(shape = self.control_points.shape[axis])
+                                  for axis
+                                  in  self.collapse_axes
+                                ]
 
         def __call__(self, ts: array) -> array:
             ## Extract domain value and axis indicator.
             t, *ts = ts
             collapse_axis, *collapse_axes = self.collapse_axes
+            weight, *weights = self.weights
 
             ## Along the given axis, gather sub-arrays from control points
             control_vectors = array_split(self.control_points, \
                     self.control_points.shape[collapse_axis], collapse_axis)
 
             ## collapse given dispatch
-            retv = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis)
+            collapse = collapse_dispatch(mode)(self, control_vectors, t, collapse_axis, weight)
 
             ## recur computation if there're more axes to compress or finished consuming
             ## the domain elements
             if collapse_axes and ts:
-                collapse_axes = map(lambda x: x if x < collapse_axis else x - 1, collapse_axes)
-                retv = bezier(retv, collapse_axes).__call__(ts)
+                u_collapse_axes = list(map(lambda x: x if x < collapse_axis else x - 1, collapse_axes))
+                retv = bezier(collapse, u_collapse_axes).__call__(ts)
 
-            return retv
+            return collapse
 
         @classmethod
         def random(cls):
@@ -102,27 +114,4 @@ def Bezier(mode = Mode.CLOSED):
             return cls(id_control_points, id_collapse_axes)
 
     return bezier
-
-## Perhaps this should be constructed through composition. We have a function which recieves a Bezier
-## and returns a new Bezier that has been edited with the application of rational. This way we could make
-## compositions with Rational and the upcoming ElevateBezier classes. Both of which edit the control_point
-## forms
-class RationalBezier(Bezier()):
-    def __init__(self, control_points, collapse_axes, weights, axes):
-        self.control_points = self.form_control_points(control_points, weights, axes)
-        self.collapse_axes = collapse_axes
-
-    @classmethod
-    def random(self):
-        pass
-
-    def __call__(self, ts):
-        return Bezier()(self.control_points, self.collapse_axes).__call__(ts)
-
-    def form_control_points(self, control_points, weights, axes):
-        while weights:
-            weight, *weights = weights
-            axis, *axes      = axes
-            control_points = rational(control_points, weight, axis)
-        return control_points
 
