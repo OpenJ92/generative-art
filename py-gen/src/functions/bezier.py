@@ -27,12 +27,15 @@ def collapse_dispatch(mode):
 def bernstein(n, t, i):
     combinations = comb(n, i)
     bernstein_basis = ((1-t)**(n-i)) * (t**i)
+    ## print(n, t, i, bernstein_basis, combinations, (1-t)**(n-i), t**i)
     return combinations*bernstein_basis
 
 def collapse_closed(this, control_vector, t, collapse_axis, weights):
     ## Bernstein Closed Form
-    n = this.control_points.shape[collapse_axis]
+    n = this.control_points.shape[collapse_axis] - 1
     total_weight =[ bernstein(n, t, i)*weight for i, weight in enumerate(weights) ]
+
+    if sum(total_weight) == 0: breakpoint()
 
     parts = []
     for i, (part, weight) in enumerate(zip(control_vector, weights)):
