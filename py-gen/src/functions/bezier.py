@@ -24,25 +24,26 @@ def collapse_dispatch(mode):
         case Mode.CLOSED: return collapse_closed
         case Mode.DECASTELJAU: return collapse_decasteljau
 
-## Rational Closed form? 
+def bernstein(n, t, i):
+    combinations = comb(n, i)
+    bernstein_basis = ((1-t)**(n-i)) * (t**i)
+    return combinations*bernstein_basis
+
 def collapse_closed(this, control_vector, t, collapse_axis, weights):
-    ## condense sub-arrays with closed-form
-    bernstein = lambda n: lambda t: lambda i: comb(n, i)*((1-t)**(n-i))*(t**i)
-    collapse_function = bernstein(this.control_points.shape[collapse_axis]-1)(t)
-    total_weight = sum([collapse_function(i)*weight for i, weight in enumerate(weights)])
+    ## Bernstein Closed Form
+    n = this.control_points.shape[collapse_axis]
+    total_weight =[ bernstein(n, t, i)*weight for i, weight in enumerate(weights) ]
+
     parts = []
     for i, (part, weight) in enumerate(zip(control_vector, weights)):
-        print(i, weight, part)
-        parts = [*parts, (collapse_function(i)*part*weight)/total_weight]
+        parts = [*parts, (bernstein(n,t,i)*part*weight)/sum(total_weight)]
 
-    ## collect result of above computation and remove the condensed axis
     retv = squeeze(sum(parts),axis=collapse_axis)
     return retv
 
 
 def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
     ## The de Casteljau Algorithm
-    ## condense sub-arrays with convolution 
     tail = lambda lst: lst[1:]
     interpolate = lambda t: lambda left: lambda right: (1-t)*right + t*left
     while len(control_vector) > 1:
@@ -51,7 +52,6 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
                            in zip(control_vector, tail(control_vector))
                          ]
 
-    ## collect result of above computation and remove the condensed axis
     retv, *_ = control_vector
     retv = squeeze(retv, axis=collapse_axis)
     return retv
@@ -111,27 +111,4 @@ def Bezier(mode = Mode.CLOSED):
             return cls(id_control_points, id_collapse_axes)
 
     return bezier
-
-## Perhaps this should be constructed through composition. We have a function which recieves a Bezier
-## and returns a new Bezier that has been edited with the application of rational. This way we could make
-## compositions with Rational and the upcoming ElevateBezier classes. Both of which edit the control_point
-## forms
-class RationalBezier(Bezier()):
-    def __init__(self, control_points, collapse_axes, weights, axes):
-        self.control_points = self.form_control_points(control_points, weights, axes)
-        self.collapse_axes = collapse_axes
-
-    @classmethod
-    def random(self):
-        pass
-
-    def __call__(self, ts):
-        return Bezier()(self.control_points, self.collapse_axes).__call__(ts)
-
-    def form_control_points(self, control_points, weights, axes):
-        while weights:
-            weight, *weights = weights
-            axis, *axes      = axes
-            control_points = rational(control_points, weight, axis)
-        return control_points
 
