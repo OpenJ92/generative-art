@@ -14,7 +14,7 @@ from numpy import array_split, concatenate, square, array, ones, multiply, tenso
 from numpy.random import rand, randint
 from math import pi
 
-from src.functions import Parallelogram, Bezier, RationalBezier, Sphere, Dialate, \
+from src.functions import Parallelogram, Bezier, Sphere, Dialate, \
         Translate, Composition, ID, Ball, Perlin_Noise, Perlin_Stack, \
         Perlin_Vector, Add, AccumulateOnto, Copy, Barycentric
 from src.sculptures import FlexHyperCube, FlexCube, FlexPlane, \
