@@ -10,10 +10,6 @@ from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
 
-## Like Hypersphere, we need to reconstruct Bezier to dispatch on convolve
-## strategy. Be it recursive, closed or AST constructions
-
-
 class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
