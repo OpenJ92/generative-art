@@ -20,7 +20,7 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
-def populate_MVT(A, collapse_to, extent, flare):
+def populate_MVT(A, collapse_to, flare):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
         C = B.copy()
@@ -69,5 +69,6 @@ def degree_elevation(A, increase, axis):
                   for i
                   in range(current_degree+increase+1)
                 ]
+
 
     return concatenate(elevation, axis=axis)
