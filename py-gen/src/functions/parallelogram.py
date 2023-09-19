@@ -2,6 +2,7 @@ from numpy import array
 
 from src.typeclass.__function__ import __Function__
 
+
 class Parallelogram(__Function__):
     def __init__(self, A):
         self.A = A
