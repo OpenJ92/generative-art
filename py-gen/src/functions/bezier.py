@@ -10,7 +10,6 @@ from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
 
-
 class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
@@ -64,18 +63,17 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 
 def Bezier(mode=Mode.CLOSED):
     class bezier(__Random__, __Function__):
-        def __init__(
-            self,
-            control_points,
-            collapse_axes,
-            weights=[
-                ones(shape=self.control_points.shape[axis])
-                for axis in self.collapse_axes
-            ],
-        ):
+        def __init__(self, control_points, collapse_axes, weights=None):
             self.control_points = control_points
             self.collapse_axes = collapse_axes
-            self.weights = weights
+            self.weights = (
+                weights
+                if weights
+                else [
+                    ones(shape=self.control_points.shape[axis])
+                    for axis in self.collapse_axes
+                ]
+            )
 
         def __call__(self, ts: array) -> array:
             ## Extract domain value and axis indicator.

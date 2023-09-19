@@ -7,3 +7,5 @@ black: black-diff
 black-diff:
 	black --target-version=py310 --diff --color py-gen
 
+flake:
+	flake py-gen
