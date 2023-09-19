@@ -9,7 +9,6 @@ from src.typeclass.__random__ import __Random__
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
-from src.helpers.numpy import rational
 
 ## Like Hypersphere, we need to reconstruct Bezier to dispatch on convolve
 ## strategy. Be it recursive, closed or AST constructions

@@ -32,8 +32,8 @@ from src.typeclass.__sculpture__ import __Sculpture__
 
 def U04():
     for k in range(10):
-        A = rand(10, 3)
-        B = rand(7, 3)
+        A = rand(7, 3)
+        B = rand(5, 3)
         print(k, A)
 
         line = UnitStrip(1500)
@@ -68,7 +68,7 @@ def U04():
         L = List(list(map(lambda A: f(A, line, noise, deform), N)))
         K = __Sculpture__(List(list(map(lambda A: f(A, line, noise, deform), M))), Dialate(2)).sculpt()
 
-        write_to_file(f"smoothtest_{k+931}.svg", wrap(draw(List([squares(pi*(k/20)), L, K]))))
+        write_to_file(f"smoothtest_{k+777}.svg", wrap(draw(List([squares(pi*(k/20)), L, K]))))
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
