@@ -53,6 +53,22 @@ def make_closed_LNE(A, axis, t):
     c = b - a
     return concatenate([a + t*c, a, *A, b, a + t*c], axis=axis)
 
-def degree_elevation(A, degree, axis):
-    pass
+def degree_elevation(A, increase, axis):
+    current_degree = A.shape[axis]
+    split = array_split(A, A.shape[axis], axis)
 
+    def rth_control_point(split, n, r, i):
+        numerator = lambda j: comb(n, j)*comb(r, i - j)
+        denominator = comb(n + r, i)
+        control_point_update = []
+        for j in range(max(0,i-r), min(n,i)):
+            control_point_update = [*control_point_update, control_point*(numerator(j)/denominator)]
+        return squeeze(sum(control_point_update), axis=axis)
+
+    elevation = [ rth_control_point(split, current_degree, increase, i)
+                  for i
+                  in range(current_degree+increase+1)
+                ]
+
+
+    return concatenate(elevation, axis=axis)

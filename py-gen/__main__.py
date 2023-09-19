@@ -32,8 +32,8 @@ from src.typeclass.__sculpture__ import __Sculpture__
 
 def U04():
     for k in range(10):
-        A = rand(10, 3)
-        B = rand(7, 3)
+        A = rand(7, 3)
+        B = rand(5, 3)
         print(k, A)
 
         line = UnitStrip(1500)
