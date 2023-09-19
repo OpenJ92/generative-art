@@ -1,10 +1,19 @@
 from abc import ABC, abstractmethod
 from numpy import array
 
-from src.atoms import Point, Segment, SegmentStrip, Triangle, Composite, __Data__, __Meta_Data__, List
+from src.atoms import (
+    Point,
+    Segment,
+    SegmentStrip,
+    Triangle,
+    Composite,
+    __Data__,
+    __Meta_Data__,
+    List,
+)
+
 
 class __Function__(ABC):
-
     @abstractmethod
     def __call__(self, data: array) -> array:
         pass

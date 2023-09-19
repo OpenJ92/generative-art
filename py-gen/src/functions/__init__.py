@@ -14,12 +14,13 @@ from src.functions.accumulateonto import AccumulateOnto
 from src.functions.barycentric import Barycentric
 
 from src.typeclass.__function__ import __Function__
+
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
 ## class Concat(__Function__):
 ##     def __init__(self, vff1, vff2):
 ##         self.vff1 = vff1
 ##         self.vff2 = vff2
-## 
+##
 ##     def __call__(self, t):
 ##         return (*self.vff1(t), *self.vff2(t))
