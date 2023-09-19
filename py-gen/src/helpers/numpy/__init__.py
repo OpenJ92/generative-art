@@ -20,7 +20,7 @@ def linear_interpolate(A, collapse_axes, samples):
         A = concatenate(C, axis=axis)
     return A
 
-def populate_MVT(A, collapse_to, extent, flare):
+def populate_MVT(A, collapse_to, flare):
     for axis in [ax for ax in range(len(A.shape)) if ax != collapse_to]:
         B = array_split(A, A.shape[axis], axis)
         C = B.copy()
@@ -32,19 +32,11 @@ def populate_MVT(A, collapse_to, extent, flare):
                     raise NotImplementedError
                 case [a, b, c]:
                     e = c - a
-                    E = [ *E
-                        ,  (b - flare*e)
-                        ,   b
-                        ,  (b + flare*e)
-                        ]
+                    E = [ *E, (b - flare*e), b, (b + flare*e)]
                     break
                 case [a, b, c, *B]:
                     e = c - a
-                    E = [ *E
-                        ,  (b - flare*e)
-                        ,  b
-                        ,  (b + flare*e)
-                        ]
+                    E = [ *E, (b - flare*e), b, (b + flare*e)]
                     B = [b, c, *B]
 
         a, *C, c = C
