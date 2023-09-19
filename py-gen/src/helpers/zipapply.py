@@ -9,6 +9,7 @@ from src.atoms import __Data__, List
 ## data. Here we really bend the knee to make this work in the function
 ## format, which is not needed
 
+
 class ZipApply(__Function__):
     def __init__(self, funcs):
         self.funcs = funcs
