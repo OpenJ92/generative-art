@@ -10,6 +10,7 @@ from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.atoms import Segment, List
 
+
 class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
@@ -99,7 +100,7 @@ def Bezier(mode=Mode.CLOSED):
                 u_collapse_axes = list(
                     map(lambda x: x if x < collapse_axis else x - 1, collapse_axes)
                 )
-                retv = bezier(collapse, u_collapse_axes).__call__(ts)
+                collapse = bezier(collapse, u_collapse_axes).__call__(ts)
 
             return collapse
 

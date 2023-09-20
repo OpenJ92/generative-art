@@ -10,9 +10,19 @@
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
 from numpy.random import rand, randint
-from numpy import array_split, concatenate, square, array, ones, multiply, tensordot
+from numpy import (
+    array_split,
+    concatenate,
+    square,
+    array,
+    ones,
+    multiply,
+    tensordot,
+    stack,
+    einsum,
+)
 from numpy.random import rand, randint
-from math import pi
+from math import pi, sqrt
 
 from src.functions import (
     Parallelogram,
@@ -120,19 +130,21 @@ def U04():
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
-
-
 ## reduction Bezier
 def U07(k):
     line = UnitStrip(1500)
-    A = rand(20, 3)
-    beziers = [Bezier()(A[i:], [0]) for i in range(12)]
-    f = lambda bez: __Sculpture__(
-        line.sculpt(), Composition([bez, Parallelogram(array([[1, 0, 0], [0, 0, 1]]))])
+    A = rand(40, 3)
+    beziers = [Bezier()(degree_elevation(A[i:], i, 0), [0]) for i in range(0, 15)]
+    bezier = Bezier()(stack([bez.control_points for bez in beziers], axis=0), [1, 0])
+
+    design = __Sculpture__(
+        FlexPlane(Square(Segment), 100, 100).sculpt(),
+        Composition(
+            [
+                bezier,
+                Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
+            ]
+        ),
     ).sculpt()
-    # We need Order Increasing on Beziers for this one.
-    design = list(map(f, beziers))
-    write_to_file(f"u07_{k}.svg", wrap(draw(List(design))))
 
-
-U04()
+    write_to_file(f"u07_{k}.svg", wrap(draw(design)))

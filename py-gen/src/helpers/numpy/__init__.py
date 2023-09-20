@@ -1,4 +1,5 @@
-from numpy import array_split, concatenate, square
+from numpy import array_split, concatenate, square, squeeze
+from math import comb
 
 
 def linear_interpolate(A, collapse_axes, samples):
@@ -59,23 +60,28 @@ def make_closed_LNE(A, axis, t):
 
 
 def degree_elevation(A, increase, axis):
+    if increase == 0:
+        return A
     current_degree = A.shape[axis]
     split = array_split(A, A.shape[axis], axis)
 
-    def rth_control_point(split, n, r, i):
+    def rth_control_point(control_point, n, r, i):
+        if i == 0:
+            return control_point[0]
+        if i == n + r:
+            return control_point[-1]
+
         numerator = lambda j: comb(n, j) * comb(r, i - j)
         denominator = comb(n + r, i)
         control_point_update = []
         for j in range(max(0, i - r), min(n, i)):
-            control_point_update = [
-                *control_point_update,
-                control_point * (numerator(j) / denominator),
-            ]
-        return squeeze(sum(control_point_update), axis=axis)
+            calc = control_point[j] * (numerator(j) / denominator)
+            control_point_update = [*control_point_update, calc]
+        return sum(control_point_update)
 
     elevation = [
         rth_control_point(split, current_degree, increase, i)
-        for i in range(current_degree + increase + 1)
+        for i in range(1, current_degree + increase + 1)
     ]
 
     return concatenate(elevation, axis=axis)
