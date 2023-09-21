@@ -126,19 +126,21 @@ def U04():
             List(list(map(lambda A: f(A, line, noise, deform), M))), Dialate(2)
         ).sculpt()
 
-        write_to_file(f"{k+432}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
+        write_to_file(f"{k+732}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
 ## reduction Bezier
 def U07(k):
-    line = UnitStrip(1500)
     A = rand(40, 3)
-    beziers = [Bezier()(degree_elevation(A[i:], i, 0), [0]) for i in range(0, 15)]
-    bezier = Bezier()(stack([bez.control_points for bez in beziers], axis=0), [1, 0])
+    beziers = [
+        Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
+        for i in range(0, 15)
+    ]
+    bezier = Bezier()(make_closed_LNE(stack([bez.control_points for bez in beziers], axis=0), 0, .75), [1, 0])
 
     design = __Sculpture__(
-        FlexPlane(Square(Segment), 100, 100).sculpt(),
+        FlexPlane(Square(Segment), 200, 100).sculpt(),
         Composition(
             [
                 bezier,
@@ -147,4 +149,4 @@ def U07(k):
         ),
     ).sculpt()
 
-    write_to_file(f"u07_{k}.svg", wrap(draw(design)))
+    write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
