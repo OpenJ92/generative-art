@@ -52,6 +52,7 @@ from src.sculptures import (
     Concentric,
     FlexSquare,
     UnitStrip,
+    Stack,
 )
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
@@ -137,10 +138,21 @@ def U07(k):
         Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
         for i in range(0, 15)
     ]
-    bezier = Bezier()(make_closed_LNE(stack([bez.control_points for bez in beziers], axis=0), 0, .75), [1, 0])
+    bezier = Bezier()(
+        make_closed_LNE(
+            populate_MVT(
+                stack([bez.control_points for bez in beziers], axis=0), 2, 0.25
+            ),
+            0,
+            0.25,
+        ),
+        [1, 0],
+    )
 
+    ## plane = FlexPlane(Square(Segment), 300, 300).sculpt()
+    plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
     design = __Sculpture__(
-        FlexPlane(Square(Segment), 200, 100).sculpt(),
+        plane,
         Composition(
             [
                 bezier,
