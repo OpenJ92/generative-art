@@ -15,12 +15,33 @@ from src.functions.barycentric import Barycentric
 
 from src.typeclass.__function__ import __Function__
 
+from numpy import array
+
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
-## class Concat(__Function__):
-##     def __init__(self, vff1, vff2):
-##         self.vff1 = vff1
-##         self.vff2 = vff2
-##
-##     def __call__(self, t):
-##         return (*self.vff1(t), *self.vff2(t))
+class Concat(__Function__):
+    def __init__(self, A: __Function__, B: __Function__):
+        self.A = A
+        self.B = B
+    def __call__(self, x: array):
+        return x
+
+    def __call_data__(self, x: __Data__):
+        return array(*self.A.__call_data__(t), *self.B.__call_data__(t))
+
+
+class Add(__Function__):
+    def __init__(self, A: __Function__, B: __Function__):
+        self.A = A
+        self.B = B
+
+    def __call__(self, x: array):
+        return self.A(x) + self.B(x)
+
+class Multiply(__Function__):
+    def __init__(self, A: __Function__, B: __Function__):
+        self.A = A
+        self.B = B
+
+    def __call__(self, x: array):
+        pass
