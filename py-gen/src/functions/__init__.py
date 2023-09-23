@@ -45,3 +45,20 @@ class Multiply(__Function__):
 
     def __call__(self, x: array):
         pass
+
+class ZipApply(__Function__):
+    def __init__(self, funcs):
+        self.funcs = funcs
+
+    def __call__(self, data: array):
+        return data
+
+    def __call_data__(self, data: __Data__) -> __Data__:
+        match data:
+            case List(elements=elements):
+                applied = []
+                for element, func in zip(elements, self.funcs):
+                    applied = [*applied, __Sculpture__(element, func).sculpt()]
+                return List(applied)
+            case _:
+                raise NotImplementedError
