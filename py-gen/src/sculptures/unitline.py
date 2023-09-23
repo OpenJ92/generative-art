@@ -1,9 +1,4 @@
-from src.functions.scale import Scale
-from src.functions.translate import Translate
-from src.functions.composition import Composition
-from src.functions.id import ID
-from src.helpers.zipapply import ZipApply
-from src.functions.copy import Copy
+from src.functions import ZipApply, Copy, Scale, Translate, Composition, ID
 from src.atoms import Segment, List, SegmentStrip
 from src.typeclass.__sculpture__ import __Sculpture__
 

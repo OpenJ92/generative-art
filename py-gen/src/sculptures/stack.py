@@ -1,8 +1,4 @@
-from src.helpers.zipapply import ZipApply
-from src.functions.parallelogram import Parallelogram
-from src.functions.composition import Composition
-from src.functions.translate import Translate
-from src.functions.copy import Copy
+from src.functions import ZipApply, Parallelogram, Composition, Translate, Copy
 
 from src.typeclass.__sculpture__ import __Sculpture__
 

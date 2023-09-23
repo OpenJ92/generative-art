@@ -1,9 +1,4 @@
-from src.functions.scale import Scale
-from src.functions.translate import Translate
-from src.functions.composition import Composition
-from src.functions.copy import Copy
-
-from src.helpers.zipapply import ZipApply
+from src.functions import ZipApply, Scale, Translate, Composition, Copy
 
 from src.atoms import dimension
 

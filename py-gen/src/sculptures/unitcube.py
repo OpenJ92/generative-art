@@ -1,6 +1,5 @@
 from src.typeclass.__sculpture__ import __Sculpture__
-from src.functions.id import ID
-from src.functions.hypercube import HyperCube
+from src.functions import ID, HyperCube
 from src.sculptures.unitline import UnitLine, UnitStrip
 from src.atoms import List, Segment, Triangle, Point
 
