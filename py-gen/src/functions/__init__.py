@@ -20,10 +20,12 @@ from numpy import array
 
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
+
 class Concat(__Function__):
     def __init__(self, A: __Function__, B: __Function__):
         self.A = A
         self.B = B
+
     def __call__(self, x: array):
         return x
 
@@ -39,6 +41,7 @@ class Add(__Function__):
     def __call__(self, x: array):
         return self.A(x) + self.B(x)
 
+
 class Multiply(__Function__):
     def __init__(self, A: __Function__, B: __Function__):
         self.A = A
@@ -46,6 +49,7 @@ class Multiply(__Function__):
 
     def __call__(self, x: array):
         pass
+
 
 class ZipApply(__Function__):
     def __init__(self, funcs):
