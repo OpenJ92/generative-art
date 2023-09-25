@@ -162,3 +162,7 @@ def U07(k):
     ).sculpt()
 
     write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
+
+def U08(k):
+    ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
+    ## Three collapse dimensions.`
