@@ -10,9 +10,19 @@
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
 from numpy.random import rand, randint
-from numpy import array_split, concatenate, square, array, ones, multiply, tensordot
+from numpy import (
+    array_split,
+    concatenate,
+    square,
+    array,
+    ones,
+    multiply,
+    tensordot,
+    stack,
+    einsum,
+)
 from numpy.random import rand, randint
-from math import pi
+from math import pi, sqrt
 
 from src.functions import (
     Parallelogram,
@@ -42,6 +52,7 @@ from src.sculptures import (
     Concentric,
     FlexSquare,
     UnitStrip,
+    Stack,
 )
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
@@ -116,23 +127,42 @@ def U04():
             List(list(map(lambda A: f(A, line, noise, deform), M))), Dialate(2)
         ).sculpt()
 
-        write_to_file(f"{k+432}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
+        write_to_file(f"{k+732}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
 
 
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
-
-
 ## reduction Bezier
 def U07(k):
-    line = UnitStrip(1500)
-    A = rand(20, 3)
-    beziers = [Bezier()(A[i:], [0]) for i in range(12)]
-    f = lambda bez: __Sculpture__(
-        line.sculpt(), Composition([bez, Parallelogram(array([[1, 0, 0], [0, 0, 1]]))])
+    A = rand(40, 3)
+    beziers = [
+        Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
+        for i in range(0, 15)
+    ]
+    bezier = Bezier()(
+        make_closed_LNE(
+            populate_MVT(
+                stack([bez.control_points for bez in beziers], axis=0), 2, 0.25
+            ),
+            0,
+            0.25,
+        ),
+        [1, 0],
+    )
+
+    ## plane = FlexPlane(Square(Segment), 300, 300).sculpt()
+    plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
+    design = __Sculpture__(
+        plane,
+        Composition(
+            [
+                bezier,
+                Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
+            ]
+        ),
     ).sculpt()
-    # We need Order Increasing on Beziers for this one.
-    design = list(map(f, beziers))
-    write_to_file(f"u07_{k}.svg", wrap(draw(List(design))))
 
+    write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
 
-U04()
+def U08(k):
+    ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
+    ## Three collapse dimensions.`

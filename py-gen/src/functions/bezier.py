@@ -64,18 +64,17 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 
 def Bezier(mode=Mode.CLOSED):
     class bezier(__Random__, __Function__):
-        def __init__(
-            self,
-            control_points,
-            collapse_axes,
-            weights=[
-                ones(shape=self.control_points.shape[axis])
-                for axis in self.collapse_axes
-            ],
-        ):
+        def __init__(self, control_points, collapse_axes, weights=None):
             self.control_points = control_points
             self.collapse_axes = collapse_axes
-            self.weights = weights
+            self.weights = (
+                weights
+                if weights
+                else [
+                    ones(shape=self.control_points.shape[axis])
+                    for axis in self.collapse_axes
+                ]
+            )
 
         def __call__(self, ts: array) -> array:
             ## Extract domain value and axis indicator.
@@ -101,7 +100,7 @@ def Bezier(mode=Mode.CLOSED):
                 u_collapse_axes = list(
                     map(lambda x: x if x < collapse_axis else x - 1, collapse_axes)
                 )
-                retv = bezier(collapse, u_collapse_axes).__call__(ts)
+                collapse = bezier(collapse, u_collapse_axes).__call__(ts)
 
             return collapse
 
