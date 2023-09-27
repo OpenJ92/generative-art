@@ -147,10 +147,11 @@ def U07(k):
             0.25,
         ),
         [1, 0],
-    )
+    ).update_with_random_weights()
 
-    ## plane = FlexPlane(Square(Segment), 300, 300).sculpt()
-    plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
+    breakpoint()
+    plane = FlexPlane(Square(Segment), 300, 300).sculpt()
+    ## plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
     design = __Sculpture__(
         plane,
         Composition(
@@ -165,4 +166,5 @@ def U07(k):
 
 def U08(k):
     ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
-    ## Three collapse dimensions.`
+    ## Three collapse dimensions
+    pass

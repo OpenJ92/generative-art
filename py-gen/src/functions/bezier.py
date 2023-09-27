@@ -1,4 +1,5 @@
 from numpy import array, array_split, squeeze, stack, concatenate, ones
+from numpy.random import rand
 from functools import reduce, partial
 from math import comb
 from enum import Enum
@@ -8,6 +9,7 @@ from src.typeclass.__sculpture__ import __Sculpture__
 from src.typeclass.__random__ import __Random__
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
+from src.functions.sphere import Sphere
 from src.atoms import Segment, List
 
 
@@ -103,6 +105,14 @@ def Bezier(mode=Mode.CLOSED):
                 collapse = bezier(collapse, u_collapse_axes).__call__(ts)
 
             return collapse
+
+        def update_with_random_weights(self):
+            shape = self.control_points.shape
+            weights = []
+            for axis in self.collapse_axes:
+                weights = [*weights, Sphere()(rand(shape[axis]-1, ))]
+            self.weights = weights
+            return self
 
         @classmethod
         def random(cls):
