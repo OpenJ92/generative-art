@@ -110,7 +110,14 @@ def Bezier(mode=Mode.CLOSED):
             shape = self.control_points.shape
             weights = []
             for axis in self.collapse_axes:
-                weights = [*weights, Sphere()(rand(shape[axis]-1, ))]
+                weights = [
+                    *weights,
+                    Sphere()(
+                        rand(
+                            shape[axis] - 1,
+                        )
+                    ),
+                ]
             self.weights = weights
             return self
 
