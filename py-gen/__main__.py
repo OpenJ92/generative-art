@@ -133,7 +133,7 @@ def U04():
 ## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
 ## reduction Bezier
 def U07(k):
-    A = rand(40, 3)
+    A = rand(20, 3)
     beziers = [
         Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
         for i in range(0, 15)
@@ -147,10 +147,10 @@ def U07(k):
             0.25,
         ),
         [1, 0],
-    )
+    ).update_with_random_weights()
 
-    ## plane = FlexPlane(Square(Segment), 300, 300).sculpt()
-    plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
+    plane = FlexPlane(Square(Segment), 300, 300).sculpt()
+    ## plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
     design = __Sculpture__(
         plane,
         Composition(
@@ -163,6 +163,44 @@ def U07(k):
 
     write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
 
+
 def U08(k):
     ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
-    ## Three collapse dimensions.`
+    ## Three collapse dimensions
+    pass
+
+
+## "Floral"
+def U10():
+    ## I'm going to hardcode this, but there should be a procedure that produces the same object
+    def make_bezier_circle(flare):
+        return array(
+            [
+                [1, 0],
+                [1 + 0, 0 + flare],
+                [0 - flare, 1],
+                [0, 1],
+                [0 + flare, 1],
+                [-1, 0 + flare],
+                [-1, 0],
+                [-1, 0 - flare],
+                [0 - flare, -1],
+                [0, -1],
+                [0 + flare, -1],
+                [1 + 0, 0 - flare],
+                [1, 0],
+            ]
+        )
+
+    count = 20; height = 3
+    stem_control_points = [
+        make_bezier_circle(rand()) @ array([[1, 0, 0], [0, 1, 0]])
+        + array([0, 0, height * k / count])
+        for k in range(count)
+    ]
+
+    base = rand(20, 3)
+    transform = lambda height: array([[height, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])
+
+
+    pass
