@@ -14,7 +14,8 @@ from src.functions.barycentric import Barycentric
 from src.functions.scale import Scale
 
 from src.typeclass.__function__ import __Function__
-from src.atoms import __Data__
+from src.typeclass.__sculpture__ import __Sculpture__
+from src.atoms import __Data__, List
 
 from numpy import array
 
