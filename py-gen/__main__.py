@@ -204,3 +204,17 @@ def U10():
 
 
     pass
+
+def U11():
+    ## Hypersphere products. Define poly-multipy and carry out over k-sphere * l-sphere.
+    ## I've been very curious about the visual form of these for a long time now. Do a 
+    ## collection of projections of each product and place in canvases. Three per canvas
+    pass
+
+def U12():
+    ## Bezier k-form as velocity function.
+    pass
+
+def U14():
+    ## Bezier k-form as acc function
+    pass
