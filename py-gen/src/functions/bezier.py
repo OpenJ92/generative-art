@@ -50,7 +50,7 @@ def collapse_closed(this, control_vector, t, collapse_axis, weights):
 
 
 def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
-    ## The de Casteljau Algorithm
+    ## The de Casteljau Algorithm - Unweighted
     tail = lambda lst: lst[1:]
     interpolate = lambda t: lambda left: lambda right: (1 - t) * right + t * left
     while len(control_vector) > 1:
