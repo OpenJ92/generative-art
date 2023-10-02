@@ -50,7 +50,7 @@ def collapse_closed(this, control_vector, t, collapse_axis, weights):
 
 
 def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
-    ## The de Casteljau Algorithm
+    ## The de Casteljau Algorithm - Unweighted
     tail = lambda lst: lst[1:]
     interpolate = lambda t: lambda left: lambda right: (1 - t) * right + t * left
     while len(control_vector) > 1:
@@ -65,8 +65,36 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 
 
 def Bezier(mode=Mode.CLOSED):
+    """Bezier(Mode)"""
+
     class bezier(__Random__, __Function__):
+        f"""Bezier({mode})
+        Attributes
+        ----------
+        random(None) -> bezier
+        ID(int) -> bezier
+
+        Methods
+        -------
+
+        __call__(array) -> array
+        """
+
         def __init__(self, control_points, collapse_axes, weights=None):
+            f"""A class representing Bezier Function from Rn -> Rm
+            ...
+            Parameters
+            ----------
+            control_points : array
+                numpy array of any dimension.
+            collapse_axes : list(int)
+                list of axes to collapse over.
+            weights: list(list(int))
+                Weight to apply to each vector through collapse algorithm.
+                These are taken in the same order as the collapse axes and
+                should be shaped appropriately. 
+
+            """
             self.control_points = control_points
             self.collapse_axes = collapse_axes
             self.weights = (
