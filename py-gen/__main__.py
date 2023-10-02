@@ -192,7 +192,8 @@ def U10():
             ]
         )
 
-    count = 20; height = 3
+    count = 20
+    height = 3
     stem_control_points = [
         make_bezier_circle(rand()) @ array([[1, 0, 0], [0, 1, 0]])
         + array([0, 0, height * k / count])
@@ -202,18 +203,20 @@ def U10():
     base = rand(20, 3)
     transform = lambda height: array([[height, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])
 
-
     pass
+
 
 def U11():
     ## Hypersphere products. Define poly-multipy and carry out over k-sphere * l-sphere.
-    ## I've been very curious about the visual form of these for a long time now. Do a 
+    ## I've been very curious about the visual form of these for a long time now. Do a
     ## collection of projections of each product and place in canvases. Three per canvas
     pass
+
 
 def U12():
     ## Bezier k-form as velocity function.
     pass
+
 
 def U14():
     ## Bezier k-form as acc function

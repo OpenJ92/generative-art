@@ -66,9 +66,30 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 
 def Bezier(mode=Mode.CLOSED):
     """Bezier(Mode)"""
+
     class bezier(__Random__, __Function__):
-        f"""Bezier({mode})"""
+        """Bezier(Mode)"""
+
         def __init__(self, control_points, collapse_axes, weights=None):
+            f"""A class representing Bezier Function from Rn -> Rm
+            ...
+            Attributes
+            ----------
+            control_points : array
+                numpy array of any dimension.
+            collapse_axes : list(int)
+                list of axes to collapse over.
+            weights: list(list(int))
+                Weight to apply to each vector through collapse algorithm.
+                These are taken in the same order as the collapse axes and
+                should be shaped appropriately. 
+
+            Methods
+            -------
+            __call__
+            random
+
+            """
             self.control_points = control_points
             self.collapse_axes = collapse_axes
             self.weights = (
