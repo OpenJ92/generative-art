@@ -92,7 +92,7 @@ def Bezier(mode=Mode.CLOSED):
             weights: list(list(int))
                 Weight to apply to each vector through collapse algorithm.
                 These are taken in the same order as the collapse axes and
-                should be shaped appropriately. 
+                should be shaped appropriately.
 
             """
             self.control_points = control_points
@@ -107,6 +107,14 @@ def Bezier(mode=Mode.CLOSED):
             )
 
         def __call__(self, ts: array) -> array:
+            """ Call Bezier Function.
+            ...
+            Parameters
+            ----------
+            ts : array
+                n x 1 array to be manipulated by the function
+            """
+
             ## Extract domain value and axis indicator.
             t, *ts = ts
             collapse_axis, *collapse_axes = self.collapse_axes
