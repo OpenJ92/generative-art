@@ -68,12 +68,22 @@ def Bezier(mode=Mode.CLOSED):
     """Bezier(Mode)"""
 
     class bezier(__Random__, __Function__):
-        """Bezier(Mode)"""
+        f"""Bezier({mode})
+        Attributes
+        ----------
+        random(None) -> bezier
+        ID(int) -> bezier
+
+        Methods
+        -------
+
+        __call__(array) -> array
+        """
 
         def __init__(self, control_points, collapse_axes, weights=None):
             f"""A class representing Bezier Function from Rn -> Rm
             ...
-            Attributes
+            Parameters
             ----------
             control_points : array
                 numpy array of any dimension.
@@ -83,11 +93,6 @@ def Bezier(mode=Mode.CLOSED):
                 Weight to apply to each vector through collapse algorithm.
                 These are taken in the same order as the collapse axes and
                 should be shaped appropriately. 
-
-            Methods
-            -------
-            __call__
-            random
 
             """
             self.control_points = control_points
