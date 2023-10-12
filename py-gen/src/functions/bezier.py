@@ -1,6 +1,6 @@
 from numpy import array, array_split, squeeze, stack, concatenate, ones
 from numpy.random import rand
-from functools import reduce, partial
+from functools import reduce, cache
 from math import comb
 from enum import Enum
 
@@ -26,10 +26,14 @@ def collapse_dispatch(mode):
             return collapse_decasteljau
 
 
+@cache
+def combination(n, i):
+    return comb(n, i)
+
+@cache
 def bernstein(n, t, i):
-    combinations = comb(n, i)
+    combinations = combination(n, i)
     bernstein_basis = ((1 - t) ** (n - i)) * (t**i)
-    ## print(n, t, i, bernstein_basis, combinations, (1-t)**(n-i), t**i)
     return combinations * bernstein_basis
 
 
@@ -38,8 +42,8 @@ def collapse_closed(this, control_vector, t, collapse_axis, weights):
     n = this.control_points.shape[collapse_axis] - 1
     total_weight = [bernstein(n, t, i) * weight for i, weight in enumerate(weights)]
 
-    if sum(total_weight) == 0:
-        breakpoint()
+    ## if sum(total_weight) == 0:
+    ##     breakpoint()
 
     parts = []
     for i, (part, weight) in enumerate(zip(control_vector, weights)):
