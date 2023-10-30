@@ -219,5 +219,5 @@ def U12():
 
 
 def U14():
-    ## Bezier k-form as acc function
+    ## Bezier k-form as acceleration function
     pass
