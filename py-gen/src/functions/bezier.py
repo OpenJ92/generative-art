@@ -107,7 +107,7 @@ def Bezier(mode=Mode.CLOSED):
             )
 
         def __call__(self, ts: array) -> array:
-            """ Call Bezier Function.
+            """Call Bezier Function.
             ...
             Parameters
             ----------
@@ -143,7 +143,7 @@ def Bezier(mode=Mode.CLOSED):
             return collapse
 
         def update_with_random_weights(self):
-            """ Update Bezier Function with Random Weights
+            """Update Bezier Function with Random Weights
             ...
             Parameters
             ==========
@@ -165,7 +165,7 @@ def Bezier(mode=Mode.CLOSED):
 
         @classmethod
         def random(cls, k: int, n: int):
-            """ Construct Random Bezier Function of k dimensions
+            """Construct Random Bezier Function of k dimensions
             ...
             Parameters
             ==========
@@ -178,7 +178,7 @@ def Bezier(mode=Mode.CLOSED):
 
         @classmethod
         def ID(cls, k: int):
-            """ Consturct Identity Bezier Function of k dimensions
+            """Consturct Identity Bezier Function of k dimensions
             ...
             Parameters
             ==========
