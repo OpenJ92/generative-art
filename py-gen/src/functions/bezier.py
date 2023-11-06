@@ -143,6 +143,12 @@ def Bezier(mode=Mode.CLOSED):
             return collapse
 
         def update_with_random_weights(self):
+            """ Update Bezier Function with Random Weights
+            ...
+            Parameters
+            ==========
+
+            """
             shape = self.control_points.shape
             weights = []
             for axis in self.collapse_axes:
@@ -158,12 +164,28 @@ def Bezier(mode=Mode.CLOSED):
             return self
 
         @classmethod
-        def random(cls):
+        def random(cls, k: int, n: int):
+            """ Construct Random Bezier Function of k dimensions
+            ...
+            Parameters
+            ==========
+            k : int
+                dimension of the input of Bezier Function
+            n : int
+                dimension of the output of Bezier Function
+            """
             raise NotImplementedError
 
         @classmethod
-        def ID(cls, dim):
-            HCD = HyperCube(HCMode.BEZIER)(dim)
+        def ID(cls, k: int):
+            """ Consturct Identity Bezier Function of k dimensions
+            ...
+            Parameters
+            ==========
+            k : int
+                dimension of the input and output of Bezier Function
+            """
+            HCD = HyperCube(HCMode.BEZIER)(k)
 
             data = __Sculpture__(Segment(array([0]), array([1])), HCD).sculpt()
 
@@ -177,7 +199,7 @@ def Bezier(mode=Mode.CLOSED):
                         return stack(list(map(dfs, data.elements)))
 
             id_control_points = dfs(data)
-            id_collapse_axes = range(dim)[::-1]
+            id_collapse_axes = range(k)[::-1]
 
             return cls(id_control_points, id_collapse_axes)
 

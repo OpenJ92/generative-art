@@ -195,13 +195,18 @@ def U10():
     count = 20
     height = 3
     stem_control_points = [
-        make_bezier_circle(rand()) @ array([[1, 0, 0], [0, 1, 0]])
+        make_bezier_circle(rand() + 1) @ array([[1, 0, 0], [0, 1, 0]])
         + array([0, 0, height * k / count])
         for k in range(count)
     ]
 
     base = rand(20, 3)
     transform = lambda height: array([[height, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])
+
+    # construct k Random beziers in 1x1x1 rxThexPhi. rescale 1x(0,2pi)x(0,pi). Stack
+    # with some overlap in r direction. Supply output from these to ball.
+    # Use these and bezier_circles as part of conttol points of new bezier form.
+    # Sample with simple lines. Apply either noise or bezier function to add noise
 
     pass
 
