@@ -208,6 +208,7 @@ def U10():
     # Use these and bezier_circles as part of conttol points of new bezier form.
     # Sample with simple lines. Apply either noise or bezier function to add noise
 
+
     pass
 
 
@@ -215,6 +216,9 @@ def U11():
     ## Hypersphere products. Define poly-multipy and carry out over k-sphere * l-sphere.
     ## I've been very curious about the visual form of these for a long time now. Do a
     ## collection of projections of each product and place in canvases. Three per canvas
+
+    ## TODO: Constrcut PolynomialProduct __Function__ taking any two np.arrays 
+
     pass
 
 
