@@ -17,7 +17,6 @@ class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
 
-
 def collapse_dispatch(mode):
     match mode:
         case Mode.CLOSED:
