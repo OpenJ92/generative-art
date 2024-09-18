@@ -15,17 +15,18 @@ from src.typeclass.__random__ import __Random__
 
 ## Rn -> R1
 class Perlin_Noise(__Random__, __Function__):
-    def __init__(self, octave, seed):
+    def __init__(self, octave, seed, scale=1):
         self.octave = octave
         self.seed = seed
+        self.scale = scale
         self.perline_noise = PerlinNoise(self.octave, self.seed)
 
     def __call__(self, ts: array):
-        return self.perline_noise(ts)
+        return self.scale * self.perline_noise(ts)
 
     @classmethod
     def random(cls):
-        return cls(randint(low=1, high=20), randint(999999999))
+        return cls(randint(low=1, high=20), randint(999999999), rand())
 
 
 ## Rn -> R1
@@ -37,11 +38,11 @@ class Perlin_Stack(__Random__, __Function__):
 
     def __call__(self, ts: array):
         perlins = map(
-            lambda octseed: Perlin_Noise(*octseed), zip(self.octaves, self.seeds)
+            lambda octseedprop: Perlin_Noise(*octseedprop), zip(self.octaves, self.seeds, self.proportions)
         )
         retval = 0
-        for prop, perlin in zip(self.proportions, perlins):
-            retval += retval + prop * perlin(ts)
+        for perlin in perlins:
+            retval += retval + perlin(ts)
         return retval
 
     @classmethod

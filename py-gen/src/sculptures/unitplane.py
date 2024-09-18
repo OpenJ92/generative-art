@@ -7,20 +7,15 @@ from numpy import array, diag
 from itertools import product
 
 
-# Can't this be extended to any dimension? Consider generalizing this.
-# Make FlexCube with three parameters and HCube(3)
 def FlexPlane(sculpture, nx, ny):
     funcs = []
     for x, y in product(range(nx), range(ny)):
-        funcs = [
-            *funcs,
-            Composition(
-                [
+        funcs.append(
+            Composition( [
                     Parallelogram(diag(array([1 / nx, 1 / ny]))),
-                    Translate(array([x / nx, y / ny])),
-                ]
+                    Translate(array([x / nx, y / ny])), ]
             ),
-        ]
+        )
 
     return __Sculpture__(
         __Sculpture__(sculpture.sculpt(), Copy(nx * ny)).sculpt(), ZipApply(funcs)

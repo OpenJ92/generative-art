@@ -1,7 +1,7 @@
 from src.typeclass.__function__ import __Function__
 
 from math import sin, cos
-from numpy import hstack, array
+from numpy import hstack, array, zeros
 
 
 class Sphere(__Function__):
@@ -17,12 +17,37 @@ class Sphere(__Function__):
             return arr
 
 
-from unittest import TestCase
-
-
-class TEST_Sphere(TestCase):
-    def test_length_invariant(self):
-        pass
-
-    def test_embedded_dimension_change(self):
-        pass
+# class Sphere(__Function__, __Random__):
+#     convert = {"C" : True, "S" : False}
+#     fn      = {True : cos, False : sin}
+# 
+#     @classmethod
+#     def _parse(cls, word):
+#         pass
+# 
+#     def _validate_thetas(self, thetas):
+#         return len(thetas) == self.size
+# 
+#     def __init__(self, word):
+#         if not (self.information := Sphere._parse(word)):
+#             raise ValueError
+# 
+#     def _evaluate(self, thetas):
+#         output = zeros(self.information['size'])
+#         output[information['init']] = 1
+# 
+#         information = [ thetas
+#                       , self.information['policies']
+#                       , self.information['locations']
+#                       ]
+# 
+#         for theta, policy, location in zip(information):
+#             output *= fn[policy](theta)
+#             output[location] = fn[not policy](theta)
+# 
+#         return output
+# 
+#     def __call__(self, thetas):
+#         if not self._validate_thetas(thetas):
+#             raise ValueError
+#         return self._evaluate(thetas)

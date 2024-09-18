@@ -17,7 +17,6 @@ class Mode(Enum):
     CLOSED = 0
     DECASTELJAU = 1
 
-
 def collapse_dispatch(mode):
     match mode:
         case Mode.CLOSED:
@@ -96,6 +95,7 @@ def Bezier(mode=Mode.CLOSED):
 
             """
             self.control_points = control_points
+            ## Should this always be sorted DESC?
             self.collapse_axes = collapse_axes
             self.weights = (
                 weights
