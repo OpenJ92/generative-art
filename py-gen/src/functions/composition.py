@@ -11,6 +11,8 @@ class Composition(__Function__):
         self.funcs = funcs
 
     def __call__(self, data: array):
+        for func in self.funcs:
+            data = func(data)
         return data
 
     def __call_data__(self, data: __Data__) -> __Data__:

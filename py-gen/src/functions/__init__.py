@@ -79,3 +79,20 @@ class ZipApply(__Function__):
                 return List(applied)
             case _:
                 raise NotImplementedError
+
+class Map(__Function__):
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, data: array):
+        return data
+
+    def __call_data__(self, data: __Data__):
+        match data:
+            case List(elements=elements):
+                applied = []
+                for element in elements:
+                    applied.append(__Sculpture__(element, self.func).sculpt())
+                return List(applied)
+            case _:
+                raise NotImplementedError

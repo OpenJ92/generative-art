@@ -17,8 +17,9 @@ class Pose_Landmark_Detection:
     Pose_Landmarks = mp.solutions.pose.PoseLandmark
     Pose_Connections = mp.solutions.pose.POSE_CONNECTIONS
 
-    def __init__(self, model_path):
+    def __init__(self, model_path, video_path):
         self.model_path = model_path
+        self.video_path = video_path
 
     def setupmodel(self):
         BaseOptions = mp.tasks.BaseOptions
@@ -31,13 +32,11 @@ class Pose_Landmark_Detection:
             running_mode=VisionRunningMode.VIDEO,
         )
 
-        ## Work to split this off into runmodel function. Then, we can construct a make_data
-        ## function which
         with PoseLandmarker.create_from_options(options) as landmarker:
-            cap = cv.VideoCapture("py-gen/mp/AlinaTaratorin3.mp4")
+            cap = cv.VideoCapture(self.video_path)
             fps = cap.get(cv.CAP_PROP_FPS)
 
-            width = cap.get(cv.CAP_PROP_FRAME_WIDTH)
+            width  = cap.get(cv.CAP_PROP_FRAME_WIDTH)
             height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
             frame_count = 0
 
@@ -61,15 +60,13 @@ class Pose_Landmark_Detection:
 
                 if not pose_landmarker_result.pose_landmarks:
                     continue
-                else:
-                    result = pose_landmarker_result.pose_landmarks
 
+                result = pose_landmarker_result.pose_landmarks
                 convert = List(list(map(self.convert_landmark, result[0])))
-
                 frame_detections = [*frame_detections, convert]
 
             cap.release()
-        return f, List(frame_detections)
+        return List([f, List(frame_detections)])
 
     def convert_landmark(self, landmark):
         Landmark = mp.tasks.components.containers.Landmark

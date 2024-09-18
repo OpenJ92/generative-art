@@ -9,6 +9,11 @@
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
 # Video(__Camera__, Sculpture(__Data__, __Function__), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
+
+
+## valid function composition graph. edges represent valid function composition. For every new function
+## constructed, you register it with the function composition graph. Traversals over this graph form the
+## composition of functions
 from numpy.random import rand, randint
 from numpy import (
     array_split,
@@ -40,6 +45,7 @@ from src.functions import (
     AccumulateOnto,
     Copy,
     Barycentric,
+    Map,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -53,6 +59,10 @@ from src.sculptures import (
     FlexSquare,
     UnitStrip,
     Stack,
+    Linear_Pedal,
+    Sphere_Line,
+    Floral,
+    Rectangles,
 )
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
@@ -115,11 +125,11 @@ def U04():
         noise = Perlin_Vector.random()(3)
 
         N = [
-            make_closed_LNE(populate_MVT(A, 1, 1.75, i * 0.0125), 0, 0.5)
+            make_closed_LNE(populate_MVT(A, 1.75, i * 0.0125), 0, 0.5)
             for i in range(2, 30)
         ]
         M = [
-            make_closed_LNE(populate_MVT(B, 1, 1.75, i * 0.0125), 0, 0.5)
+            make_closed_LNE(populate_MVT(B, 1.75, i * 0.0125), 0, 0.5)
             for i in range(2, 60)
         ]
         L = List(list(map(lambda A: f(A, line, noise, deform), N)))
@@ -136,7 +146,7 @@ def U07(k):
     A = rand(20, 3)
     beziers = [
         Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
-        for i in range(0, 15)
+        for i in range(0, 15, 2)
     ]
     bezier = Bezier()(
         make_closed_LNE(
@@ -149,13 +159,16 @@ def U07(k):
         [1, 0],
     ).update_with_random_weights()
 
-    plane = FlexPlane(Square(Segment), 300, 300).sculpt()
+    plane = FlexPlane(FlexSquare(5), 1000, 1).sculpt()
     ## plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
     design = __Sculpture__(
         plane,
         Composition(
             [
                 bezier,
+                Parallelogram(array([[1, 0, 0], [0, 4*pi, 0], [0, 0, 2*pi]])),
+                Translate([3,0,0]),
+                Ball(),
                 Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
             ]
         ),
@@ -167,48 +180,6 @@ def U07(k):
 def U08(k):
     ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
     ## Three collapse dimensions
-    pass
-
-
-## "Floral"
-def U10():
-    ## I'm going to hardcode this, but there should be a procedure that produces the same object
-    def make_bezier_circle(flare):
-        return array(
-            [
-                [1, 0],
-                [1 + 0, 0 + flare],
-                [0 - flare, 1],
-                [0, 1],
-                [0 + flare, 1],
-                [-1, 0 + flare],
-                [-1, 0],
-                [-1, 0 - flare],
-                [0 - flare, -1],
-                [0, -1],
-                [0 + flare, -1],
-                [1 + 0, 0 - flare],
-                [1, 0],
-            ]
-        )
-
-    count = 20
-    height = 3
-    stem_control_points = [
-        make_bezier_circle(rand() + 1) @ array([[1, 0, 0], [0, 1, 0]])
-        + array([0, 0, height * k / count])
-        for k in range(count)
-    ]
-
-    base = rand(20, 3)
-    transform = lambda height: array([[height, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])
-
-    # construct k Random beziers in 1x1x1 rxThexPhi. rescale 1x(0,2pi)x(0,pi). Stack
-    # with some overlap in r direction. Supply output from these to ball.
-    # Use these and bezier_circles as part of conttol points of new bezier form.
-    # Sample with simple lines. Apply either noise or bezier function to add noise
-
-
     pass
 
 
@@ -230,3 +201,45 @@ def U12():
 def U14():
     ## Bezier k-form as acceleration function
     pass
+
+
+def U17():
+    return Linear_Pedal(.2, .7, 5)
+
+def U18(k):
+    data = Sphere_Line(5)(FlexPlane(Square(Segment),100,100).sculpt()).sculpt()
+    data = __Sculpture__(data, Parallelogram(array([[1,0,0], [0,0,1]]))).sculpt()
+    write_to_file(f"u18_{k+500}.svg", wrap(draw(data)))
+
+def U15(k, degree):
+    start, end = rand(), rand()
+    stem = end*rand()
+
+
+    pedal  = Linear_Pedal(start, end, degree, stem)
+    data = __Sculpture__(FlexPlane(Square(Segment), 100, 100).sculpt(), pedal)
+    data = __Sculpture__(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
+    write_to_file(f"u15_{k+100}.svg", wrap(draw(data.sculpt())))
+
+def U21(k):
+    floral = Floral(2, .09, k)
+    functions = len(floral.funcs[0].funcs)
+    data = __Sculpture__(FlexPlane(Square(Segment), 100, 100).sculpt(), Copy(functions))
+    data = __Sculpture__(data.sculpt(), floral)
+    data = __Sculpture__(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
+    write_to_file(f"u21_{k+100}.svg", wrap(draw(data.sculpt())))
+
+def U22(k):
+    floral = Floral(3, .05, k)
+    functions = len(floral.funcs[0].funcs)
+    data = __Sculpture__(FlexPlane(Square(Segment), 50, 50).sculpt(), Copy(functions))
+    data = __Sculpture__(data.sculpt(), floral)
+
+    perlins = [Perlin_Noise.random() for _ in range(3)]
+    for perlin in perlins:
+        perlin.scale = .001
+
+    data = __Sculpture__(data.sculpt(), Perlin_Vector(perlins))
+    data = __Sculpture__(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
+
+    write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))

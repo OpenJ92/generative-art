@@ -95,6 +95,7 @@ def Bezier(mode=Mode.CLOSED):
 
             """
             self.control_points = control_points
+            ## Should this always be sorted DESC?
             self.collapse_axes = collapse_axes
             self.weights = (
                 weights

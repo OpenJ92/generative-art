@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from numpy import array, zeros, diag
+from numpy import array, zeros, diag, stack
 
 from src.typeclass.__composite__ import __Composite__
 
@@ -41,6 +41,10 @@ class SegmentStrip:
 
     def __init__(self, points):
         self.points = points
+
+    def extract_to_array(self):
+        return stack([point.l for point in self.points])
+
 
 
 class List:
