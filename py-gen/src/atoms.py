@@ -112,18 +112,9 @@ def draw(data: __Data__) -> str:
             x1, y1 = m
             return f'<polyline points="{x0},{y0} {x1},{y1}" />\n'
         case Triangle(l=l, m=m, n=n):
-            (
-                x0,
-                y0,
-            ) = l
-            (
-                x1,
-                y1,
-            ) = m
-            (
-                x2,
-                y2,
-            ) = n
+            x0, y0 = l
+            x1, y1 = m
+            x2, y2 = n
             return f'<polygon points="{x0},{y0} {x1},{y1} {x2},{y2} {x0},{y0}" />\n'
         case List(elements=elements):
             return "".join(list(map(draw, elements)))
