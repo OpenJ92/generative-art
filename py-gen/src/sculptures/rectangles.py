@@ -1,4 +1,4 @@
-from src.functions import Bezier, ID, Map
+from src.functions import Bezier, ID, Map, Composition
 from src.sculptures import FlexPlane
 from src.atoms import Point, Segment, List, __Meta_Data__
 from src.typeclass import __Sculpture__, __Function__, __Random__
@@ -10,18 +10,21 @@ class Rectangle(__Function__):
         self.size = size
 
     def __call__(self, data: array):
-        elements = [None] * self.size
-        for index in range(0, self.size):
+        elements = [None] * (self.size // 2)
+        for index in range(0, self.size // 2):
             length, width = data[2*index], data[2*index+1]
             elements[index] = List([ Segment(array([0,0]),array([length,0]))
                                    , Segment(array([length,0]),array([length, width]))
                                    , Segment(array([length, width]),array([0, width]))
                                    , Segment(array([0, width]),array([0,0]))
                                    ])
-            elements[index] = __Meta_Data__(meta = {"color":index}, data = elements[index])
-            ## breakpoint()
+            elements[index] = __Meta_Data__(meta={"color":index},data=elements[index])
         return List(elements)
 
+    ## We should consider taking the contents of __call__ and supplying them within
+    ## __call_data__. Recall, that __call__ represent transformations of spacial information
+    ## and __call_data__ represent transformations of __Data__ information. Rectangle is
+    ## taking the spacial information of array and CONSTRUCTING __Data__. 
     def __call_data__(self, data):
         match data:
             case Point(l=x):
@@ -32,14 +35,11 @@ class Rectangle(__Function__):
 def Rectangles(control_points, nx, ny):
     ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of three
 
-    rectangles = Bezier()(control_points, (1,2))
+    information = Bezier()(control_points, (1,2))
 
-    ## This should be a __Function__ with a specialized __call_data__
-    ## function which matches on Point __Data__ and calls self with the
-    ## following funciton. make :: Point -> List[Segment]
+    points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), nx, ny).sculpt()
+    function = Composition([Map(information), Map(Rectangle(control_points.shape[-1]))])
 
-    point = __Sculpture__(Point(array([1,1])), ID())
-    data  = __Sculpture__(FlexPlane(point, nx, ny).sculpt(), Map(rectangles))
-    data  = __Sculpture__(data.sculpt(), Map(Rectangle(control_points.shape[-1] // 3))).sculpt()
+    data  = __Sculpture__(points, function).sculpt()
 
     breakpoint()
