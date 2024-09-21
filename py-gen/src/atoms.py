@@ -105,8 +105,15 @@ def parse_meta(meta: dict):
 
 ## Ultimately, this function should only work on 2D data. That is to say that after
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
-## to draw.
-def draw(data: __Data__) -> str:
+## to draw_helper.
+def apply_construct(applied):
+    def f(meta):
+        for index in range(len(applied)):
+            applied[index] = applied[index](meta)
+        return applied
+    return f
+
+def draw_helper(data: __Data__) -> str:
     if dimension(data) != 2:
         raise NotImplementedError
     match data:
@@ -128,16 +135,10 @@ def draw(data: __Data__) -> str:
         case List(elements=elements):
             applied = []
             for element in elements:
-                applied.append(draw(element))
+                applied.append(draw_helper(element))
 
-            def q(applied):
-                def f(meta):
-                    for index in range(len(applied)):
-                        applied[index] = applied[index](meta)
-                    return applied
-                return f
 
-            string = lambda meta: "".join(q(applied)(meta))
+            string = lambda meta: "".join(apply_construct(applied)(meta))
 
         case SegmentStrip(points=points):
 
@@ -147,23 +148,20 @@ def draw(data: __Data__) -> str:
                         return Segment(l1, l2)
                     case _:
                         raise NotImplementedError
-            def q(applied):
-                def f(meta):
-                    for index in range(len(applied)):
-                        applied[index] = applied[index](meta)
-                    return applied
-                return f
 
             applied = []
             for point, pojnt in zip(points, points[1:]):
-                applied.append(draw(f((point, pojnt))))
+                applied.append(draw_helper(f((point, pojnt))))
 
-            string = lambda meta: "".join(q(applied)(meta))
+            string = lambda meta: "".join(apply_construct(applied)(meta))
 
         case __Meta_Data__(meta=m, data=da):
-            return lambda _: draw(da)(parse_meta(m))
+            return lambda _: draw_helper(da)(parse_meta(m))
 
     return string
+
+def draw(data):
+    return draw_helper(data)("")
 
 
 def wrap(work: str) -> str:
