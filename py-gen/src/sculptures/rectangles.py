@@ -33,7 +33,7 @@ class Rectangle(__Function__):
                 return NotImplementedError
 
 def Rectangles(control_points, nx, ny):
-    ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of three
+    ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of two
 
     information = Bezier()(control_points, (1,2))
 
@@ -41,5 +41,5 @@ def Rectangles(control_points, nx, ny):
     function = Composition([Map(information), Map(Rectangle(control_points.shape[-1]))])
 
     data  = __Sculpture__(points, function).sculpt()
+    return data
 
-    breakpoint()
