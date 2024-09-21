@@ -96,17 +96,24 @@ def dimension(data: __Data__):
         case __Meta_Data__(meta, data):
             return dimension(data)
 
-
+color = {0:"black", 1:"red", 2:"blue", 3:"green"}
 def parse_meta(meta: dict):
     elements = []
     for key, value in meta.items():
-        elements.append(f"{key}=\"{value}\"")
+        elements.append(f"{key}=\"{color[value]}\"")
     return "".join(elements)
+
+def apply_construct(applied):
+    def f(meta):
+        for index in range(len(applied)):
+            applied[index] = applied[index](meta)
+        return applied
+    return f
 
 ## Ultimately, this function should only work on 2D data. That is to say that after
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
-## to draw.
-def draw(data: __Data__) -> str:
+## to draw_helper.
+def draw_helper(data: __Data__) -> str:
     if dimension(data) != 2:
         raise NotImplementedError
     match data:
@@ -115,29 +122,18 @@ def draw(data: __Data__) -> str:
             string = lambda meta: f'<circle cx="{x0}" cy="{y0}" r="5" {meta}/>\n'
 
         case Segment(l=l, m=m):
-            x0, y0 = l
-            x1, y1 = m
+            x0, y0 = l; x1, y1 = m
             string = lambda meta: f'<polyline points="{x0},{y0} {x1},{y1}" {meta}/>\n'
 
         case Triangle(l=l, m=m, n=n):
-            x0, y0 = l
-            x1, y1 = m
-            x2, y2 = n
+            x0, y0 = l; x1, y1 = m; x2, y2 = n
             string = lambda meta: f'<polygon points="{x0},{y0} {x1},{y1} {x2},{y2} {x0},{y0}" {meta}/>\n'
 
         case List(elements=elements):
             applied = []
             for element in elements:
-                applied.append(draw(element))
-
-            def q(applied):
-                def f(meta):
-                    for index in range(len(applied)):
-                        applied[index] = applied[index](meta)
-                    return applied
-                return f
-
-            string = lambda meta: "".join(q(applied)(meta))
+                applied.append(draw_helper(element))
+            string = lambda meta: "".join(apply_construct(applied)(meta))
 
         case SegmentStrip(points=points):
 
@@ -147,23 +143,19 @@ def draw(data: __Data__) -> str:
                         return Segment(l1, l2)
                     case _:
                         raise NotImplementedError
-            def q(applied):
-                def f(meta):
-                    for index in range(len(applied)):
-                        applied[index] = applied[index](meta)
-                    return applied
-                return f
 
             applied = []
             for point, pojnt in zip(points, points[1:]):
-                applied.append(draw(f((point, pojnt))))
-
-            string = lambda meta: "".join(q(applied)(meta))
+                applied.append(draw_helper(f((point, pojnt))))
+            string = lambda meta: "".join(apply_construct(applied)(meta))
 
         case __Meta_Data__(meta=m, data=da):
-            return lambda _: draw(da)(parse_meta(m))
+            return lambda _: draw_helper(da)(parse_meta(m))
 
     return string
+
+def draw(data):
+    return draw_helper(data)("")
 
 
 def wrap(work: str) -> str:

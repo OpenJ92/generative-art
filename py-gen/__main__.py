@@ -243,3 +243,7 @@ def U22(k):
     data = __Sculpture__(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
 
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
+
+def U23(k):
+    data = Rectangles(rand(20,10,8), 10, 10)
+    write_to_file(f"u23_{k+100}.svg", wrap(draw(data)))
