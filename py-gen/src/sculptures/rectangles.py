@@ -18,7 +18,7 @@ class Rectangle(__Function__):
                                    , Segment(array([length, width]),array([0, width]))
                                    , Segment(array([0, width]),array([0,0]))
                                    ])
-            elements[index] = __Meta_Data__(meta={"color":index},data=elements[index])
+            elements[index] = __Meta_Data__(meta={"stroke":index},data=elements[index])
         return List(elements)
 
     ## We should consider taking the contents of __call__ and supplying them within
