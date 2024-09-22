@@ -96,6 +96,7 @@ def dimension(data: __Data__):
         case __Meta_Data__(meta, data):
             return dimension(data)
 
+## Rudimentary Parser. Applicative Functor Parser in python?
 color = {0:"black", 1:"red", 2:"blue", 3:"green"}
 def parse_meta(meta: dict):
     elements = []

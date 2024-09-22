@@ -1,4 +1,4 @@
-from src.functions import Bezier, ID, Map, Composition
+from src.functions import Bezier, ID, Map, Composition, Translate, ZipApply
 from src.sculptures import FlexPlane
 from src.atoms import Point, Segment, List, __Meta_Data__
 from src.typeclass import __Sculpture__, __Function__, __Random__
@@ -39,7 +39,12 @@ def Rectangles(control_points, nx, ny):
 
     points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), nx, ny).sculpt()
     function = Composition([Map(information), Map(Rectangle(control_points.shape[-1]))])
-
     data  = __Sculpture__(points, function).sculpt()
+
+    translates = []
+    for point in points.elements:
+        translates.append(Translate(point.l))
+    data = __Sculpture__(data, ZipApply(translates)).sculpt()
+
     return data
 
