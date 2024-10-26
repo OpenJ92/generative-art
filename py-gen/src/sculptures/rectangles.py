@@ -32,19 +32,28 @@ class Rectangle(__Function__):
             case _:
                 return NotImplementedError
 
-def Rectangles(control_points, nx, ny):
+class Rectangles(__Sculpture__, __Random__):
     ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of two
+    def __init__(self, control_points, nx, ny):
+        self.control_points = control_points
+        self.nx = nx
+        self.ny = ny
 
-    information = Bezier()(control_points, (1,2))
+    def sculpt(self)
+        information = Bezier()(self.control_points, (1,2))
 
-    points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), nx, ny).sculpt()
-    function = Composition([Map(information), Map(Rectangle(control_points.shape[-1]))])
-    data  = __Sculpture__(points, function).sculpt()
+        points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), self.nx, self.ny).sculpt()
+        function = Composition([Map(information), Map(Rectangle(self.control_points.shape[-1]))])
+        data  = __Sculpture__(points, function).sculpt()
 
-    translates = []
-    for point in points.elements:
-        translates.append(Translate(point.l))
-    data = __Sculpture__(data, ZipApply(translates)).sculpt()
+        translates = []
+        for point in points.elements:
+            translates.append(Translate(point.l))
+        data = __Sculpture__(data, ZipApply(translates)).sculpt()
 
-    return data
+        return data
+
+    def random(cls):
+        raise NotImplementedError
+
 

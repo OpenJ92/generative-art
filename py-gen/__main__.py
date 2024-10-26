@@ -245,5 +245,5 @@ def U22(k):
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
 
 def U23(k, n):
-    data = Rectangles(n*(2*rand(20,10,8)-1), 8, 8)
+    data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1)
     write_to_file(f"u23_{k+100}.svg", wrap(draw(data)))

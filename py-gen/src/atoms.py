@@ -120,21 +120,24 @@ def draw_helper(data: __Data__) -> str:
     match data:
         case Point(l=l):
             x0, y0 = l
-            string = lambda meta: f'<circle cx="{x0}" cy="{y0}" r="5" {meta}/>\n'
+            return lambda meta: \
+                    f'<circle cx="{x0}" cy="{y0}" r="5" {meta}/>\n'
 
         case Segment(l=l, m=m):
             x0, y0 = l; x1, y1 = m
-            string = lambda meta: f'<polyline points="{x0},{y0} {x1},{y1}" {meta}/>\n'
+            return lambda meta: \
+                    f'<polyline points="{x0},{y0} {x1},{y1}" {meta}/>\n'
 
         case Triangle(l=l, m=m, n=n):
             x0, y0 = l; x1, y1 = m; x2, y2 = n
-            string = lambda meta: f'<polygon points="{x0},{y0} {x1},{y1} {x2},{y2} {x0},{y0}" {meta}/>\n'
+            return lambda meta: \
+                    f'<polygon points="{x0},{y0} {x1},{y1} {x2},{y2} {x0},{y0}" {meta}/>\n'
 
         case List(elements=elements):
             applied = []
             for element in elements:
                 applied.append(draw_helper(element))
-            string = lambda meta: "".join(apply_construct(applied)(meta))
+            return lambda meta: "".join(apply_construct(applied)(meta))
 
         case SegmentStrip(points=points):
 
@@ -148,19 +151,19 @@ def draw_helper(data: __Data__) -> str:
             applied = []
             for point, pojnt in zip(points, points[1:]):
                 applied.append(draw_helper(f((point, pojnt))))
-            string = lambda meta: "".join(apply_construct(applied)(meta))
+
+            return lambda meta: "".join(apply_construct(applied)(meta))
 
         case __Meta_Data__(meta=m, data=da):
             return lambda _: draw_helper(da)(parse_meta(m))
-
-    return string
 
 def draw(data):
     return draw_helper(data)("")
 
 
 def wrap(work: str) -> str:
-    header = '<svg width="297mm" height="210mm" viewBox="0 0 297 210" xmlns="http://www.w3.org/2000/svg">\n'
+    header = '<svg width="297mm" height="210mm" viewBox="0 0 297 210" \
+              xmlns="http://www.w3.org/2000/svg">\n'
     footer = "</svg>"
     return header + work + footer
 
