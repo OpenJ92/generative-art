@@ -21,7 +21,7 @@ class __Kinetic__:
         frames = List([])
         for time in linspace(0, 1, self.samples):
             _time = self.__time__(time)
-            _input = self.__function__(adjusted_time)
+            _input = self.__function__(_time)
             frames.append(self.__sculpture__(_input).sculpt())
         return frames
 
