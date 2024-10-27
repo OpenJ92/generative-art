@@ -20,7 +20,8 @@ class __Kinetic__:
     def sculpt():
         frames = List([])
         for time in linspace(0, 1, self.samples):
-            adjusted_time = self.__time__(time)
-            frames.append(self.__sculpture__(self.__function__(adjusted_time)).sculpt())
+            _time = self.__time__(time)
+            _input = self.__function__(adjusted_time)
+            frames.append(self.__sculpture__(_input).sculpt())
         return frames
 
