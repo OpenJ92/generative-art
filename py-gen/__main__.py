@@ -24,6 +24,8 @@ from numpy import (
     tensordot,
     stack,
     einsum,
+    sin,
+    cos,
 )
 from numpy.random import rand, randint
 from math import pi, sqrt
@@ -259,4 +261,23 @@ def U25(k, n):
     ## We need to make a quick 'frame' object
     control_points = n*(2*rand(10,10,20,10,8)-1)
     bezier = Bezier()(control_points, [0,1])
+
+    frames = []
+    for sample in 2*pi*linspace(24*5):
+        circle = array([sin(sample), cos(sample)]) + [.5, .5]
+        rectangles = Rectangles(bezier(control_points)(circle), 200, 1).sculpt()
+        ## Sculpture supplied to rectangles MUST be two dimensional. 
+        frame = Frame(rectangles, 297, 420); frame.fit(120)
+        frames.append(frame)
+
+    pages = []
+    for page in range(10):
+        selection = frames[12*page: 12*(page+1)]
+        tile = Tile(selection, 3, 4) ## selection must be a list of Frames
+        pages.append(tile)
+
+    for page in pages:
+        # write to file
+        pass
+
     breakpoint()
