@@ -3,6 +3,7 @@ from src.sculptures import FlexPlane
 from src.atoms import Point, Segment, List, __Meta_Data__
 from src.typeclass import __Sculpture__, __Function__, __Random__
 
+from collections import defaultdict
 from numpy import array
 
 class Rectangle(__Function__):
@@ -39,7 +40,7 @@ class Rectangles(__Sculpture__, __Random__):
         self.nx = nx
         self.ny = ny
 
-    def sculpt(self)
+    def sculpt(self):
         information = Bezier()(self.control_points, (1,2))
 
         points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), self.nx, self.ny).sculpt()
@@ -49,11 +50,28 @@ class Rectangles(__Sculpture__, __Random__):
         translates = []
         for point in points.elements:
             translates.append(Translate(point.l))
-        data = __Sculpture__(data, ZipApply(translates)).sculpt()
 
-        return data
+        rectangles = __Sculpture__(data, ZipApply(translates)).sculpt()
+
+        color_rectangles = defaultdict(list)
+        for batch in rectangles.elements:
+            for color in batch.elements:
+                color_rectangles[color.meta['stroke']].append(color)
+
+        rectangles = []
+        for color in color_rectangles.values():
+            rectangles.append(List(color))
+
+        return List(rectangles)
 
     def random(cls):
         raise NotImplementedError
 
+
+# class Motion_Rectangles(__Kinetic__, __Random__):
+#     def __init__(self):
+#         pass
+# 
+#     def random(cls):
+#         raise NotImplementedError
 

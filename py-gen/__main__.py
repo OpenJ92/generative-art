@@ -1,5 +1,4 @@
 # __Data__, __Function__, __Camera__, __Light__
-
 # Sculpture(__Data__, __Function__) -> Named functions
 # Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__)
 # Enviornment(env_file?)
@@ -245,5 +244,19 @@ def U22(k):
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
 
 def U23(k, n):
-    data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1)
+    data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
     write_to_file(f"u23_{k+100}.svg", wrap(draw(data)))
+
+def U24(k, n):
+    control_points = n*(2*rand(20,10,8)-1)
+    control_points = make_closed_MVT(control_points, 0, 1)
+    control_points = make_closed_MVT(control_points, 1, 1)
+
+    data = Rectangles(control_points, 200, 1).sculpt()
+    write_to_file(f"u24_{k+100}.svg", wrap(draw(data)))
+
+def U25(k, n):
+    ## We need to make a quick 'frame' object
+    control_points = n*(2*rand(10,10,20,10,8)-1)
+    bezier = Bezier()(control_points, [0,1])
+    breakpoint()
