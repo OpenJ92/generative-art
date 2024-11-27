@@ -1,6 +1,6 @@
 from src.functions import ZipApply, Parallelogram, Composition, Translate, Copy
 
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 
 
 def Stack(sculpture, paralellogram, translate, times):

@@ -1,4 +1,4 @@
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 from src.functions import Bezier, Composition, Parallelogram, Scale, Translate, ZipApply, Ball
 from src.sculptures import UnitStrip
 

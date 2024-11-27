@@ -1,4 +1,4 @@
-from src.typeclass.function import Function
+from src.typeclass import Function
 
 def Cylinder(Function):
     def __init__(self, instructions):

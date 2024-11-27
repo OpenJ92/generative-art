@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from src.atoms import Data
-from src.typeclass.function import Function
+from src.typeclass.__function__ import Function
 
 
 class Sculpture:

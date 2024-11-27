@@ -1,4 +1,4 @@
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 
 from src.functions import Sphere, Bezier, Composition, Translate, Scale, Add, ID, Parallelogram
 from src.atoms import Point

@@ -1,4 +1,4 @@
-from src.typeclass.function import Function
+from src.typeclass import Function
 from src.atoms import Data, List
 
 from itertools import repeat

@@ -1,3 +1,10 @@
+from src.typeclass import Function, Sculpture
+from src.atoms import Data, List
+
+from numpy import array, einsum, ones, zeros
+from itertools import product
+from collections import defaultdict
+
 from src.functions.parallelogram import Parallelogram
 from src.functions.bezier import Bezier
 from src.functions.sphere import Sphere
@@ -13,20 +20,12 @@ from src.functions.accumulateonto import AccumulateOnto
 from src.functions.barycentric import Barycentric
 from src.functions.scale import Scale
 
-from src.typeclass.function import Function
-from src.typeclass.sculpture import Sculpture
-from src.atoms import Data, List
-
-from numpy import array, einsum, ones, zeros
-from itertools import product
-from collections import defaultdict
-
 
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
 
 class Concat(Function):
-    def __init__(self, A: Function, B: __Function__):
+    def __init__(self, A: Function, B: Function):
         self.A = A
         self.B = B
 
@@ -38,7 +37,7 @@ class Concat(Function):
 
 
 class Add(Function):
-    def __init__(self, A: Function, B: __Function__):
+    def __init__(self, A: Function, B: Function):
         self.A = A
         self.B = B
 
@@ -49,7 +48,7 @@ class Add(Function):
 ## Perhaps this shouldn't be a product of functions, but a product of Sculptures...
 ## What does that even mean? 
 class Multiply(Function):
-    def __init__(self, A: Function, B: __Function__):
+    def __init__(self, A: Function, B: Function):
         self.A = A
         self.B = B
 
