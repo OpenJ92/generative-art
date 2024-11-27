@@ -1,4 +1,4 @@
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 
 from math import sin, cos
 from numpy import hstack, array, zeros
@@ -17,7 +17,7 @@ class Sphere(Function):
             return arr
 
 
-# class Sphere(Function, __Random__):
+# class Sphere(Function, Random):
 #     convert = {"C" : True, "S" : False}
 #     fn      = {True : cos, False : sin}
 # 

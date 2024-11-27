@@ -1,10 +1,10 @@
 from numpy import array, square
 
-from src.typeclass.__function__ import Function
-from src.typeclass.__random__ import __Random__
+from src.typeclass.function import Function
+from src.typeclass.__random__ import Random
 
 
-class SphereInversion(__Random__, Function):
+class SphereInversion(Random, Function):
     def __init__(self, center, radius):
         self.center = center
         self.radius = radius

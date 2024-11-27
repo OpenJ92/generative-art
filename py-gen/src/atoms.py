@@ -69,15 +69,15 @@ Composite = SegmentStrip | TriangleFan | TriangleStrip | PatchList | List
 
 
 @dataclass
-class __Meta_Data__:
+class Meta_Data:
     meta: dict
-    data: __Data__
+    data: Data
 
 
-__Data__ = Atomic | Composite | __Meta_Data__
+Data = Atomic | Composite | Meta_Data
 
 
-def dimension(data: __Data__):
+def dimension(data: Data):
     match data:
         case Point(l=l):
             return l.size
@@ -93,7 +93,7 @@ def dimension(data: __Data__):
             return dimension(Point(l))
         case SegmentStrip(points=_):
             raise NotImplementedError
-        case __Meta_Data__(meta, data):
+        case Meta_Data(meta, data):
             return dimension(data)
 
 ## Rudimentary Parser. Applicative Functor Parser in python?
@@ -114,7 +114,7 @@ def apply_construct(applied):
 ## Ultimately, this function should only work on 2D data. That is to say that after
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
 ## to draw_helper.
-def draw_helper(data: __Data__) -> str:
+def draw_helper(data: Data) -> str:
     if dimension(data) != 2:
         raise NotImplementedError
     match data:
@@ -154,7 +154,7 @@ def draw_helper(data: __Data__) -> str:
 
             return lambda meta: "".join(apply_construct(applied)(meta))
 
-        case __Meta_Data__(meta=m, data=da):
+        case Meta_Data(meta=m, data=da):
             return lambda _: draw_helper(da)(parse_meta(m))
 
 def draw(data):

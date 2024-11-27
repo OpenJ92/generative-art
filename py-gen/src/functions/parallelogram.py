@@ -1,6 +1,6 @@
 from numpy import array
 
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 
 class Parallelogram(Function):
     def __init__(self, A):

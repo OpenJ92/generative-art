@@ -4,9 +4,9 @@ from functools import reduce, partial
 from math import comb
 from enum import Enum
 
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 from src.typeclass.sculpture import Sculpture
-from src.typeclass.__random__ import __Random__
+from src.typeclass.__random__ import Random
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.functions.sphere import Sphere
@@ -66,7 +66,7 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 def Bezier(mode=Mode.CLOSED):
     """Bezier(Mode)"""
 
-    class bezier(__Random__, Function):
+    class bezier(Random, Function):
         f"""Bezier({mode})
         Attributes
         ----------

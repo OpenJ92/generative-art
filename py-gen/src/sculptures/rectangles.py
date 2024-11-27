@@ -1,7 +1,7 @@
 from src.functions import Bezier, ID, Map, Composition, Translate, ZipApply
 from src.sculptures import FlexPlane
-from src.atoms import Point, Segment, List, __Meta_Data__
-from src.typeclass import Sculpture, Function, __Random__
+from src.atoms import Point, Segment, List, Meta_Data
+from src.typeclass import Sculpture, Function, Random
 
 from collections import defaultdict
 from numpy import array
@@ -19,21 +19,21 @@ class Rectangle(Function):
                                    , Segment(array([length, width]),array([0, width]))
                                    , Segment(array([0, width]),array([0,0]))
                                    ])
-            elements[index] = __Meta_Data__(meta={"stroke":index},data=elements[index])
+            elements[index] = Meta_Data(meta={"stroke":index},data=elements[index])
         return List(elements)
 
     ## We should consider taking the contents of __call__ and supplying them within
-    ## __call_data__. Recall, that __call__ represent transformations of spacial information
-    ## and __call_data__ represent transformations of __Data__ information. Rectangle is
-    ## taking the spacial information of array and CONSTRUCTING __Data__. 
-    def __call_data__(self, data):
+    ## call_data. Recall, that __call__ represent transformations of spacial information
+    ## and call_data represent transformations of Data information. Rectangle is
+    ## taking the spacial information of array and CONSTRUCTING Data. 
+    def call_data(self, data):
         match data:
             case Point(l=x):
                 return self.__call__(x)
             case _:
                 return NotImplementedError
 
-class Rectangles(Sculpture, __Random__):
+class Rectangles(Sculpture, Random):
     ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of two
     def __init__(self, control_points, nx, ny):
         self.control_points = control_points
@@ -68,7 +68,7 @@ class Rectangles(Sculpture, __Random__):
         raise NotImplementedError
 
 
-# class Motion_Rectangles(__Kinetic__, __Random__):
+# class Motion_Rectangles(__Kinetic__, Random):
 #     def __init__(self):
 #         pass
 # 

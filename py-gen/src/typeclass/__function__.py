@@ -7,8 +7,8 @@ from src.atoms import (
     SegmentStrip,
     Triangle,
     Composite,
-    __Data__,
-    __Meta_Data__,
+    Data,
+    Meta_Data,
     List,
 )
 
@@ -16,9 +16,10 @@ from src.atoms import (
 class Function(ABC):
     @abstractmethod
     def __call__(self, data: array) -> array:
+        ## Overwritten by user.
         pass
 
-    def __call_data__(self, data: __Data__) -> __Data__:
+    def call_data(self, data: Data) -> Data:
         match data:
             case Point(l=x):
                 return Point(self.__call__(x))
@@ -27,8 +28,8 @@ class Function(ABC):
             case Triangle(l=l, m=m, n=n):
                 return Triangle(self.__call__(l), self.__call__(m), self.__call__(n))
             case List(elements=elements):
-                return List(list(map(lambda x: self.__call_data__(x), elements)))
+                return List(list(map(lambda x: self.call_data(x), elements)))
             case SegmentStrip(points=points):
-                return SegmentStrip(list(map(lambda x: self.__call_data__(x), points)))
-            case __Meta_Data__(meta, data):
-                return __Meta_Data__(meta, self.__call_data__(data))
+                return SegmentStrip(list(map(lambda x: self.call_data(x), points)))
+            case Meta_Data(meta, data):
+                return Meta_Data(meta, self.call_data(data))

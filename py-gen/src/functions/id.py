@@ -1,4 +1,4 @@
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 
 from numpy import array
 

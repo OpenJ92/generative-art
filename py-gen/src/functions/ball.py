@@ -1,5 +1,5 @@
 from src.functions.sphere import Sphere
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 
 
 class Ball(Function):

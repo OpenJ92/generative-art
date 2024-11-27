@@ -1,9 +1,9 @@
 from typing import List
 from numpy import array
 
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 from src.typeclass.sculpture import Sculpture
-from src.atoms import __Data__
+from src.atoms import Data
 
 
 class Composition(Function):
@@ -15,7 +15,7 @@ class Composition(Function):
             data = func(data)
         return data
 
-    def __call_data__(self, data: __Data__) -> __Data__:
+    def call_data(self, data: Data) -> Data:
         for func in self.funcs:
             data = Sculpture(data, func).sculpt()
         return data

@@ -1,11 +1,11 @@
-# __Data__, Function, __Camera__, __Light__ # Sculpture(__Data__, Function) -> Named functions
+# Data, Function, __Camera__, __Light__ # Sculpture(Data, Function) -> Named functions
 # Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__)
 # Enviornment(env_file?)
 
-# Photograph(__Camera__, __Data__)
-# Photograph(__Camera__, Sculpture(__Data__, Function))
+# Photograph(__Camera__, Data)
+# Photograph(__Camera__, Sculpture(Data, Function))
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
-# Video(__Camera__, Sculpture(__Data__, Function), __Update__, frames)
+# Video(__Camera__, Sculpture(Data, Function), __Update__, frames)
 # Video(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__), __Update__, frames)
 
 

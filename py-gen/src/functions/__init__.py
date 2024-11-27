@@ -13,9 +13,9 @@ from src.functions.accumulateonto import AccumulateOnto
 from src.functions.barycentric import Barycentric
 from src.functions.scale import Scale
 
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 from src.typeclass.sculpture import Sculpture
-from src.atoms import __Data__, List
+from src.atoms import Data, List
 
 from numpy import array, einsum, ones, zeros
 from itertools import product
@@ -33,8 +33,8 @@ class Concat(Function):
     def __call__(self, x: array):
         return x
 
-    def __call_data__(self, x: __Data__):
-        return array(*self.A.__call_data__(x), *self.B.__call_data__(x))
+    def call_data(self, x: Data):
+        return array(*self.A.call_data(x), *self.B.call_data(x))
 
 
 class Add(Function):
@@ -70,7 +70,7 @@ class ZipApply(Function):
     def __call__(self, data: array):
         return data
 
-    def __call_data__(self, data: __Data__) -> __Data__:
+    def call_data(self, data: Data) -> Data:
         match data:
             case List(elements=elements):
                 applied = []
@@ -87,7 +87,7 @@ class Map(Function):
     def __call__(self, data: array):
         return data
 
-    def __call_data__(self, data: __Data__):
+    def call_data(self, data: Data):
         match data:
             case List(elements=elements):
                 applied = []

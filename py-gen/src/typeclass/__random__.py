@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class __Random__(ABC):
+class Random(ABC):
     @classmethod
     @abstractmethod
     def random():

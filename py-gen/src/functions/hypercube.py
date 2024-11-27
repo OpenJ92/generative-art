@@ -1,9 +1,9 @@
 from src.typeclass.sculpture import Sculpture
-from src.typeclass.__function__ import Function
+from src.typeclass.function import Function
 from src.functions.parallelogram import Parallelogram
 from src.functions.translate import Translate
 from src.functions.composition import Composition
-from src.atoms import __Data__, dimension, List, Segment, Triangle, Point
+from src.atoms import Data, dimension, List, Segment, Triangle, Point
 
 from numpy import eye, take, array
 from itertools import combinations
@@ -43,7 +43,7 @@ def HyperCube(mode=Mode.FULL):
         def __call__(self, data: array):
             return data
 
-        def __call_data__(self, data: __Data__):
+        def call_data(self, data: Data):
             dimdata = dimension(data)
             if self.N == dimdata:
                 return data
