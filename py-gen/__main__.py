@@ -1,6 +1,4 @@
-# Data, Function, __Camera__, __Light__ # Sculpture(Data, Function) -> Named functions
-# Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__)
-# Enviornment(env_file?)
+# Data, Function, __Camera__, __Light__ # Sculpture(Data, Function) -> Named functions # Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__) # Enviornment(env_file?)
 
 # Photograph(__Camera__, Data)
 # Photograph(__Camera__, Sculpture(Data, Function))
@@ -68,7 +66,7 @@ from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
 
 from mp.pose_landmark_detection import Pose_Landmark_Detection
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 
 # Remember to do make the sculpture that makes a set of beziers that reduce order in order. Update each to upgrade
 # to the max order. What's more, add multithreading to rendering processes. Functions may or may not be seperable
@@ -261,22 +259,22 @@ def U25(k, n):
     control_points = n*(2*rand(10,10,20,10,8)-1)
     bezier = Bezier()(control_points, [0,1])
 
-    frames = []
-    for sample in 2*pi*linspace(24*5):
-        circle = array([sin(sample), cos(sample)]) + [.5, .5]
-        rectangles = Rectangles(bezier(control_points)(circle), 200, 1).sculpt()
-        ## Sculpture supplied to rectangles MUST be two dimensional. 
-        frame = Frame(rectangles, 297, 420); frame.fit(120)
-        frames.append(frame)
+    ## frames = []
+    ## for sample in 2*pi*linspace(24*5):
+    ##     circle = array([sin(sample), cos(sample)]) + [.5, .5]
+    ##     rectangles = Rectangles(bezier(control_points)(circle), 200, 1).sculpt()
+    ##     ## Sculpture supplied to rectangles MUST be two dimensional. 
+    ##     frame = Frame(rectangles, 297, 420); frame.fit(120)
+    ##     frames.append(frame)
 
-    pages = []
-    for page in range(10):
-        selection = frames[12*page: 12*(page+1)]
-        tile = Tile(selection), 3, 4).sculpt() ## selection must be a list of Frames
-        pages.append(tile)
+    ## pages = []
+    ## for page in range(10):
+    ##     selection = frames[12*page: 12*(page+1)]
+    ##     tile = Tile(selection), 3, 4).sculpt() ## selection must be a list of Frames
+    ##     pages.append(tile)
 
-    for frame, page in enumerate(pages):
-        # write to file
-        pass
+    ## for frame, page in enumerate(pages):
+    ##     # write to file
+    ##     pass
 
-    breakpoint()
+    ## breakpoint()

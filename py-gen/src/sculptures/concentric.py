@@ -1,8 +1,6 @@
 from src.functions import ZipApply, Scale, Translate, Composition, Copy
-
 from src.atoms import dimension
-
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 
 from numpy import array
 

@@ -1,6 +1,5 @@
+from src.typeclass import Function
 from numpy import array
-
-from src.typeclass.function import Function
 
 
 class Translate(Function):

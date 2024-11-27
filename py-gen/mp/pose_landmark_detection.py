@@ -1,7 +1,7 @@
-from src.typeclass.sculpture import Sculpture
+from src.typeclass import Sculpture
 from src.atoms import Meta_Data, List, Point, Segment
-from src.functions.parallelogram import Parallelogram
-from src.sculptures.unitcube import Square
+from src.functions import Parallelogram
+from src.sculptures import Square
 
 import mediapipe as mp
 from numpy import array, diag

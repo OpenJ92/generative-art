@@ -4,8 +4,7 @@ from numpy import array, square
 from numpy.random import randint, rand
 
 from src.functions.sphere import Sphere
-from src.typeclass.function import Function
-from src.typeclass.__random__ import Random
+from src.typeclass import Function, Random
 
 ## These all need a normalization strategy on the call_data layer. that
 ## strategy must be invertable. (remember to add that to the typeclass folder).

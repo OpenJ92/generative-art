@@ -1,6 +1,6 @@
 from numpy import array
 
-from src.typeclass.function import Function
+from src.typeclass import Function
 
 
 class Dialate(Function):
