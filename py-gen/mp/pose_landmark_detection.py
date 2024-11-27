@@ -1,5 +1,5 @@
-from src.typeclass.__sculpture__ import __Sculpture__
-from src.atoms import __Meta_Data__, List, Point, Segment
+from src.typeclass.sculpture import Sculpture
+from src.atoms import Meta_Data, List, Point, Segment
 from src.functions.parallelogram import Parallelogram
 from src.sculptures.unitcube import Square
 
@@ -9,7 +9,7 @@ import cv2 as cv
 
 ## We need to seperate this class into a specific OpenCV Image and Video class and
 ## a seperate MP model class. Then we can make a class that takes a OCV and Model
-## and produced the __Data__ Elements needed. Then we can make other algos that make
+## and produced the Data Elements needed. Then we can make other algos that make
 ## use of OCV data etc.
 
 
@@ -40,7 +40,7 @@ class Pose_Landmark_Detection:
             height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
             frame_count = 0
 
-            f = __Sculpture__(
+            f = Sculpture(
                 Square(Segment).sculpt(), Parallelogram(diag([width, height]))
             ).sculpt()
 
@@ -75,11 +75,11 @@ class Pose_Landmark_Detection:
         match landmark:
             case Landmark(x=x, y=y, z=z, visibility=visibility, presence=presence):
                 meta = {"visibility": visibility, "presence": presence}
-                return __Meta_Data__(meta, Point(array([x, y, z])))
+                return Meta_Data(meta, Point(array([x, y, z])))
             case NormalizedLandmark(
                 x=x, y=y, z=z, visibility=visibility, presence=presence
             ):
                 meta = {"visibility": visibility, "presence": presence}
-                return __Meta_Data__(meta, Point(array([x, y, z])))
+                return Meta_Data(meta, Point(array([x, y, z])))
             case _:
                 raise NotImplementedError

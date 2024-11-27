@@ -1,9 +1,9 @@
 from numpy import array
 
-from src.typeclass.__function__ import __Function__
+from src.typeclass.function import Function
 
 
-class Dialate(__Function__):
+class Dialate(Function):
     def __init__(self, a):
         self.a = a
 

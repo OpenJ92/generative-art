@@ -1,4 +1,4 @@
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 from src.functions import Bezier, Composition, Parallelogram, Scale, Translate, ZipApply, Ball
 from src.sculptures import UnitStrip
 
@@ -15,7 +15,7 @@ def Linear_Pedal(start, end, degree, stem_end, _seed):
 
     ## _base = rand(3, degree)
     samples = rand(3, degree)
-    ## base = __Sculpture__(UnitStrip(degree).sculpt(), Bezier()(_base, [1]))
+    ## base = Sculpture(UnitStrip(degree).sculpt(), Bezier()(_base, [1]))
     ## samples = base.sculpt().extract_to_array().T
 
     _outer_pedal_right = concatenate([start, samples, end], axis=1).T \
@@ -29,7 +29,7 @@ def Linear_Pedal(start, end, degree, stem_end, _seed):
 
 
     stem = Composition([Parallelogram(array([[1],[0],[0]])), Scale(stem_end)])
-    _inner_pedal_right = __Sculpture__(UnitStrip(degree+2).sculpt(), stem) \
+    _inner_pedal_right = Sculpture(UnitStrip(degree+2).sculpt(), stem) \
                                      .sculpt() \
                                      .extract_to_array()
     _inner_pedal_left = flip(_inner_pedal_right, 0)

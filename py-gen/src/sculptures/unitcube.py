@@ -1,4 +1,4 @@
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 from src.functions import ID, HyperCube
 from src.sculptures.unitline import UnitLine, UnitStrip
 from src.atoms import List, Segment, Triangle, Point
@@ -7,11 +7,11 @@ from numpy import array
 
 
 def __Square__(atom):
-    return __Sculpture__(__Sculpture__(atom, ID()).sculpt(), HyperCube()(2))
+    return Sculpture(__Sculpture__(atom, ID()).sculpt(), HyperCube()(2))
 
 
 def __Cube__(atom):
-    return __Sculpture__(__Sculpture__(atom, ID()).sculpt(), HyperCube()(3))
+    return Sculpture(__Sculpture__(atom, ID()).sculpt(), HyperCube()(3))
 
 
 def PointSquare():
@@ -48,8 +48,8 @@ def Cube(atomcls):
 
 
 def HCube(atomcls, n):
-    return __Sculpture__(Square(atomcls).sculpt(), HyperCube()(n))
+    return Sculpture(Square(atomcls).sculpt(), HyperCube()(n))
 
 
 def FlexSquare(n):
-    return __Sculpture__(UnitStrip(n).sculpt(), HyperCube()(2))
+    return Sculpture(UnitStrip(n).sculpt(), HyperCube()(2))

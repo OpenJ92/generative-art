@@ -4,9 +4,9 @@ from functools import reduce, partial
 from math import comb
 from enum import Enum
 
-from src.typeclass.__function__ import __Function__
-from src.typeclass.__sculpture__ import __Sculpture__
-from src.typeclass.__random__ import __Random__
+from src.typeclass.function import Function
+from src.typeclass.sculpture import Sculpture
+from src.typeclass.__random__ import Random
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.functions.sphere import Sphere
@@ -66,7 +66,7 @@ def collapse_decasteljau(this, control_vector, t, collapse_axis, weights):
 def Bezier(mode=Mode.CLOSED):
     """Bezier(Mode)"""
 
-    class bezier(__Random__, __Function__):
+    class bezier(Random, Function):
         f"""Bezier({mode})
         Attributes
         ----------
@@ -152,14 +152,7 @@ def Bezier(mode=Mode.CLOSED):
             shape = self.control_points.shape
             weights = []
             for axis in self.collapse_axes:
-                weights = [
-                    *weights,
-                    Sphere()(
-                        rand(
-                            shape[axis] - 1,
-                        )
-                    ),
-                ]
+                weights = [*weights,Sphere()(rand(shape[axis] - 1,)),]
             self.weights = weights
             return self
 
@@ -187,7 +180,7 @@ def Bezier(mode=Mode.CLOSED):
             """
             HCD = HyperCube(HCMode.BEZIER)(k)
 
-            data = __Sculpture__(Segment(array([0]), array([1])), HCD).sculpt()
+            data = Sculpture(Segment(array([0]), array([1])), HCD).sculpt()
 
             def dfs(data):
                 match data:

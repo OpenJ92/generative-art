@@ -1,10 +1,10 @@
 from numpy import array_split, squeeze, square
 
-from src.typeclass.__function__ import __Function__
+from src.typeclass.function import Function
 from src.functions.sphere import Sphere
 
 
-class Barycentric(__Function__):
+class Barycentric(Function):
     def __init__(self, points):
         self.points = points
 

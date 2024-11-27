@@ -1,7 +1,7 @@
-from src.typeclass.__function__ import __Function__
+from src.typeclass.function import Function
 
 
-class AccumulateOnto(__Function__):
+class AccumulateOnto(Function):
     def __init__(self, acc, scale):
         self.acc = acc
         self.scale = scale

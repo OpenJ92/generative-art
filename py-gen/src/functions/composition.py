@@ -1,13 +1,13 @@
 from typing import List
 from numpy import array
 
-from src.typeclass.__function__ import __Function__
-from src.typeclass.__sculpture__ import __Sculpture__
-from src.atoms import __Data__
+from src.typeclass.function import Function
+from src.typeclass.sculpture import Sculpture
+from src.atoms import Data
 
 
-class Composition(__Function__):
-    def __init__(self, funcs: List[__Function__]):
+class Composition(Function):
+    def __init__(self, funcs: List[Function]):
         self.funcs = funcs
 
     def __call__(self, data: array):
@@ -15,7 +15,7 @@ class Composition(__Function__):
             data = func(data)
         return data
 
-    def __call_data__(self, data: __Data__) -> __Data__:
+    def call_data(self, data: Data) -> Data:
         for func in self.funcs:
-            data = __Sculpture__(data, func).sculpt()
+            data = Sculpture(data, func).sculpt()
         return data

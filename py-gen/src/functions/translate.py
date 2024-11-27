@@ -1,9 +1,9 @@
 from numpy import array
 
-from src.typeclass.__function__ import __Function__
+from src.typeclass.function import Function
 
 
-class Translate(__Function__):
+class Translate(Function):
     def __init__(self, dv):
         self.dv: array = dv
 

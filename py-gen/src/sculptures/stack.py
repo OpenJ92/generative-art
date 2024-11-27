@@ -1,10 +1,10 @@
 from src.functions import ZipApply, Parallelogram, Composition, Translate, Copy
 
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 
 
 def Stack(sculpture, paralellogram, translate, times):
-    sculptures = __Sculpture__(sculpture.sculpt(), Copy(times)).sculpt()
+    sculptures = Sculpture(sculpture.sculpt(), Copy(times)).sculpt()
     funcs = []
     for time in range(times):
         funcs = [
@@ -13,4 +13,4 @@ def Stack(sculpture, paralellogram, translate, times):
                 [Parallelogram(paralellogram), Translate((time / times) * translate)]
             ),
         ]
-    return __Sculpture__(sculptures, ZipApply(funcs))
+    return Sculpture(sculptures, ZipApply(funcs))

@@ -4,17 +4,17 @@ from numpy import array, square
 from numpy.random import randint, rand
 
 from src.functions.sphere import Sphere
-from src.typeclass.__function__ import __Function__
-from src.typeclass.__random__ import __Random__
+from src.typeclass.function import Function
+from src.typeclass.__random__ import Random
 
-## These all need a normalization strategy on the __call_data__ layer. that
+## These all need a normalization strategy on the call_data layer. that
 ## strategy must be invertable. (remember to add that to the typeclass folder).
 ## inherit where applicable. What's more, we have to make a Random typeclass
 ## that enables up to sample functions at random
 
 
 ## Rn -> R1
-class Perlin_Noise(__Random__, __Function__):
+class Perlin_Noise(Random, Function):
     def __init__(self, octave, seed, scale=1):
         self.octave = octave
         self.seed = seed
@@ -30,7 +30,7 @@ class Perlin_Noise(__Random__, __Function__):
 
 
 ## Rn -> R1
-class Perlin_Stack(__Random__, __Function__):
+class Perlin_Stack(Random, Function):
     def __init__(self, proportions, octaves, seeds):
         self.proportions = proportions
         self.octaves = octaves
@@ -64,7 +64,7 @@ Perlin = Perlin_Noise | Perlin_Stack
 
 
 ## Rn -> Rm transform
-class Perlin_Vector(__Random__, __Function__):
+class Perlin_Vector(Random, Function):
     def __init__(self, perlins):
         self.perlins = perlins
 

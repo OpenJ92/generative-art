@@ -7,4 +7,4 @@ from src.sculptures.pedal import Linear_Pedal, Floral
 from src.sculptures.sphereline import Sphere_Line
 from src.sculptures.rectangles import Rectangles
 
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture

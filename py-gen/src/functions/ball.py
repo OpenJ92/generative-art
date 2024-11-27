@@ -1,8 +1,8 @@
 from src.functions.sphere import Sphere
-from src.typeclass.__function__ import __Function__
+from src.typeclass.function import Function
 
 
-class Ball(__Function__):
+class Ball(Function):
     def __call__(self, ts):
         t, *ts = ts
         return t * Sphere()(ts)
