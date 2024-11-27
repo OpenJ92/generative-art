@@ -1,12 +1,12 @@
 from src.functions import Bezier, ID, Map, Composition, Translate, ZipApply
 from src.sculptures import FlexPlane
 from src.atoms import Point, Segment, List, __Meta_Data__
-from src.typeclass import __Sculpture__, __Function__, __Random__
+from src.typeclass import Sculpture, Function, __Random__
 
 from collections import defaultdict
 from numpy import array
 
-class Rectangle(__Function__):
+class Rectangle(Function):
     def __init__(self, size):
         self.size = size
 
@@ -33,7 +33,7 @@ class Rectangle(__Function__):
             case _:
                 return NotImplementedError
 
-class Rectangles(__Sculpture__, __Random__):
+class Rectangles(Sculpture, __Random__):
     ## control_points -- expected dimension = (l,m,n) -> n should be a mutiple of two
     def __init__(self, control_points, nx, ny):
         self.control_points = control_points
@@ -43,15 +43,15 @@ class Rectangles(__Sculpture__, __Random__):
     def sculpt(self):
         information = Bezier()(self.control_points, (1,2))
 
-        points = FlexPlane(__Sculpture__(Point(array([1,1])), ID()), self.nx, self.ny).sculpt()
+        points = FlexPlane(Sculpture(Point(array([1,1])), ID()), self.nx, self.ny).sculpt()
         function = Composition([Map(information), Map(Rectangle(self.control_points.shape[-1]))])
-        data  = __Sculpture__(points, function).sculpt()
+        data  = Sculpture(points, function).sculpt()
 
         translates = []
         for point in points.elements:
             translates.append(Translate(point.l))
 
-        rectangles = __Sculpture__(data, ZipApply(translates)).sculpt()
+        rectangles = Sculpture(data, ZipApply(translates)).sculpt()
 
         color_rectangles = defaultdict(list)
         for batch in rectangles.elements:

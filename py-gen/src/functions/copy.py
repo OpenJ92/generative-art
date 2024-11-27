@@ -1,11 +1,11 @@
-from src.typeclass.__function__ import __Function__
+from src.typeclass.__function__ import Function
 from src.atoms import __Data__, List
 
 from itertools import repeat
 from numpy import array
 
 
-class Copy(__Function__):
+class Copy(Function):
     def __init__(self, times):
         self.times = times
 

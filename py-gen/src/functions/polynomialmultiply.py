@@ -1,9 +1,9 @@
 from numpy import array, einsum, ones
 from itertools import product
 
-from src.typeclass.__function__ import __Function__
+from src.typeclass.__function__ import Function
 
-class PolynomialMultiply(__Function__):
+class PolynomialMultiply(Function):
     def __init__(self, other: array):
         self.other = other
 

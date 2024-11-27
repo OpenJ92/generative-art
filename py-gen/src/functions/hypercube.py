@@ -1,5 +1,5 @@
-from src.typeclass.__sculpture__ import __Sculpture__
-from src.typeclass.__function__ import __Function__
+from src.typeclass.sculpture import Sculpture
+from src.typeclass.__function__ import Function
 from src.functions.parallelogram import Parallelogram
 from src.functions.translate import Translate
 from src.functions.composition import Composition
@@ -35,7 +35,7 @@ def pnpBez(data, dim, hcdim):
 
 
 def HyperCube(mode=Mode.FULL):
-    class hypercube(__Function__):
+    class hypercube(Function):
         def __init__(self, N):
             self.N = N
             self.mode = mode
@@ -48,7 +48,7 @@ def HyperCube(mode=Mode.FULL):
             if self.N == dimdata:
                 return data
             if self.N >= dimdata:
-                data = __Sculpture__(data, hypercube(self.N - 1)).sculpt()
+                data = Sculpture(data, hypercube(self.N - 1)).sculpt()
 
             directions = eye(self.N)
             planes, notplanes = hypercube.pnp(data, dimdata, self.N)
@@ -61,7 +61,7 @@ def HyperCube(mode=Mode.FULL):
 
             comp = []
             for f in funcs:
-                comp = [*comp, __Sculpture__(data, f).sculpt()]
+                comp = [*comp, Sculpture(data, f).sculpt()]
 
             return List(comp)
 

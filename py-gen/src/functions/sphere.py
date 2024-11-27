@@ -1,10 +1,10 @@
-from src.typeclass.__function__ import __Function__
+from src.typeclass.__function__ import Function
 
 from math import sin, cos
 from numpy import hstack, array, zeros
 
 
-class Sphere(__Function__):
+class Sphere(Function):
     def __call__(self, ts):
         return self.recursive_call(array([1]), ts)
 
@@ -17,7 +17,7 @@ class Sphere(__Function__):
             return arr
 
 
-# class Sphere(__Function__, __Random__):
+# class Sphere(Function, __Random__):
 #     convert = {"C" : True, "S" : False}
 #     fn      = {True : cos, False : sin}
 # 

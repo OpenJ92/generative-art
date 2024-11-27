@@ -13,7 +13,7 @@ from src.atoms import (
 )
 
 
-class __Function__(ABC):
+class Function(ABC):
     @abstractmethod
     def __call__(self, data: array) -> array:
         pass

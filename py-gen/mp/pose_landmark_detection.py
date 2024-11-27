@@ -1,4 +1,4 @@
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 from src.atoms import __Meta_Data__, List, Point, Segment
 from src.functions.parallelogram import Parallelogram
 from src.sculptures.unitcube import Square
@@ -40,7 +40,7 @@ class Pose_Landmark_Detection:
             height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
             frame_count = 0
 
-            f = __Sculpture__(
+            f = Sculpture(
                 Square(Segment).sculpt(), Parallelogram(diag([width, height]))
             ).sculpt()
 

@@ -13,8 +13,8 @@ from src.functions.accumulateonto import AccumulateOnto
 from src.functions.barycentric import Barycentric
 from src.functions.scale import Scale
 
-from src.typeclass.__function__ import __Function__
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.__function__ import Function
+from src.typeclass.sculpture import Sculpture
 from src.atoms import __Data__, List
 
 from numpy import array, einsum, ones, zeros
@@ -25,8 +25,8 @@ from collections import defaultdict
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
 
 
-class Concat(__Function__):
-    def __init__(self, A: __Function__, B: __Function__):
+class Concat(Function):
+    def __init__(self, A: Function, B: __Function__):
         self.A = A
         self.B = B
 
@@ -37,8 +37,8 @@ class Concat(__Function__):
         return array(*self.A.__call_data__(x), *self.B.__call_data__(x))
 
 
-class Add(__Function__):
-    def __init__(self, A: __Function__, B: __Function__):
+class Add(Function):
+    def __init__(self, A: Function, B: __Function__):
         self.A = A
         self.B = B
 
@@ -48,8 +48,8 @@ class Add(__Function__):
 
 ## Perhaps this shouldn't be a product of functions, but a product of Sculptures...
 ## What does that even mean? 
-class Multiply(__Function__):
-    def __init__(self, A: __Function__, B: __Function__):
+class Multiply(Function):
+    def __init__(self, A: Function, B: __Function__):
         self.A = A
         self.B = B
 
@@ -63,7 +63,7 @@ class Multiply(__Function__):
         return output
 
 
-class ZipApply(__Function__):
+class ZipApply(Function):
     def __init__(self, funcs):
         self.funcs = funcs
 
@@ -75,12 +75,12 @@ class ZipApply(__Function__):
             case List(elements=elements):
                 applied = []
                 for element, func in zip(elements, self.funcs):
-                    applied = [*applied, __Sculpture__(element, func).sculpt()]
+                    applied = [*applied, Sculpture(element, func).sculpt()]
                 return List(applied)
             case _:
                 raise NotImplementedError
 
-class Map(__Function__):
+class Map(Function):
     def __init__(self, func):
         self.func = func
 
@@ -92,7 +92,7 @@ class Map(__Function__):
             case List(elements=elements):
                 applied = []
                 for element in elements:
-                    applied.append(__Sculpture__(element, self.func).sculpt())
+                    applied.append(Sculpture(element, self.func).sculpt())
                 return List(applied)
             case _:
                 raise NotImplementedError

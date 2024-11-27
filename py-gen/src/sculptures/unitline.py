@@ -1,6 +1,6 @@
 from src.functions import ZipApply, Copy, Scale, Translate, Composition, ID
 from src.atoms import Segment, List, SegmentStrip
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 
 from numpy import array, diag, linspace
 
@@ -10,15 +10,15 @@ def UnitLine(nx):
     for x in range(nx):
         funcs = [*funcs, Composition([Scale(1 / nx), Translate(array([x / nx]))])]
 
-    return __Sculpture__(
-        __Sculpture__(Segment(array([0]), array([1])), Copy(nx)).sculpt(),
+    return Sculpture(
+        Sculpture(Segment(array([0]), array([1])), Copy(nx)).sculpt(),
         ZipApply(funcs),
     )
 
 
-# There are no repeated points in this form as it's piped though __Function__ machines
+# There are no repeated points in this form as it's piped though Function machines
 def UnitStrip(n):
-    return __Sculpture__(
+    return Sculpture(
         SegmentStrip.from_itterable(linspace(0, 1, num=n, endpoint=True).reshape(n, 1)),
         ID(),
     )

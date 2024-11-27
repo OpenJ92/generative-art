@@ -2,7 +2,7 @@ from src.functions import ZipApply, Scale, Translate, Composition, Copy
 
 from src.atoms import dimension
 
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 
 from numpy import array
 
@@ -22,6 +22,6 @@ def Concentric(sculpture, count):
             ),
             *funcs,
         ]
-    return __Sculpture__(
-        __Sculpture__(sculpture, Copy(count)).sculpt(), ZipApply(funcs)
+    return Sculpture(
+        Sculpture(sculpture, Copy(count)).sculpt(), ZipApply(funcs)
     )

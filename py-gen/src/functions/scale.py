@@ -1,9 +1,9 @@
-from src.typeclass.__function__ import __Function__
+from src.typeclass.__function__ import Function
 
 from numpy import array, diag
 
 
-class Scale(__Function__):
+class Scale(Function):
     def __init__(self, scale):
         self.scale = scale
 

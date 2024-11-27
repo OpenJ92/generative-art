@@ -1,9 +1,9 @@
-from src.typeclass.__function__ import __Function__
+from src.typeclass.__function__ import Function
 
 from numpy import array
 
 
-class Parallel(__Function__):
+class Parallel(Function):
     def __init__(self, view: array):
         self.view = view
 

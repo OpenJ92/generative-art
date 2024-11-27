@@ -1,4 +1,4 @@
-from src.typeclass.__sculpture__ import __Sculpture__
+from src.typeclass.sculpture import Sculpture
 
 from src.functions import Sphere, Bezier, Composition, Translate, Scale, Add, ID, Parallelogram
 from src.atoms import Point
@@ -23,14 +23,14 @@ def Sphere_Line(depth):
                              ][::-1])
         sphere = Add(sphere, bezier)
 
-    sphere_samples = __Sculpture__(UnitStrip(30).sculpt(), sphere).sculpt().extract_to_array()
+    sphere_samples = Sculpture(UnitStrip(30).sculpt(), sphere).sculpt().extract_to_array()
 
     ## Line: Make curve from two samples from largest sphere from above.
     ## Sample line for k points for the second element in control points
     ## in Join
 
     ## point = Composition([Scale(4), Sphere()][::-1])
-    ## start = .5 * __Sculpture__(Point(rand(2)), point).sculpt().l
+    ## start = .5 * Sculpture(Point(rand(2)), point).sculpt().l
     ## end   = -start
 
     start = sphere([0])
@@ -40,9 +40,9 @@ def Sphere_Line(depth):
                        , Parallelogram(diag(end - start))
                        , Parallelogram(array([1,1,1]).reshape(3, 1))
                        ][::-1])
-    line_samples = __Sculpture__(UnitStrip(30).sculpt(), line).sculpt().extract_to_array()
+    line_samples = Sculpture(UnitStrip(30).sculpt(), line).sculpt().extract_to_array()
 
     ## Join: Stack matrices from above and supply to Bezier. Submit FlexPlane
-    ## and Bezier to __Sculpture__ and return.
+    ## and Bezier to Sculpture and return.
     sphereline = Bezier()(stack([line_samples, sphere_samples]), [0, 1])
-    return lambda data: __Sculpture__(data, sphereline)
+    return lambda data: Sculpture(data, sphereline)
