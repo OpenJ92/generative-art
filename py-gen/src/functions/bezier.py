@@ -150,7 +150,7 @@ def Bezier(mode=Mode.CLOSED):
             shape = self.control_points.shape
             weights = []
             for axis in self.collapse_axes:
-                weights = [*weights,Sphere()(rand(shape[axis] - 1,)),]
+                weights.append(Sphere()(rand(shape[axis] - 1,)))
             self.weights = weights
             return self
 
@@ -165,6 +165,7 @@ def Bezier(mode=Mode.CLOSED):
             n : int
                 dimension of the output of Bezier Function
             """
+            ## input must be a vector, but output 'can' be a tensor
             raise NotImplementedError
 
         @classmethod

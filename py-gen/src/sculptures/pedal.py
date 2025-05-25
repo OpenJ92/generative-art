@@ -71,3 +71,6 @@ def Floral(layers, deviation, _seed):
             pedals.append(function)
 
     return Composition([ZipApply(pedals), Ball()])
+
+## Here we need to reconstruct the above so as to accept a Bezier Pedal like
+## the one defined above. Notice that Linear_Pedal is a RealizedFunction
