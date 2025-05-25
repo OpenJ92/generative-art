@@ -23,6 +23,7 @@ from numpy import (
     einsum,
     sin,
     cos,
+    linspace,
 )
 from numpy.random import rand, randint
 from math import pi, sqrt
@@ -241,6 +242,40 @@ def U22(k):
     data = Sculpture(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
 
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
+
+def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
+    ## Here we've taken a uniform sample of the time domain [0,1]. This will be
+    ## be supplied to our control point Bezier R1 -> R(n x m x ... x ) which will
+    ## further be supplied to our sculptural Beziers
+    time_domain = linspace(0,1,frames)
+
+    ## Here we generate the initial random Bezier whose axes are 
+    ## R(*time_collapes_axes x *sculpture_collapes_axes) We're going to need
+    ## some function R -> R(time_collapes_axes). For the time being, we'll supply
+    ## another random Bezier of the same type to be submitted. (Look to parameterize this in the future)
+    time_transform_control = rand(randint(1, 10), time_collapse_axes)
+    time_transform = Bezier(time_transform_control, collapse_axes=[0])
+
+    ## Here we have a Bezier whose control points have the dimension as the sum of 
+    ## the time domain collapse axes and sculpture collapse axes with it's own collapse
+    ## axes being the first time_collapse_axes elements [0, 1, ..., time_collapse_axes]
+    ## This produces a MDA with dimension sculpture_collapse_axes to be submitted to the
+    ## sculpture.
+    control_point_generator_control = rand(*randint(1, 10, time_collapse_axes+sculpture_collapes_axes))
+    control_point_generator = Bezier(control_point_generator_control, collapse_axes=list(range(time_collapse_axes)))
+
+    ## Sculpture generation. We sample the time domain so as to generate a vector suitable
+    ## for submission to our control_point_generator. control_point_generator builds control_points
+    ## for our bezier sculpture and is then used in the construction of function Bezier and
+    ## registered into our beziers list.
+    beziers = []
+    for time in time_domain:
+        ## Vector R(time_collapes_axes)
+        transformed_sample = time_transform(time)
+        control_point_time = control_point_generator(transformed_sample)
+        beziers.append(Bezier(control_point_time, collapse_axes=range(sculpture_collapes_axes)))
+
+    return control_points
 
 def U23(k, n):
     data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
