@@ -19,13 +19,20 @@
 ## is more, the program is strictly single threaded. With the introduction of python 3.14, GIL will
 ## be unlocked and so to the power or parallel programming. Introduction of tagged functions as being
 ## "Parallel" or perhaps more specifically "Independent" and of Product Monoids over Data forms will
-## unlock speedups worth persuing. As a means to this end, a python specific Haskell isomorphism should
+## unlock speedups worth pursuing. As a means to this end, a python specific Haskell isomorphism should
 ## be constructed so as to 'safely' implement these parallel programs in 'self assembly' mode. The 
 ## extrodinary thing here is the system is generic enough to be constructed 'point free' in so far as
 ## one might register functions and Data to a composition graph program which itself constructs
 ## parallel enabled computation graphs. The API should be suitable for users to construct custom
 ## sculptures if they so choose. Making this program a strict subset of the new one will be a goal.
 
+## I'm starting to have a panic attack again. I don't know what I'm doing here. I implement functions 
+## which are nodes in a composition graph. They could be many different typ[es a -> b,  a -> m b,
+## m a -> m b They registered and connected in the composition graph. traversals are then deffered 
+## computations (i.e, f @ g @ h ... ) as constructed by traversals of said composition graph with the 
+## Functional Programming package. There should be a 'paralellism submodule that can scan the traversals 
+## and determine paralellization potential. This can be done through tagging Function elements as Pure or 
+## Effectful etc.etc. I'm feeling se scared.
 
 from numpy.random import rand, randint
 from numpy import (
