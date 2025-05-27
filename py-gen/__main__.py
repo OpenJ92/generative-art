@@ -10,6 +10,23 @@
 ## valid function composition graph. edges represent valid function composition. For every new function
 ## constructed, you register it with the function composition graph. Traversals over this graph form the
 ## composition of functions
+
+
+## I believe we're at a point where this program has revealed it's inadequacies. As of current, all
+## forms must be hard coded into they system by myself. While artistic intent is important, I can't 
+## help but feel that I'm not using the medium to it's fullest extent. All functions are aware of 
+## of thier forms (Vec[n] -> Vec[m]) or (Data -> Data) and so are capable of self assembling. What
+## is more, the program is strictly single threaded. With the introduction of python 3.14, GIL will
+## be unlocked and so to the power or parallel programming. Introduction of tagged functions as being
+## "Parallel" or perhaps more specifically "Independent" and of Product Monoids over Data forms will
+## unlock speedups worth persuing. As a means to this end, a python specific Haskell isomorphism should
+## be constructed so as to 'safely' implement these parallel programs in 'self assembly' mode. The 
+## extrodinary thing here is the system is generic enough to be constructed 'point free' in so far as
+## one might register functions and Data to a composition graph program which itself constructs
+## parallel enabled computation graphs. The API should be suitable for users to construct custom
+## sculptures if they so choose. Making this program a strict subset of the new one will be a goal.
+
+
 from numpy.random import rand, randint
 from numpy import (
     array_split,
