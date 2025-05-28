@@ -256,7 +256,7 @@ def U21(k):
 def U22(k):
     floral = Floral(3, .05, k)
     functions = len(floral.funcs[0].funcs)
-    data = Sculpture(FlexPlane(Square(Segment), 50, 50).sculpt(), Copy(functions))
+    data = Sculpture(FlexPlane(Square(Segment), 5, 5).sculpt(), Copy(functions))
     data = Sculpture(data.sculpt(), floral)
 
     perlins = [Perlin_Noise.random() for _ in range(3)]
@@ -264,6 +264,7 @@ def U22(k):
         perlin.scale = .001
 
     data = Sculpture(data.sculpt(), Perlin_Vector(perlins))
+
     data = Sculpture(data.sculpt(), Parallelogram(array([[1,0,0], [0,1,0]])))
 
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
@@ -279,15 +280,17 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
     ## some function R -> R(time_collapes_axes). For the time being, we'll supply
     ## another random Bezier of the same type to be submitted. (Look to parameterize this in the future)
     time_transform_control = rand(randint(1, 10), time_collapse_axes)
-    time_transform = Bezier(time_transform_control, collapse_axes=[0])
+    ## Note: This time_transform Bezier should loop back on itself as C1. This way we'll
+    ## have perfect loop videos.
+    time_transform = Bezier()(time_transform_control, [0])
 
     ## Here we have a Bezier whose control points have the dimension as the sum of 
     ## the time domain collapse axes and sculpture collapse axes with it's own collapse
     ## axes being the first time_collapse_axes elements [0, 1, ..., time_collapse_axes]
     ## This produces a MDA with dimension sculpture_collapse_axes to be submitted to the
     ## sculpture.
-    control_point_generator_control = rand(*randint(1, 10, time_collapse_axes+sculpture_collapes_axes))
-    control_point_generator = Bezier(control_point_generator_control, collapse_axes=list(range(time_collapse_axes)))
+    control_point_generator_control = rand(*randint(1, 10, time_collapse_axes+sculpture_collapse_axes+1))
+    control_point_generator = Bezier()(control_point_generator_control, collapse_axes=list(range(time_collapse_axes)))
 
     ## Sculpture generation. We sample the time domain so as to generate a vector suitable
     ## for submission to our control_point_generator. control_point_generator builds control_points
@@ -296,11 +299,12 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
     beziers = []
     for time in time_domain:
         ## Vector R(time_collapes_axes)
-        transformed_sample = time_transform(time)
+        transformed_sample = time_transform([time])
         control_point_time = control_point_generator(transformed_sample)
-        beziers.append(Bezier(control_point_time, collapse_axes=range(sculpture_collapes_axes)))
+        beziers.append(Bezier()(control_point_time, range(sculpture_collapse_axes)))
+        breakpoint()
 
-    return control_points
+    return beziers
 
 def U23(k, n):
     data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
