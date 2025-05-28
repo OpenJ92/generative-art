@@ -7,11 +7,11 @@ from numpy import array
 
 
 def __Square__(atom):
-    return Sculpture(__Sculpture__(atom, ID()).sculpt(), HyperCube()(2))
+    return Sculpture(Sculpture(atom, ID()).sculpt(), HyperCube()(2))
 
 
 def __Cube__(atom):
-    return Sculpture(__Sculpture__(atom, ID()).sculpt(), HyperCube()(3))
+    return Sculpture(Sculpture(atom, ID()).sculpt(), HyperCube()(3))
 
 
 def PointSquare():

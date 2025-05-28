@@ -6,8 +6,8 @@ from src.typeclass.__function__ import Function
 
 class Sculpture:
     def __init__(self, data: Data, function: Function):
-        self.data = __data__
-        self.function = __function__
+        self.data = data
+        self.function = function
 
     def sculpt(self) -> Data:
         return self.function.call_data(self.data)

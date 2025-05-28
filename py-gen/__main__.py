@@ -90,7 +90,8 @@ from src.sculptures import (
 from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
 from src.helpers.numpy import *
 
-from mp.pose_landmark_detection import Pose_Landmark_Detection
+## Removed MediaPipe from project
+## from mp.pose_landmark_detection import Pose_Landmark_Detection
 from src.typeclass import Sculpture
 
 # Remember to do make the sculpture that makes a set of beziers that reduce order in order. Update each to upgrade
