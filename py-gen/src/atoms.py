@@ -120,6 +120,8 @@ def draw_helper(data: Data) -> str:
     if dimension(data) != 2:
         raise NotImplementedError
     match data:
+        case Empty():
+            return lambda meta: ''
         case Point(l=l):
             x0, y0 = l
             return lambda meta: \
