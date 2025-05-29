@@ -69,6 +69,8 @@ from src.functions import (
     Copy,
     Barycentric,
     Map,
+    Frame,
+    Tile,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -87,7 +89,7 @@ from src.sculptures import (
     Floral,
     Rectangles,
 )
-from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List
+from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List, Empty
 from src.helpers.numpy import *
 
 ## Removed MediaPipe from project
@@ -297,14 +299,40 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
     ## for our bezier sculpture and is then used in the construction of function Bezier and
     ## registered into our beziers list.
     beziers = []
+    frame = Frame((1080, 1920), (100, 100))
     for time in time_domain:
         ## Vector R(time_collapes_axes)
         transformed_sample = time_transform([time])
         control_point_time = control_point_generator(transformed_sample)
-        beziers.append(Bezier()(control_point_time, range(sculpture_collapse_axes)))
-        breakpoint()
 
-    return beziers
+        bezier = Bezier()(control_point_time, range(sculpture_collapse_axes))
+        ## Between bezier and frame, we need to carry out a projection down to two
+        ## dimensions. Otherwise, frame function will resolve a ValueError
+        function = Composition([bezier, frame])
+        beziers.append(function)
+
+    data = Sculpture(Copy(frames), FlexPlane(Square(Segment), 50, 50).sculpt()).sculpt()
+    data = Sculpture(ZipApply(beziers), data).sculpt()
+
+
+    tiling = (3,4)
+    width, height = tiling
+    quotient, remainder = divmod(frames)
+    empty = [Empty] * (width * height - remainder)
+    data.elements = [*data.elements, *empty]
+
+    sections = []
+    for section in range(quotient + 1):
+        lower, upper = width*height*section, width*height*(section+1)
+        tiles = List(data.elements[lower:upper])
+        sections.append(tiles)
+    sections = List(sections)
+
+    data = Sculpture(Map(Tile(tiling, (1080, 1920))), sections).sculpt()
+
+    ## For each element in data now, which are the paginated frames, we can export to svg
+    for page, element in enumerate(data.elements):
+        write_to_file(f"KinematicBezier_{page}.svg", wrap(draw(element)))
 
 def U23(k, n):
     data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()

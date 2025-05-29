@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from numpy import array
 
 from src.atoms import (
+    Empty,
     Point,
     Segment,
     SegmentStrip,
@@ -21,6 +22,8 @@ class Function(ABC):
 
     def call_data(self, data: Data) -> Data:
         match data:
+            case Empty:
+                return Empty
             case Point(l=x):
                 return Point(self.__call__(x))
             case Segment(l=l, m=m):
