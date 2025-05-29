@@ -1,6 +1,6 @@
 from src.typeclass import Function
 from src.function import Translate, Scale, Min, Max, Composition
-from src.Sculpture
+from src.Sculpture import Rectangle
 
 class Frame(Function):
     def __init__(self, dimensions, padding):
