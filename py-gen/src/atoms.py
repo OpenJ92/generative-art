@@ -162,7 +162,7 @@ def draw_helper(data: Data) -> str:
             return lambda _: draw_helper(da)(parse_meta(m))
 
 def draw(data):
-    return draw_helper(data)("")
+    return draw_helper(List([data]))("")
 
 
 def wrap(work: str) -> str:
