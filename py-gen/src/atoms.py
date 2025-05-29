@@ -1,9 +1,11 @@
-from __future__ import annotations
-from dataclasses import dataclass
+from __future__ import annotations from dataclasses import dataclass
 from numpy import array, zeros, diag, stack
 
 from src.typeclass.__composite__ import __Composite__
 
+
+class Empty:
+    pass
 
 class Point:
     def __init__(self, l):
@@ -31,7 +33,7 @@ class Triangle:
         self.intrinsic_dimension = 2
 
 
-Atomic = Point | Segment | Triangle
+Atomic = Point | Segment | Triangle | Empty
 
 
 class SegmentStrip:
