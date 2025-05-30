@@ -1,4 +1,6 @@
-from src.functions import Bezier, ID, Map, Composition, Translate, ZipApply
+from src.functions import Bezier, ID, Composition, Translate
+from src.functions.map import Map
+from src.functions.zipapply import ZipApply
 from src.sculptures import FlexPlane
 from src.atoms import Point, Segment, List, Meta_Data
 from src.typeclass import Sculpture, Function, Random

@@ -1,4 +1,5 @@
-from src.functions import ZipApply, Parallelogram, Composition, Translate, Copy
+from src.functions import Parallelogram, Composition, Translate, Copy
+from src.functions.zipapply import ZipApply
 
 from src.typeclass import Sculpture
 

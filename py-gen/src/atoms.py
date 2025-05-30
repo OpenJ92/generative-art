@@ -1,4 +1,5 @@
-from __future__ import annotations from dataclasses import dataclass
+from __future__ import annotations
+from dataclasses import dataclass
 from numpy import array, zeros, diag, stack
 
 from src.typeclass.__composite__ import __Composite__
@@ -117,6 +118,8 @@ def apply_construct(applied):
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
 ## to draw_helper.
 def draw_helper(data: Data) -> str:
+    if data is None:
+        breakpoint()
     if dimension(data) != 2:
         raise NotImplementedError
     match data:
@@ -162,7 +165,7 @@ def draw_helper(data: Data) -> str:
             return lambda _: draw_helper(da)(parse_meta(m))
 
 def draw(data):
-    return draw_helper(List([data]))("")
+    return draw_helper(data)("")
 
 
 def wrap(work: str) -> str:
