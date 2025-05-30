@@ -1,5 +1,6 @@
 from src.typeclass import Sculpture
-from src.functions import Bezier, Composition, Parallelogram, Scale, Translate, ZipApply, Ball
+from src.functions import Bezier, Composition, Parallelogram, Scale, Translate, Ball
+from src.functions.zipapply import ZipApply
 from src.sculptures import UnitStrip
 
 from numpy import array, concatenate, linspace, stack, flip

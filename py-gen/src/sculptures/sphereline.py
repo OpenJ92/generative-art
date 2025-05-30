@@ -1,6 +1,7 @@
 from src.typeclass import Sculpture
 
-from src.functions import Sphere, Bezier, Composition, Translate, Scale, Add, ID, Parallelogram
+from src.functions import Sphere, Bezier, Composition, Translate, Scale, ID, Parallelogram
+from src.functions.add import Add
 from src.atoms import Point
 from src.helpers.numpy import make_closed_LNE
 from src.sculptures import FlexPlane, UnitStrip

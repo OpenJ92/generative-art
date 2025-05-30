@@ -34,20 +34,23 @@
 ## and determine paralellization potential. This can be done through tagging Function elements as Pure or 
 ## Effectful etc.etc. I'm feeling se scared.
 
-from numpy.random import rand, randint
+from numpy.random import rand, randint, seed
 from numpy import (
+    identity,
     array_split,
     concatenate,
     square,
     array,
     ones,
+    zeros,
     multiply,
     tensordot,
-    stack,
+    hstack,
     einsum,
     sin,
     cos,
     linspace,
+    array,
 )
 from numpy.random import rand, randint
 from math import pi, sqrt
@@ -71,6 +74,7 @@ from src.functions import (
     Map,
     Frame,
     Tile,
+    ZipApply,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -271,17 +275,19 @@ def U22(k):
 
     write_to_file(f"u22_{k+100}.svg", wrap(draw(data.sculpt())))
 
-def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
+def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     ## Here we've taken a uniform sample of the time domain [0,1]. This will be
     ## be supplied to our control point Bezier R1 -> R(n x m x ... x ) which will
     ## further be supplied to our sculptural Beziers
+    seed(_seed)
+
     time_domain = linspace(0,1,frames)
 
     ## Here we generate the initial random Bezier whose axes are 
     ## R(*time_collapes_axes x *sculpture_collapes_axes) We're going to need
     ## some function R -> R(time_collapes_axes). For the time being, we'll supply
     ## another random Bezier of the same type to be submitted. (Look to parameterize this in the future)
-    time_transform_control = rand(randint(1, 10), time_collapse_axes)
+    time_transform_control = rand(randint(3, 10), time_collapse_axes)
     ## Note: This time_transform Bezier should loop back on itself as C1. This way we'll
     ## have perfect loop videos.
     time_transform = Bezier()(time_transform_control, [0])
@@ -291,7 +297,7 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
     ## axes being the first time_collapse_axes elements [0, 1, ..., time_collapse_axes]
     ## This produces a MDA with dimension sculpture_collapse_axes to be submitted to the
     ## sculpture.
-    control_point_generator_control = rand(*randint(1, 10, time_collapse_axes+sculpture_collapse_axes+1))
+    control_point_generator_control = rand(*randint(3, 10, time_collapse_axes+sculpture_collapse_axes+1))
     control_point_generator = Bezier()(control_point_generator_control, collapse_axes=list(range(time_collapse_axes)))
 
     ## Sculpture generation. We sample the time domain so as to generate a vector suitable
@@ -299,25 +305,31 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
     ## for our bezier sculpture and is then used in the construction of function Bezier and
     ## registered into our beziers list.
     beziers = []
-    frame = Frame((1080, 1920), (100, 100))
+    frame = Frame((1080, 1920), 100)
     for time in time_domain:
         ## Vector R(time_collapes_axes)
         transformed_sample = time_transform([time])
         control_point_time = control_point_generator(transformed_sample)
-
         bezier = Bezier()(control_point_time, range(sculpture_collapse_axes))
-        ## Between bezier and frame, we need to carry out a projection down to two
-        ## dimensions. Otherwise, frame function will resolve a ValueError
-        function = Composition([bezier, frame])
+
+        index = control_point_time.shape[-1]
+        selector = identity(2)
+        another = zeros([2, sculpture_collapse_axes-2])
+        other = zeros([2, index-2])
+
+        ## VERY SIMPLISTIC PROJECTIONS TAKING THE FIRST TWO COMPONENTS. REPLACE
+        _up = Parallelogram(hstack([selector, another]).T)
+        _down = Parallelogram(hstack([selector, other]))
+        function = Composition([_up, bezier, _down, frame])
+
         beziers.append(function)
 
-    data = Sculpture(Copy(frames), FlexPlane(Square(Segment), 50, 50).sculpt()).sculpt()
-    data = Sculpture(ZipApply(beziers), data).sculpt()
+    data = Sculpture(FlexPlane(Square(Segment), 30, 30).sculpt(), Copy(frames)).sculpt()
+    data = Sculpture(data, ZipApply(beziers)).sculpt()
 
-
-    tiling = (3,4)
+    tiling = (5,4)
     width, height = tiling
-    quotient, remainder = divmod(frames)
+    quotient, remainder = divmod(frames, width*height)
     empty = [Empty] * (width * height - remainder)
     data.elements = [*data.elements, *empty]
 
@@ -326,13 +338,14 @@ def U22Kinimatic(frames, time_collapse_axes, sculpture_collapse_axes):
         lower, upper = width*height*section, width*height*(section+1)
         tiles = List(data.elements[lower:upper])
         sections.append(tiles)
-    sections = List(sections)
 
-    data = Sculpture(Map(Tile(tiling, (1080, 1920))), sections).sculpt()
+    data = List(sections)
+    data = Sculpture(data, Map(Tile(tiling, (1080, 1920)))).sculpt()
 
     ## For each element in data now, which are the paginated frames, we can export to svg
     for page, element in enumerate(data.elements):
-        write_to_file(f"KinematicBezier_{page}.svg", wrap(draw(element)))
+        write_to_file(f"KinematicBezier_{_seed}_{page}.svg", wrap(draw(element)))
+        print(f"KinematicBezier_{_seed}_{page}.svg")
 
 def U23(k, n):
     data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()

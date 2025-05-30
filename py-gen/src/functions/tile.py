@@ -1,5 +1,9 @@
-from src.typeclass import Function
-from src.functions import Translate, ZipApply
+from src.typeclass import Function, Sculpture
+from src.atoms import List
+from src.functions.translate import Translate
+from src.functions.zipapply import ZipApply
+
+from numpy import array
 
 class Tile(Function):
     def __init__(self, tiling, sizes):
@@ -23,4 +27,4 @@ class Tile(Function):
                 translate = Translate(array([w*self.frame_width, h*self.frame_height]))
                 translates.append(translate)
 
-        return Sculpture(ZipApply(translates), data).sculpt()
+        return Sculpture(data, ZipApply(translates)).sculpt()

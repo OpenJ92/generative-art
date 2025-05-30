@@ -5,6 +5,6 @@ from src.sculptures.concentric import Concentric
 from src.sculptures.stack import Stack
 from src.sculptures.pedal import Linear_Pedal, Floral
 from src.sculptures.sphereline import Sphere_Line
-from src.sculptures.rectangles import Rectangles
+from src.sculptures.rectangles import Rectangle, Rectangles
 
 from src.typeclass import Sculpture

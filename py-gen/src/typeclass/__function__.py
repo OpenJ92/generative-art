@@ -22,8 +22,8 @@ class Function(ABC):
 
     def call_data(self, data: Data) -> Data:
         match data:
-            case Empty:
-                return Empty
+            case Empty():
+                return Empty()
             case Point(l=x):
                 return Point(self.__call__(x))
             case Segment(l=l, m=m):

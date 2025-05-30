@@ -1,4 +1,4 @@
-from src.typeclass import Function, Sculpture
+from src.typeclass import Function
 from src.atoms import Data, List
 
 from numpy import array, einsum, ones, zeros
@@ -19,6 +19,13 @@ from src.functions.perlin_noise import Perlin_Noise, Perlin_Stack, Perlin_Vector
 from src.functions.accumulateonto import AccumulateOnto
 from src.functions.barycentric import Barycentric
 from src.functions.scale import Scale
+from src.functions.frame import Frame
+from src.functions.tile import Tile
+from src.functions.max import Max
+from src.functions.min import Min
+from src.functions.zipapply import ZipApply
+from src.functions.map import Map
+from src.functions.add import Add
 
 
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
@@ -36,15 +43,6 @@ class Concat(Function):
         return array(*self.A.call_data(x), *self.B.call_data(x))
 
 
-class Add(Function):
-    def __init__(self, A: Function, B: Function):
-        self.A = A
-        self.B = B
-
-    def __call__(self, x: array):
-        return self.A(x) + self.B(x)
-
-
 ## Perhaps this shouldn't be a product of functions, but a product of Sculptures...
 ## What does that even mean? 
 class Multiply(Function):
@@ -60,38 +58,3 @@ class Multiply(Function):
         for i, j in ranges:
             output[i + j] += outer[i][j]
         return output
-
-
-class ZipApply(Function):
-    def __init__(self, funcs):
-        self.funcs = funcs
-
-    def __call__(self, data: array):
-        return data
-
-    def call_data(self, data: Data) -> Data:
-        match data:
-            case List(elements=elements):
-                applied = []
-                for element, func in zip(elements, self.funcs):
-                    applied = [*applied, Sculpture(element, func).sculpt()]
-                return List(applied)
-            case _:
-                raise NotImplementedError
-
-class Map(Function):
-    def __init__(self, func):
-        self.func = func
-
-    def __call__(self, data: array):
-        return data
-
-    def call_data(self, data: Data):
-        match data:
-            case List(elements=elements):
-                applied = []
-                for element in elements:
-                    applied.append(Sculpture(element, self.func).sculpt())
-                return List(applied)
-            case _:
-                raise NotImplementedError

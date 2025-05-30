@@ -1,5 +1,6 @@
 from src.typeclass import Sculpture
-from src.functions import ZipApply, Parallelogram, Translate, Composition
+from src.functions import Parallelogram, Translate, Composition
+from src.functions.zipapply import ZipApply
 from src.sculptures.unitcube import Square, HyperCube
 from src.functions.copy import Copy
 
