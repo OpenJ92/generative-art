@@ -324,13 +324,14 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
         beziers.append(function)
 
-    data = Sculpture(FlexPlane(Square(Segment), 30, 30).sculpt(), Copy(frames)).sculpt()
+    data = Sculpture(FlexPlane(Square(Segment), 60, 60).sculpt(), Copy(frames)).sculpt()
+    #data = Concentric(FlexSquare(50), 30*30).sculpt()
     data = Sculpture(data, ZipApply(beziers)).sculpt()
 
     tiling = (5,4)
     width, height = tiling
     quotient, remainder = divmod(frames, width*height)
-    empty = [Empty] * (width * height - remainder)
+    empty = [Empty] * remainder
     data.elements = [*data.elements, *empty]
 
     sections = []
