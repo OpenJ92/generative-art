@@ -1,0 +1,70 @@
+
+=== BRUTALIST MINIMALISM — SOUND AS SYSTEM ===
+
+[1] Alva Noto (Carsten Nicolai)
+    Albums:
+    - Transform
+    - Unitxt
+    - Xerrox (Volumes I–IV)
+    Label: Raster-Noton / Raster
+
+[2] Ryoji Ikeda
+    Albums:
+    - dataplex
+    - test pattern
+    - matrix
+    Notes: High-frequency logic, grid-based audio systems
+
+[3] Pan Sonic (formerly Panasonic)
+    Albums:
+    - Kesto (234.48:4) [esp. Disc 1]
+    - Kulma
+    Notes: Analog industrial purity — cold, physical minimalism
+
+[4] Eleh
+    Albums:
+    - Radiant Intervals
+    - Floating Frequencies
+    - Location Momentum
+    Notes: Modular analog minimalism — meditative and tectonic
+
+[5] CM von Hausswolff
+    Albums:
+    - Operations of Spirit Communication
+    - 800 000 Seconds in Harar
+    Notes: Frequency as metaphysics — slow, electromagnetic drone
+
+[6] Zbigniew Karkowski
+    Albums:
+    - World As Will
+    - Nerve Cell_0
+    Notes: High-force dynamic noise — chaotic but intelligent
+
+[7] Pita (Peter Rehberg)
+    Albums:
+    - Get Out
+    - A Bas la Culture Marchande
+    Notes: Glitch and rupture — raw digital destruction
+
+[8] COH (Ivan Pavlov)
+    Albums:
+    - COH Plays Cosey
+    - Enter Tinnitus
+    - Mask of Birth
+    Notes: Clinical, modular precision — erotic and cold
+
+=== LABELS TO EXPLORE ===
+
+- Raster / Raster-Noton
+- Editions Mego (archive)
+- Touch
+- LINE (Richard Chartier)
+- Room40
+- Sonm Archive
+
+=== RECOMMENDED USE ===
+
+Use short loops or granular extractions from these sources to:
+- Parameterize traversal
+- Drive control points
+- Generate traversal rhythm via amplitude or onset detection
