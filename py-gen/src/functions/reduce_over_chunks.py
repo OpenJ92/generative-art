@@ -12,4 +12,9 @@ class ReduceOverChunks(Function):
         ## is in size of 2 and scale of the square of elements of a 
         ## hypersphere. Perhaps we'll 'realize' that form here for use
         ## elsewhere. 
-        pass
+        chunks = []
+        for index in range(0, len(array), size):
+            point = data[index:index+size]
+            chunks.append(Point(l=point)
+
+        return List(chunks)
