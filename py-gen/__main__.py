@@ -75,6 +75,7 @@ from src.functions import (
     Frame,
     Tile,
     ZipApply,
+    Scale,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -93,7 +94,7 @@ from src.sculptures import (
     Floral,
     Rectangles,
 )
-from src.atoms import Point, Segment, Triangle, draw, wrap, write_to_file, List, Empty
+from src.atoms import Point, Segment, Triangle, SegmentStrip, draw, wrap, write_to_file, List, Empty
 from src.helpers.numpy import *
 
 ## Removed MediaPipe from project
@@ -324,11 +325,23 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
         beziers.append(function)
 
-    data = Sculpture(FlexPlane(Square(Segment), 60, 60).sculpt(), Copy(frames)).sculpt()
-    #data = Concentric(FlexSquare(50), 30*30).sculpt()
-    data = Sculpture(data, ZipApply(beziers)).sculpt()
+    ## data1 = Sculpture(Concentric(FlexSquare(50), 12*12).sculpt(), Copy(frames)).sculpt()
+    ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
+    ## data0 = Sculpture(FlexPlane(Square(Segment), 60, 60).sculpt(), Copy(frames)).sculpt()
+    ## data0 = Sculpture(data0, ZipApply(beziers)).sculpt()
+    ## data1 = Sculpture(Concentric(Cube(Segment), 12*12).sculpt(), Copy(frames)).sculpt()
+    ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
 
-    tiling = (5,4)
+    circle = SegmentStrip.from_itterable(list(map(Sphere(), linspace(0,2*pi, 100).reshape((100,1)))))
+    circle = Sculpture(circle, Scale(.5)).sculpt()
+    circle = Sculpture(circle, Translate(array([.5,.5])))
+
+    circle = Sculpture(Concentric(circle, 100).sculpt(), Copy(frames))
+    circle = Sculpture(circle.sculpt(), ZipApply(beziers)).sculpt()
+
+    data = circle
+
+    tiling = (5, 4)
     width, height = tiling
     quotient, remainder = divmod(frames, width*height)
     empty = [Empty] * remainder
@@ -345,7 +358,7 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
     ## For each element in data now, which are the paginated frames, we can export to svg
     for page, element in enumerate(data.elements):
-        write_to_file(f"KinematicBezier_{_seed}_{page}.svg", wrap(draw(element)))
+        write_to_file(f"KinematicBezier_{_seed}_B_{page}.svg", wrap(draw(element)))
         print(f"KinematicBezier_{_seed}_{page}.svg")
 
 def U23(k, n):
