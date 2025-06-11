@@ -1,5 +1,4 @@
 # Data, Function, __Camera__, __Light__ # Sculpture(Data, Function) -> Named functions # Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__) # Enviornment(env_file?)
-
 # Photograph(__Camera__, Data)
 # Photograph(__Camera__, Sculpture(Data, Function))
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
@@ -94,7 +93,7 @@ from src.sculptures import (
     Floral,
     Rectangles,
 )
-from src.atoms import Point, Segment, Triangle, SegmentStrip, draw, wrap, write_to_file, List, Empty
+from src.atoms import Point, Segment, Triangle, SegmentStrip, Meta_Data, draw, wrap, write_to_file, List, Empty
 from src.helpers.numpy import *
 
 ## Removed MediaPipe from project
@@ -327,8 +326,10 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
     ## data1 = Sculpture(Concentric(FlexSquare(50), 12*12).sculpt(), Copy(frames)).sculpt()
     ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
+
     ## data0 = Sculpture(FlexPlane(Square(Segment), 60, 60).sculpt(), Copy(frames)).sculpt()
     ## data0 = Sculpture(data0, ZipApply(beziers)).sculpt()
+
     ## data1 = Sculpture(Concentric(Cube(Segment), 12*12).sculpt(), Copy(frames)).sculpt()
     ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
 
@@ -336,8 +337,9 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     circle = Sculpture(circle, Scale(.5)).sculpt()
     circle = Sculpture(circle, Translate(array([.5,.5])))
 
-    circle = Sculpture(Concentric(circle, 100).sculpt(), Copy(frames))
-    circle = Sculpture(circle.sculpt(), ZipApply(beziers)).sculpt()
+    circle = Sculpture(Concentric(circle, 125).sculpt(), Copy(frames)).sculpt()
+    circle.elements[-1] = Meta_Data(data=circle.elements[-1], meta={"stroke":1})
+    circle = Sculpture(circle, ZipApply(beziers)).sculpt()
 
     data = circle
 
@@ -358,7 +360,7 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
     ## For each element in data now, which are the paginated frames, we can export to svg
     for page, element in enumerate(data.elements):
-        write_to_file(f"KinematicBezier_{_seed}_B_{page}.svg", wrap(draw(element)))
+        write_to_file(f"KinematicBezier_{_seed}_A_{page}.svg", wrap(draw(element)))
         print(f"KinematicBezier_{_seed}_{page}.svg")
 
 def U23(k, n):
