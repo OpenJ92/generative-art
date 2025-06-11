@@ -1,7 +1,8 @@
 from typing import List
 from numpy import array
 
-from src.typeclass import Function, Sculpture
+from src.typeclass import Function
+from src.executors import Sculpture
 from src.atoms import Data
 
 

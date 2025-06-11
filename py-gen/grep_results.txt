@@ -1,0 +1,12 @@
+src//typeclass/__init__.py:1:from src.typeclass.__sculpture__ import Sculpture
+src//functions/hypercube.py:1:from src.typeclass import Sculpture, Function
+src//sculptures/tile.py:1:from src.typeclass import Sculpture
+src//sculptures/concentric.py:4:from src.typeclass import Sculpture
+src//sculptures/unitline.py:4:from src.typeclass import Sculpture
+src//sculptures/rectangles.py:6:from src.typeclass import Sculpture, Function, Random
+src//sculptures/sphereline.py:1:from src.typeclass import Sculpture
+src//sculptures/unitplane.py:1:from src.typeclass import Sculpture
+src//sculptures/__init__.py:10:from src.typeclass import Sculpture
+src//sculptures/pedal.py:1:from src.typeclass import Sculpture
+src//sculptures/stack.py:4:from src.typeclass import Sculpture
+src//sculptures/unitcube.py:1:from src.typeclass import Sculpture

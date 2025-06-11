@@ -1,4 +1,5 @@
-from src.typeclass import Function, Sculpture
+from src.typeclass import Function
+from src.executors import Sculpture
 from src.atoms import Data, List
 from numpy import array
 

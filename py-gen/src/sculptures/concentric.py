@@ -3,7 +3,7 @@ from src.functions.zipapply import ZipApply
 from src.functions.min import Min
 from src.functions.max import Max
 from src.atoms import dimension
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 
 from numpy import array
 

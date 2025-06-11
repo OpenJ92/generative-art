@@ -1,4 +1,4 @@
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 
 from src.functions import Sphere, Bezier, Composition, Translate, Scale, ID, Parallelogram
 from src.functions.add import Add
