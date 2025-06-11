@@ -1,4 +1,5 @@
-from src.typeclass import Sculpture, Function
+from src.executors import Sculpture
+from src.typeclass import Function
 from src.functions.parallelogram import Parallelogram
 from src.functions.translate import Translate
 from src.functions.composition import Composition

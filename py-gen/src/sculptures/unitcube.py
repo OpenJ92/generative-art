@@ -1,4 +1,4 @@
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 from src.functions import ID, HyperCube
 from src.sculptures.unitline import UnitLine, UnitStrip
 from src.atoms import List, Segment, Triangle, Point

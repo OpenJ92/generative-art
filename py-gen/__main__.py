@@ -99,7 +99,7 @@ from src.helpers.numpy import *
 
 ## Removed MediaPipe from project
 ## from mp.pose_landmark_detection import Pose_Landmark_Detection
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 
 # Remember to do make the sculpture that makes a set of beziers that reduce order in order. Update each to upgrade
 # to the max order. What's more, add multithreading to rendering processes. Functions may or may not be seperable

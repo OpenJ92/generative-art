@@ -1,4 +1,4 @@
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 
 class Tile(Sculpture):
     def __init__(self, sculptures, ranges):

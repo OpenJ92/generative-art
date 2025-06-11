@@ -1,5 +1,6 @@
 from src.atoms import dimension, List
-from src.typeclass import Function, Sculpture
+from src.typeclass import Function
+from src.executors import Sculpture
 from src.functions.translate import Translate
 from src.functions.scale import Scale
 from src.functions.min import Min

@@ -1,7 +1,7 @@
 from src.functions import Copy, Scale, Translate, Composition, ID
 from src.functions.zipapply import ZipApply
 from src.atoms import Segment, List, SegmentStrip
-from src.typeclass import Sculpture
+from src.executors import Sculpture
 
 from numpy import array, diag, linspace
 

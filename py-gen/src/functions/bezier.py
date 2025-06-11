@@ -4,7 +4,8 @@ from functools import reduce, partial
 from math import comb
 from enum import Enum
 
-from src.typeclass import Function, Sculpture, Random
+from src.typeclass import Function, Random
+from src.executors import Sculpture
 from src.functions.hypercube import HyperCube
 from src.functions.hypercube import Mode as HCMode
 from src.functions.sphere import Sphere

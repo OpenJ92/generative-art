@@ -1,4 +1,5 @@
-from src.typeclass import Function, Sculpture
+from src.typeclass import Function
+from src.executors import Sculpture
 from src.atoms import List
 from src.functions.translate import Translate
 from src.functions.zipapply import ZipApply
