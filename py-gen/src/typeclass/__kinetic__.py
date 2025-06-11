@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from numpy import linspace
 
-from src.typeclass import Function, Sculpture
 from src.atoms import List
 
 class __Kinetic__:
@@ -24,4 +23,32 @@ class __Kinetic__:
             _input = self.function(_time)
             frames.append(self.sculpture(_input).sculpt())
         return frames
+
+
+class Kinetic:
+    def __init__(self, frames, timeFunction, kineticFunction, timeData, kineticData):
+        """
+        frames :: Int
+        timeFunction :: Float -> a
+        timeData :: Float -> a
+        kineticFunction :: a -> Function
+        kineticData :: a -> Data
+        """
+        self.frames = frames
+        self.timeFunction = timeFunction
+        self.kineticFunction = kineticFunction
+        self.timeData = timeData
+        self.kineticData = kineticData
+
+    def sculpt(self):
+        samples = linspace(0,1,self.frames)
+        sculptures = List([])
+        for sample in samples:
+            function = self.kineticFunction(self.timeFunction(sample))
+            data = self.kineticData(self.timeData(sample))
+
+            sculpture = Sculpture(data, function).sculpt()
+            sculptures.elements.append(sculpture)
+
+        return sculptures
 
