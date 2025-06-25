@@ -350,7 +350,7 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     data.elements = [*data.elements, *empty]
 
     sections = []
-    for section in range(quotient + 1):
+    for section in range(quotient):
         lower, upper = width*height*section, width*height*(section+1)
         tiles = List(data.elements[lower:upper])
         sections.append(tiles)
@@ -362,6 +362,9 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     for page, element in enumerate(data.elements):
         write_to_file(f"KinematicBezier_{_seed}_A_{page}.svg", wrap(draw(element)))
         print(f"KinematicBezier_{_seed}_{page}.svg")
+
+## I think we done enough of these for now. It's time to work on Floral. Something
+## different for the M.02 series. 
 
 def U23(k, n):
     data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
