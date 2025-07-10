@@ -1,5 +1,4 @@
 # Data, Function, __Camera__, __Light__ # Sculpture(Data, Function) -> Named functions # Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__) # Enviornment(env_file?)
-
 # Photograph(__Camera__, Data)
 # Photograph(__Camera__, Sculpture(Data, Function))
 # Photograph(__Camera__, Enviornment([[Sculpture, Position, CoordinateBasis], ...], __Light__))
@@ -76,6 +75,7 @@ from src.functions import (
     Tile,
     ZipApply,
     Scale,
+    Const,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -94,7 +94,7 @@ from src.sculptures import (
     Floral,
     Rectangles,
 )
-from src.atoms import Point, Segment, Triangle, SegmentStrip, draw, wrap, write_to_file, List, Empty
+from src.atoms import Point, Segment, Triangle, SegmentStrip, Meta_Data, draw, wrap, write_to_file, List, Empty
 from src.helpers.numpy import *
 
 ## Removed MediaPipe from project
@@ -327,8 +327,10 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
     ## data1 = Sculpture(Concentric(FlexSquare(50), 12*12).sculpt(), Copy(frames)).sculpt()
     ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
+
     ## data0 = Sculpture(FlexPlane(Square(Segment), 60, 60).sculpt(), Copy(frames)).sculpt()
     ## data0 = Sculpture(data0, ZipApply(beziers)).sculpt()
+
     ## data1 = Sculpture(Concentric(Cube(Segment), 12*12).sculpt(), Copy(frames)).sculpt()
     ## data1 = Sculpture(data1, ZipApply(beziers)).sculpt()
 
@@ -336,8 +338,9 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     circle = Sculpture(circle, Scale(.5)).sculpt()
     circle = Sculpture(circle, Translate(array([.5,.5])))
 
-    circle = Sculpture(Concentric(circle, 100).sculpt(), Copy(frames))
-    circle = Sculpture(circle.sculpt(), ZipApply(beziers)).sculpt()
+    circle = Sculpture(Concentric(circle, 125).sculpt(), Copy(frames)).sculpt()
+    circle.elements[-1] = Meta_Data(data=circle.elements[-1], meta={"stroke":1})
+    circle = Sculpture(circle, ZipApply(beziers)).sculpt()
 
     data = circle
 
@@ -348,7 +351,7 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
     data.elements = [*data.elements, *empty]
 
     sections = []
-    for section in range(quotient + 1):
+    for section in range(quotient):
         lower, upper = width*height*section, width*height*(section+1)
         tiles = List(data.elements[lower:upper])
         sections.append(tiles)
@@ -358,42 +361,36 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 
     ## For each element in data now, which are the paginated frames, we can export to svg
     for page, element in enumerate(data.elements):
-        write_to_file(f"KinematicBezier_{_seed}_B_{page}.svg", wrap(draw(element)))
+        write_to_file(f"KinematicBezier_{_seed}_A_{page}.svg", wrap(draw(element)))
         print(f"KinematicBezier_{_seed}_{page}.svg")
 
-def U23(k, n):
-    data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
-    write_to_file(f"u23_{k+100}.svg", wrap(draw(data)))
+## I think we done enough of these for now. It's time to work on Floral. Something
+## different for the M.02 series. 
 
-def U24(k, n):
-    control_points = n*(2*rand(20,10,8)-1)
-    control_points = make_closed_MVT(control_points, 0, 1)
-    control_points = make_closed_MVT(control_points, 1, 1)
 
-    data = Rectangles(control_points, 200, 1).sculpt()
-    write_to_file(f"u24_{k+100}.svg", wrap(draw(data)))
+def M02(bezier_count):
+    ## Here we're going to make our moving mountains set. This'll be special because we'll be
+    ## doing an isometric transform on the construction. 
+    plains = Stack(UnitStrip(500), array([[1],[0],[0]]), array([0,1,0]), 50)
 
-def U25(k, n):
-    ## We need to make a quick 'frame' object
-    control_points = n*(2*rand(10,10,20,10,8)-1)
-    bezier = Bezier()(control_points, [0,1])
+    beziers = []
+    perlin = Perlin_Stack.random()
+    for _ in range(bezier_count):
+        dimensions = [randint(2, 10) for _ in range(3)]
+        control = rand(*dimensions) - array([.5])
+        beziers.append(Bezier()(control, [0,1,2]))
 
-    ## frames = []
-    ## for sample in 2*pi*linspace(24*5):
-    ##     circle = array([sin(sample), cos(sample)]) + [.5, .5]
-    ##     rectangles = Rectangles(bezier(control_points)(circle), 200, 1).sculpt()
-    ##     ## Sculpture supplied to rectangles MUST be two dimensional. 
-    ##     frame = Frame(rectangles, 297, 420); frame.fit(120)
-    ##     frames.append(frame)
+    scale = []
+    proportions = rand(bezier_count)
+    for bezier, proportion in zip(beziers, proportions):
+        scale.append(Composition([bezier, Scale(proportion)]))
 
-    ## pages = []
-    ## for page in range(10):
-    ##     selection = frames[12*page: 12*(page+1)]
-    ##     tile = Tile(selection), 3, 4).sculpt() ## selection must be a list of Frames
-    ##     pages.append(tile)
+    agglomeration = Const(0)
+    for compose in scale:
+        agglomeration = Add(compose, agglomeration)
 
-    ## for frame, page in enumerate(pages):
-    ##     # write to file
-    ##     pass
+    mountain = Add(agglomeration, perlin), Map(lambda x: x * array([0,0,1]))
+    ## tectonic = Sculpture(plains.sculpt(), mountain).sculpt()
+    ## write_to_file(f"mountain_{rand()}.svg", wrap(draw(tectonic)))
 
-    ## breakpoint()
+    breakpoint()

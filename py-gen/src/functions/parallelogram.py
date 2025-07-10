@@ -6,4 +6,7 @@ class Parallelogram(Function):
         self.A = A
 
     def __call__(self, data: array):
-        return self.A @ data
+        try:
+            return self.A @ data
+        except Exception as e:
+            breakpoint()

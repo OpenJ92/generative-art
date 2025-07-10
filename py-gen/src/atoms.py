@@ -82,6 +82,8 @@ Data = Atomic | Composite | Meta_Data
 
 def dimension(data: Data):
     match data:
+        case Empty():
+            return 2 ## Is this needed for draw_helper? 
         case Point(l=l):
             return l.size
         case Segment(l=l, m=m):
@@ -90,8 +92,6 @@ def dimension(data: Data):
             return l.size
         case List(elements=[element, *_]):
             return dimension(element)
-        case List(elements=_):
-            raise NotImplementedError
         case SegmentStrip(points=[Point(l=l), *_]):
             return dimension(Point(l))
         case SegmentStrip(points=_):
@@ -118,9 +118,8 @@ def apply_construct(applied):
 ## carrying out the sculpture and take our 'photo', the data is in the proper configuration
 ## to draw_helper.
 def draw_helper(data: Data) -> str:
-    if data is None:
-        breakpoint()
     if dimension(data) != 2:
+        breakpoint()
         raise NotImplementedError
     match data:
         case Empty():
@@ -155,6 +154,7 @@ def draw_helper(data: Data) -> str:
                     case _:
                         raise NotImplementedError
 
+            ## Can this just be a proper polyline?
             applied = []
             for point, pojnt in zip(points, points[1:]):
                 applied.append(draw_helper(f((point, pojnt))))
