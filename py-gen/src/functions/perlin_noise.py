@@ -36,9 +36,10 @@ class Perlin_Stack(Random, Function):
         self.seeds = seeds
 
     def __call__(self, ts: array):
-        perlins = map(
-            lambda octseedprop: Perlin_Noise(*octseedprop), zip(self.octaves, self.seeds, self.proportions)
-        )
+        perlins = []
+        for octave, seed, proportion in  zip(self.octaves, self.seeds, self.proportions):
+            perlins.append(Perlin_Noise(octave, int(seed), proportion))
+
         retval = 0
         for perlin in perlins:
             retval += retval + perlin(ts)

@@ -75,6 +75,7 @@ from src.functions import (
     Tile,
     ZipApply,
     Scale,
+    Const,
 )
 from src.sculptures import (
     FlexHyperCube,
@@ -366,39 +367,30 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 ## I think we done enough of these for now. It's time to work on Floral. Something
 ## different for the M.02 series. 
 
-def U23(k, n):
-    data = Rectangles(n*(2*rand(20,10,8)-1), 400, 1).sculpt()
-    write_to_file(f"u23_{k+100}.svg", wrap(draw(data)))
 
-def U24(k, n):
-    control_points = n*(2*rand(20,10,8)-1)
-    control_points = make_closed_MVT(control_points, 0, 1)
-    control_points = make_closed_MVT(control_points, 1, 1)
+def M02(bezier_count):
+    ## Here we're going to make our moving mountains set. This'll be special because we'll be
+    ## doing an isometric transform on the construction. 
+    plains = Stack(UnitStrip(500), array([[1],[0],[0]]), array([0,1,0]), 50)
 
-    data = Rectangles(control_points, 200, 1).sculpt()
-    write_to_file(f"u24_{k+100}.svg", wrap(draw(data)))
+    beziers = []
+    perlin = Perlin_Stack.random()
+    for _ in range(bezier_count):
+        dimensions = [randint(2, 10) for _ in range(3)]
+        control = rand(*dimensions) - array([.5])
+        beziers.append(Bezier()(control, [0,1,2]))
 
-def U25(k, n):
-    ## We need to make a quick 'frame' object
-    control_points = n*(2*rand(10,10,20,10,8)-1)
-    bezier = Bezier()(control_points, [0,1])
+    scale = []
+    proportions = rand(bezier_count)
+    for bezier, proportion in zip(beziers, proportions):
+        scale.append(Composition([bezier, Scale(proportion)]))
 
-    ## frames = []
-    ## for sample in 2*pi*linspace(24*5):
-    ##     circle = array([sin(sample), cos(sample)]) + [.5, .5]
-    ##     rectangles = Rectangles(bezier(control_points)(circle), 200, 1).sculpt()
-    ##     ## Sculpture supplied to rectangles MUST be two dimensional. 
-    ##     frame = Frame(rectangles, 297, 420); frame.fit(120)
-    ##     frames.append(frame)
+    agglomeration = Const(0)
+    for compose in scale:
+        agglomeration = Add(compose, agglomeration)
 
-    ## pages = []
-    ## for page in range(10):
-    ##     selection = frames[12*page: 12*(page+1)]
-    ##     tile = Tile(selection), 3, 4).sculpt() ## selection must be a list of Frames
-    ##     pages.append(tile)
+    mountain = Add(agglomeration, perlin), Map(lambda x: x * array([0,0,1]))
+    ## tectonic = Sculpture(plains.sculpt(), mountain).sculpt()
+    ## write_to_file(f"mountain_{rand()}.svg", wrap(draw(tectonic)))
 
-    ## for frame, page in enumerate(pages):
-    ##     # write to file
-    ##     pass
-
-    ## breakpoint()
+    breakpoint()

@@ -26,6 +26,7 @@ from src.functions.min import Min
 from src.functions.zipapply import ZipApply
 from src.functions.map import Map
 from src.functions.add import Add
+from src.functions.const import Const
 
 
 ## Here we can have functions that manipulate functions. Move Composition, Repeat, etc
