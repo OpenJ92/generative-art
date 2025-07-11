@@ -42,7 +42,7 @@ class Perlin_Stack(Random, Function):
 
         retval = 0
         for perlin in perlins:
-            retval += retval + perlin(ts)
+            retval += perlin(ts)
         return retval
 
     @classmethod

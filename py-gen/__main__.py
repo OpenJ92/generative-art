@@ -371,26 +371,37 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 def M02(bezier_count):
     ## Here we're going to make our moving mountains set. This'll be special because we'll be
     ## doing an isometric transform on the construction. 
-    plains = Stack(UnitStrip(500), array([[1],[0],[0]]), array([0,1,0]), 50)
+    plains = Stack(UnitStrip(500), array([[1],[0],[0]]), array([0,1,0]), 200)
 
-    beziers = []
-    perlin = Perlin_Stack.random()
-    for _ in range(bezier_count):
-        dimensions = [randint(2, 10) for _ in range(3)]
-        control = rand(*dimensions) - array([.5])
-        beziers.append(Bezier()(control, [0,1,2]))
+    def Mountain():
+        beziers = []
+        perlin = Perlin_Stack.random()
+        for _ in range(bezier_count):
+            dimensions = [randint(2, 10) for _ in range(3)]
+            control = rand(*dimensions) - array([.25])
+            beziers.append(Bezier()(control, [0,1,2]))
 
-    scale = []
-    proportions = rand(bezier_count)
-    for bezier, proportion in zip(beziers, proportions):
-        scale.append(Composition([bezier, Scale(proportion)]))
+        scale = []
+        proportions = 1.5*square(Sphere()(rand(bezier_count-1)))
+        for bezier, proportion in zip(beziers, proportions):
+            scale.append(Composition([bezier, Scale(proportion)]))
 
-    agglomeration = Const(0)
-    for compose in scale:
-        agglomeration = Add(compose, agglomeration)
+        agglomeration = Const(0)
+        for compose in scale:
+            agglomeration = Add(compose, agglomeration)
 
-    mountain = Add(agglomeration, perlin), Map(lambda x: x * array([0,0,1]))
-    ## tectonic = Sculpture(plains.sculpt(), mountain).sculpt()
-    ## write_to_file(f"mountain_{rand()}.svg", wrap(draw(tectonic)))
+        return Add(ID(), Composition([Add(agglomeration, perlin), Scale(array([0,0,1]))]))
 
-    breakpoint()
+    isometric = Parallelogram(array([[sqrt(3)/2, -sqrt(3)/2, 0], [0.5, 0.5, -1]]))
+
+    mountain = Composition([Mountain(), isometric])
+    tectonic = Sculpture(plains.sculpt(), mountain).sculpt()
+    sea = Sculpture(plains.sculpt(), isometric).sculpt()
+
+    segments = []
+    for up, down in zip(tectonic.elements, sea.elements):
+        left = up.points[0].l, down.points[0].l
+        right = up.points[-1].l, down.points[-1].l
+        segments.extend([Segment(*left), Segment(*right)])
+
+    write_to_file(f"mountain_{rand()}.svg", wrap(draw(List([tectonic, sea, List(segments)]))))
