@@ -8,5 +8,9 @@ class AccumulateOnto(Function):
         ## This should be tied to acc. Look to decouple
 
     def __call__(self, ts):
-        value = ts + self.scale * self.acc(ts)
+        try:
+            value = ts + self.scale * self.acc(ts)
+        except Exception as e:
+            breakpoint()
+            return ts
         return value
