@@ -36,9 +36,6 @@ def collapse_closed(this, control_vector, t, collapse_axis, weights):
     n = this.control_points.shape[collapse_axis] - 1
     total_weight = [bernstein(n, t, i) * weight for i, weight in enumerate(weights)]
 
-    if sum(total_weight) == 0:
-        breakpoint()
-
     parts = []
     for i, (part, weight) in enumerate(zip(control_vector, weights)):
         parts = [*parts, (bernstein(n, t, i) * part * weight) / sum(total_weight)]

@@ -50,9 +50,14 @@ from numpy import (
     cos,
     linspace,
     array,
+    cumsum,
+    repeat,
+    insert,
+    pi,
 )
 from numpy.random import rand, randint
-from math import pi, sqrt
+from math import sqrt
+import mediapipe as mp
 
 from src.functions import (
     Parallelogram,
@@ -97,76 +102,61 @@ from src.sculptures import (
 from src.atoms import Point, Segment, Triangle, SegmentStrip, Meta_Data, draw, wrap, write_to_file, List, Empty
 from src.helpers.numpy import *
 
-## Removed MediaPipe from project
-## from mp.pose_landmark_detection import Pose_Landmark_Detection
 from src.executors import Sculpture
-
-# Remember to do make the sculpture that makes a set of beziers that reduce order in order. Update each to upgrade
-# to the max order. What's more, add multithreading to rendering processes. Functions may or may not be seperable
-# into component pieces.
 
 
 def U04():
     for k in range(10):
-        A = rand(7, 3)
-        B = rand(5, 3)
-        print(k, A)
-
+        A, B = rand(7, 3), rand(5, 3)
         line = UnitStrip(1500)
-        squares = lambda k: Sculpture(
-            Concentric(FlexSquare(50), 100).sculpt(),
-            Composition(
-                [
-                    Parallelogram([[2 * pi, 0], [0, 1 * pi]]),
-                    Translate([pi * (k / 20), pi * (k / 20)]),
-                    Sphere(),
-                    Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
-                ]
-            ),
-        ).sculpt()
 
-        f = lambda A, line, noise, deformation: Sculpture(
-            line.sculpt(),
-            Composition(
-                [
-                    Composition(
-                        [
-                            Bezier()(A, [0]),
-                            Parallelogram(
-                                array([[1, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])
-                            ),
-                            Translate(array([1, 0, 0])),
-                            Ball(),
-                        ]
-                    ),
-                    AccumulateOnto(deformation, 0.03),
-                    AccumulateOnto(noise, 0.01),
-                    Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
-                ]
-            ),
-        ).sculpt()
-        deform = Composition(
-            [
-                Bezier()(rand(3, *randint(low=4, high=10, size=(3,))), [3, 2, 1]),
-                Parallelogram(array([[1, 0, 0], [0, 2 * pi, 0], [0, 0, pi]])),
-                Translate(array([1, 0, 0])),
-                Ball(),
-            ]
-        )
+        def squares(k):
+            sculpture = Concentric(FlexSquare(50), 100).sculpt()
+
+            domain = Parallelogram([[2 * pi, 0], [0, 1 * pi]])
+            translate = Translate([pi * (k / 20), pi * (k / 20)])
+            projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
+            function = Composition([domain, translate, Sphere(), projection])
+
+            return Sculpture(sculpture, function).sculpt()
+
+        def f(A, line, noise, deformation):
+            bezier = Bezier()(A, [0])
+            projection = Parallelogram(array([[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0]]))
+            domain = Parallelogram(array([[1, 0, 0], [0, 2 * pi, 0], [0, 0, pi]]))
+            translate = Translate(array([1, 0, 0]))
+            composition = Composition([bezier, projection, domain, translate, Ball()])
+
+            sculpture = Sculpture(line.sculpt(), composition).sculpt()
+
+            deformation_ = AccumulateOnto(deformation, 0.03)
+            noise_ = AccumulateOnto(noise, 0.01)
+            projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]]))
+            function = Composition([composition, deformation_, noise_, projection])
+
+            return Sculpture(sculpture, function).sculpt()
+
+
+        bezier = Bezier()(rand(3, *randint(low=4, high=10, size=(3,))), [3, 2, 1])
+        domain = Parallelogram(array([[1, 0, 0], [0, 2 * pi, 0], [0, 0, pi]]))
+        translate = Translate(array([1, 0, 0]))
+        deform = Composition([bezier, domain, translate, Ball()])
         noise = Perlin_Vector.random()(3)
 
-        N = [
-            make_closed_LNE(populate_MVT(A, 1.75, i * 0.0125), 0, 0.5)
-            for i in range(2, 30)
-        ]
-        M = [
-            make_closed_LNE(populate_MVT(B, 1.75, i * 0.0125), 0, 0.5)
-            for i in range(2, 60)
-        ]
-        L = List(list(map(lambda A: f(A, line, noise, deform), N)))
-        K = Sculpture(
-            List(list(map(lambda A: f(A, line, noise, deform), M))), Dialate(2)
-        ).sculpt()
+        N = []
+        for i in range(2, 30):
+            control = make_closed_LNE(populate_MVT(A, 1.75, i * 0.0125), 0, 0.5)
+            sculpture = f(control, line, noise, deform)
+            N.append(sculpture)
+
+        M = []
+        for i in range(2, 60):
+            control = make_closed_LNE(populate_MVT(B, 1.75, i * 0.0125), 0, 0.5)
+            sculpture = f(control, line, noise, deform)
+            M.append(sculpture)
+
+        L = List(N)
+        K = Sculpture(List(M), Dialate(2)).sculpt()
 
         write_to_file(f"{k+732}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
 
@@ -368,12 +358,12 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 ## different for the M.02 series. 
 
 
-def M02(bezier_count):
+def M02(bezier_counts):
     ## Here we're going to make our moving mountains set. This'll be special because we'll be
     ## doing an isometric transform on the construction. 
-    plains = Stack(UnitStrip(500), array([[1],[0],[0]]), array([0,1,0]), 200)
+    plains = Stack(UnitStrip(200), array([[1],[0],[0]]), array([0,1,0]), 80)
 
-    def Mountain():
+    def Mountain(bezier_count):
         beziers = []
         perlin = Perlin_Stack.random()
         for _ in range(bezier_count):
@@ -382,7 +372,7 @@ def M02(bezier_count):
             beziers.append(Bezier()(control, [0,1,2]))
 
         scale = []
-        proportions = 1.5*square(Sphere()(rand(bezier_count-1)))
+        proportions = 2*square(Sphere()(pi*rand(bezier_count-1)))
         for bezier, proportion in zip(beziers, proportions):
             scale.append(Composition([bezier, Scale(proportion)]))
 
@@ -394,14 +384,26 @@ def M02(bezier_count):
 
     isometric = Parallelogram(array([[sqrt(3)/2, -sqrt(3)/2, 0], [0.5, 0.5, -1]]))
 
-    mountain = Composition([Mountain(), isometric])
-    tectonic = Sculpture(plains.sculpt(), mountain).sculpt()
-    sea = Sculpture(plains.sculpt(), isometric).sculpt()
+    dividers = [Composition([Translate([0,0,-2]), isometric])]
+    samples = cumsum(2*len(bezier_counts)*square(Sphere()(rand(2*len(bezier_counts)-1))))
+    bezier_counts = repeat(array(bezier_counts), 2)
+    for bezier_count, translate in zip(bezier_counts, samples):
+        function = Composition([Mountain(bezier_count), Translate(translate*array([0,0,1])), isometric])
+        dividers.append(function)
+    dividers.append(Composition([Translate([0,0,samples[-1]+2]), isometric]))
+    dividers = iter(dividers)
 
-    segments = []
-    for up, down in zip(tectonic.elements, sea.elements):
-        left = up.points[0].l, down.points[0].l
-        right = up.points[-1].l, down.points[-1].l
-        segments.extend([Segment(*left), Segment(*right)])
+    sculptures = []
+    for first, second in zip(dividers,dividers):
+        tectonic = Sculpture(plains.sculpt(), first).sculpt()
+        sea = Sculpture(plains.sculpt(), second).sculpt()
 
-    write_to_file(f"mountain_{rand()}.svg", wrap(draw(List([tectonic, sea, List(segments)]))))
+        segments = [tectonic, sea]
+        for up, down in zip(tectonic.elements, sea.elements):
+            left = up.points[0].l, down.points[0].l
+            right = up.points[-1].l, down.points[-1].l
+            segments.extend([Segment(*left), Segment(*right)])
+
+        sculptures.extend(segments)
+
+    write_to_file(f"mountain_{rand()}.svg", wrap(draw(List(sculptures))))
