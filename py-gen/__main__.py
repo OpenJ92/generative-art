@@ -115,7 +115,7 @@ def U04():
 
             domain = Parallelogram([[2 * pi, 0], [0, 1 * pi]])
             translate = Translate([pi * (k / 20), pi * (k / 20)])
-            projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
+            projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]]))
             function = Composition([domain, translate, Sphere(), projection])
 
             return Sculpture(sculpture, function).sculpt()
@@ -127,14 +127,14 @@ def U04():
             translate = Translate(array([1, 0, 0]))
             composition = Composition([bezier, projection, domain, translate, Ball()])
 
-            sculpture = Sculpture(line.sculpt(), composition).sculpt()
-
             deformation_ = AccumulateOnto(deformation, 0.03)
             noise_ = AccumulateOnto(noise, 0.01)
             projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]]))
             function = Composition([composition, deformation_, noise_, projection])
 
-            return Sculpture(sculpture, function).sculpt()
+            sculpture = Sculpture(line.sculpt(), function).sculpt()
+
+            return sculpture
 
 
         bezier = Bezier()(rand(3, *randint(low=4, high=10, size=(3,))), [3, 2, 1])
@@ -161,8 +161,6 @@ def U04():
         write_to_file(f"{k+732}.svg", wrap(draw(List([squares(pi * (k / 20)), L, K]))))
 
 
-## Line/Circle -> SumOfSpheres -> Bezier -> Concentric Circles / Squares
-## reduction Bezier
 def U07(k):
     A = rand(20, 3)
     beziers = [
@@ -196,33 +194,6 @@ def U07(k):
     ).sculpt()
 
     write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
-
-
-def U08(k):
-    ## U07 with ndarray at 3xnxmxk R3 -> R3 Construct stacks of Concentrics(Squares). Close over all
-    ## Three collapse dimensions
-    pass
-
-
-def U11():
-    ## Hypersphere products. Define poly-multipy and carry out over k-sphere * l-sphere.
-    ## I've been very curious about the visual form of these for a long time now. Do a
-    ## collection of projections of each product and place in canvases. Three per canvas
-
-    ## TODO: Constrcut PolynomialProduct Function taking any two np.arrays 
-
-    pass
-
-
-def U12():
-    ## Bezier k-form as velocity function.
-    pass
-
-
-def U14():
-    ## Bezier k-form as acceleration function
-    pass
-
 
 def U17():
     return Linear_Pedal(.2, .7, 5)
