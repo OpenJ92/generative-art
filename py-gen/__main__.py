@@ -54,6 +54,7 @@ from numpy import (
     repeat,
     insert,
     pi,
+    stack,
 )
 from numpy.random import rand, randint
 from math import sqrt
@@ -163,35 +164,24 @@ def U04():
 
 def U07(k):
     A = rand(20, 3)
-    beziers = [
-        Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
-        for i in range(0, 15, 2)
-    ]
-    bezier = Bezier()(
-        make_closed_LNE(
-            populate_MVT(
-                stack([bez.control_points for bez in beziers], axis=0), 2, 0.25
-            ),
-            0,
-            0.25,
-        ),
-        [1, 0],
-    ).update_with_random_weights()
+
+    beziers = []
+    for i in range(0, 15, 2):
+        function = Bezier()(make_closed_LNE(degree_elevation(A[i:], i, 0), 0, 0.5), [0])
+        beziers.append(function)
+
+    control = []
+    for bezier in beziers:
+        control.append(bezier.control_points)
+    control = make_closed_LNE(populate_MVT(stack(control, axis=0), 2, 0.25), 0, 0.25)
+
+    bezier = Bezier()(control, [1, 0]).update_with_random_weights()
+    domain = Parallelogram(array([[1, 0, 0], [0, 4*pi, 0], [0, 0, 2*pi]]))
+    translate = Translate([3,0,0])
+    projection = Parallelogram(array([[1, 0, 0], [0, 0, 1]]))
 
     plane = FlexPlane(FlexSquare(5), 1000, 1).sculpt()
-    ## plane = Stack(UnitStrip(1500), array([[1], [0]]), array([0, 1]), 300).sculpt()
-    design = Sculpture(
-        plane,
-        Composition(
-            [
-                bezier,
-                Parallelogram(array([[1, 0, 0], [0, 4*pi, 0], [0, 0, 2*pi]])),
-                Translate([3,0,0]),
-                Ball(),
-                Parallelogram(array([[1, 0, 0], [0, 0, 1]])),
-            ]
-        ),
-    ).sculpt()
+    design = Sculpture(plane, Composition([bezier, domain, translate, Ball(), projection])).sculpt()
 
     write_to_file(f"u07_{k+100}.svg", wrap(draw(design)))
 
