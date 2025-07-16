@@ -55,9 +55,11 @@ from numpy import (
     insert,
     pi,
     stack,
+    arccos,
+    arange,
+    sqrt,
 )
 from numpy.random import rand, randint
-from math import sqrt
 import mediapipe as mp
 
 from src.functions import (
@@ -333,7 +335,7 @@ def M02(bezier_counts):
             beziers.append(Bezier()(control, [0,1,2]))
 
         scale = []
-        proportions = 2*square(Sphere()(pi*rand(bezier_count-1)))
+        proportions = 2*square(Sphere()(rand(bezier_count-1)))
         for bezier, proportion in zip(beziers, proportions):
             scale.append(Composition([bezier, Scale(proportion)]))
 
@@ -343,15 +345,20 @@ def M02(bezier_counts):
 
         return Add(ID(), Composition([Add(agglomeration, perlin), Scale(array([0,0,1]))]))
 
+
+    stretch = Parallelogram(array([[rand(),0,0],[0,rand(),0],[0,0,1]]))
     isometric = Parallelogram(array([[sqrt(3)/2, -sqrt(3)/2, 0], [0.5, 0.5, -1]]))
 
-    dividers = [Composition([Translate([0,0,-2]), isometric])]
-    samples = cumsum(2*len(bezier_counts)*square(Sphere()(rand(2*len(bezier_counts)-1))))
+    dividers = [Composition([Translate([0,0,-2]), stretch, isometric])]
+    ## sample = array((2*len(bezier_counts)-1)*[pi/4])#+(.15)*rand(2*len(bezier_counts)-1)
+    ## samples = cumsum(2*len(bezier_counts)*square(Sphere()(sample)))
+    samples = cumsum(square(array([1 / sqrt(2*len(bezier_counts)-1)] * (2*len(bezier_counts)))))
+    samples *= 2*len(bezier_counts)
     bezier_counts = repeat(array(bezier_counts), 2)
     for bezier_count, translate in zip(bezier_counts, samples):
-        function = Composition([Mountain(bezier_count), Translate(translate*array([0,0,1])), isometric])
+        function = Composition([Mountain(bezier_count), Translate(translate*array([0,0,1])), stretch, isometric])
         dividers.append(function)
-    dividers.append(Composition([Translate([0,0,samples[-1]+2]), isometric]))
+    dividers.append(Composition([Translate([0,0,samples[-1]+6]), stretch, isometric]))
     dividers = iter(dividers)
 
     sculptures = []
