@@ -47,7 +47,7 @@ class Perlin_Stack(Random, Function):
 
     @classmethod
     def random(cls):
-        size = randint(low=1, high=5)
+        size = randint(low=1, high=10)
         proportions = square(
             Sphere()(
                 rand(
