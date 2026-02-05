@@ -324,11 +324,11 @@ def U22Kinematic(_seed, frames, time_collapse_axes, sculpture_collapse_axes):
 def M02(bezier_counts):
     ## Here we're going to make our moving mountains set. This'll be special because we'll be
     ## doing an isometric transform on the construction. 
-    plains = Stack(UnitStrip(200), array([[1],[0],[0]]), array([0,1,0]), 80)
+    plains = Stack(UnitStrip(200), array([[1],[0],[0]]), array([0,1,0]), 50)
 
     def Mountain(bezier_count):
         beziers = []
-        perlin = Perlin_Stack.random()
+        perlin = Composition([Perlin_Stack.random(), Scale(1)])
         for _ in range(bezier_count):
             dimensions = [randint(2, 10) for _ in range(3)]
             control = rand(*dimensions) - array([.25])
@@ -346,7 +346,7 @@ def M02(bezier_counts):
         return Add(ID(), Composition([Add(agglomeration, perlin), Scale(array([0,0,1]))]))
 
 
-    stretch = Parallelogram(array([[rand(),0,0],[0,rand(),0],[0,0,1]]))
+    stretch = Parallelogram(array([[1,0,0],[0,1,0],[0,0,1]]))
     isometric = Parallelogram(array([[sqrt(3)/2, -sqrt(3)/2, 0], [0.5, 0.5, -1]]))
 
     dividers = [Composition([Translate([0,0,-2]), stretch, isometric])]
@@ -354,6 +354,7 @@ def M02(bezier_counts):
     ## samples = cumsum(2*len(bezier_counts)*square(Sphere()(sample)))
     samples = cumsum(square(array([1 / sqrt(2*len(bezier_counts)-1)] * (2*len(bezier_counts)))))
     samples *= 2*len(bezier_counts)
+    samples += pi*(3/5)*rand(len(samples))
     bezier_counts = repeat(array(bezier_counts), 2)
     for bezier_count, translate in zip(bezier_counts, samples):
         function = Composition([Mountain(bezier_count), Translate(translate*array([0,0,1])), stretch, isometric])
@@ -374,4 +375,47 @@ def M02(bezier_counts):
 
         sculptures.extend(segments)
 
+    return List(sculptures)
     write_to_file(f"mountain_{rand()}.svg", wrap(draw(List(sculptures))))
+
+def tree():
+    pass
+
+class Interval():
+    def __init__(self, start, end, exclusive=False):
+        self.start = start
+        self.end = end
+        self.exclusive = exclusive
+
+    def contains(self, value):
+        inc = lambda x: x <= self.end
+        exc = lambda x: x < self.end
+        selector = {True : exc, False : inc}
+
+        return start <= value and selector[self.exclusive](value)
+
+def length_partition(max_branching: int, length: float):
+    
+    def recursive(length_remaining):
+        if length_remaining < .05*(length):
+            return (length-length_remaining, None)
+
+        branching = randint(1, max_branching)
+
+        downsamples = []
+        for _ in range(branching):
+            ## uniformly select sample between 0 to length_remaining
+            uniform = (pi/4)*rand()
+            (_, sample) = Sphere()((uniform,))
+            sample *= sample*length_remaining
+
+            ## call recursive on remaining length of branch
+            downsample = recursive(length_remaining-sample)
+
+            ## append list retrieved from current branch
+            downsamples.append(downsample)
+
+        return (length-length_remaining, downsamples)
+
+    length_partitions = recursive(length)
+    breakpoint()
